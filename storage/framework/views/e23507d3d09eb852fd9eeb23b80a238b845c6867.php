@@ -12,6 +12,9 @@
 
                         </div>
                     <?php endif; ?>
+                    <?php if($role_id == 3): ?>
+                        ceo
+                    <?php endif; ?>
                     <div class="container">
                         <?php for($i = 0 ; $i< count($companies) ; $i += 2 ): ?>
                             <div class="row">

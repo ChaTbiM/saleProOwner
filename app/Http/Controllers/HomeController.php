@@ -26,11 +26,12 @@ class HomeController extends Controller
      */
     public function index()
     {   
-        if(Auth::user()->role_id == 3 ){
+        $role_id = Auth::user()->role_id;
+        if($role_id === 3 ){
             $companies = collect(Company::all());
-            return view('home',compact("companies"));
+            return view('home',compact('companies','role_id'));
         } 
         $companies = collect(Auth::user()->companies);  
-        return view('home',compact("companies"));
+        return view('home',compact('companies','role_id'));
     }
 }

@@ -13,6 +13,9 @@
                             {{ session('status') }}
                         </div>
                     @endif
+                    @if($role_id == 3)
+                        ceo
+                    @endif
                     <div class="container">
                         @for ($i = 0 ; $i< count($companies) ; $i += 2 )
                             <div class="row">
