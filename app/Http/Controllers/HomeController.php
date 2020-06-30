@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-// use App\Company;
-// use App\user;
+use App\Company;
+use App\user;
 use Auth;
 
 class HomeController extends Controller
@@ -26,6 +26,10 @@ class HomeController extends Controller
      */
     public function index()
     {   
+        if(Auth::user()->role_id == 3 ){
+            $companies = collect(Company::all());
+            return view('home',compact("companies"));
+        } 
         $companies = collect(Auth::user()->companies);  
         return view('home',compact("companies"));
     }

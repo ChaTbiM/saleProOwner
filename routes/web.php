@@ -13,8 +13,14 @@
 Auth::routes();
 
 Route::get('/', function () {
-    return view('auth.login');
+    return redirect('/home');
 });
 
 
-Route::get('/home', 'HomeController@index')->name('home');
+
+
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/home', 'HomeController@index')->name('home');
+    Route::resource('user', 'UserController');
+});
