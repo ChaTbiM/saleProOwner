@@ -1,4 +1,4 @@
-
+ <?php $__env->startSection('content'); ?>
 <?php if(session()->has('message1')): ?>
         <div class="alert alert-success alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><?php echo session()->get('message1'); ?></div> 
 <?php endif; ?>
@@ -226,3 +226,4 @@
         $('.buttons-delete').addClass('d-none');
 </script>
 <?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.main', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
