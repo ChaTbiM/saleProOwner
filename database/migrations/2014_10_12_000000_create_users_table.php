@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->string('phone');
-            $table->string('company_name');
+            // $table->string('company_name');
             $table->integer('role_id');
             $table->integer('biller_id')->nullable();
             $table->integer('warehouse_id')->nullable();

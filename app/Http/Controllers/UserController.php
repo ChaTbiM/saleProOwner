@@ -10,13 +10,15 @@ use App\Warehouse;
 // use App\Company;
 // use App\GeneralSetting;
 use Hash;
-use Keygen;
+use Keygen\Keygen;
+
 use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 // use App\Mail\UserNotification;
 use Illuminate\Support\Facades\Mail;
 use Auth; 
+use DB;
 
 class UserController extends Controller
 {
@@ -38,6 +40,7 @@ class UserController extends Controller
 
     public function create()
     {
+
         $role = Role::find(Auth::user()->role_id);
         if($role->hasPermissionTo('users-add')){
             $lims_role_list = Roles::where('is_active', true)->get();
@@ -50,13 +53,14 @@ class UserController extends Controller
     }
 
     public function generatePassword()
-    {
+    {   
         $id = Keygen::numeric(6)->generate();
         return $id;
     }
 
     public function store(Request $request)
     {
+
         $this->validate($request, [
             'name' => [
                 'max:255',
@@ -88,7 +92,48 @@ class UserController extends Controller
             $data['is_active'] = false;
         $data['is_deleted'] = false;
         $data['password'] = bcrypt($data['password']);
-        User::create($data);
+
+        
+        try {
+
+            $user = User::create($data);
+            $user_id = $user->id;
+            $hygiene_id = DB::select('select * from companies where name = ?', ['hygiene'])[0]->id;
+            $sweet_id = DB::select('select * from companies where name = ?', ['sweet'])[0]->id;
+            $sanfora_id = DB::select('select * from companies where name = ?', ['sanfora'])[0]->id;
+            $hafko_id = DB::select('select * from companies where name = ?', ['hafko'])[0]->id;
+            $service_id = DB::select('select * from companies where name = ?', ['service'])[0]->id;
+            $goods_id = DB::select('select * from companies where name = ?', ['goods'])[0]->id;
+
+
+            if($request->hygiene){
+                DB::insert('insert into users_companies (user_id, company_id) values (?, ?)', [$user_id, $hygiene_id]);
+            }
+
+            if($request->sweet){
+                DB::insert('insert into users_companies (user_id, company_id) values (?, ?)', [$user_id, $sweet_id]);
+            }
+
+            if($request->sanfora){
+                DB::insert('insert into users_companies (user_id, company_id) values (?, ?)', [$user_id, $sanfora_id]);
+            }
+
+            if($request->hafko){
+                DB::insert('insert into users_companies (user_id, company_id) values (?, ?)', [$user_id, $hafko_id]);
+            }
+
+            if($request->service){
+                DB::insert('insert into users_companies (user_id, company_id) values (?, ?)', [$user_id, $service_id]);
+            }
+
+            if($request->goods){
+                DB::insert('insert into users_companies (user_id, company_id) values (?, ?)', [$user_id, $goods_id]);
+            }
+
+        } catch (\Throwable $th) {
+            $message = "error creating user, please try again.";
+        }
+
         return redirect('user')->with('message1', $message); 
     }
 

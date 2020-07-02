@@ -25,7 +25,6 @@
                     <th class="not-exported"></th>
                     <th><?php echo e(trans('file.UserName')); ?></th>
                     <th><?php echo e(trans('file.Email')); ?></th>
-                    <th><?php echo e(trans('file.Company Name')); ?></th>
                     <th><?php echo e(trans('file.Phone Number')); ?></th>
                     <th><?php echo e(trans('file.Role')); ?></th>
                     <th><?php echo e(trans('file.Status')); ?></th>
@@ -38,7 +37,6 @@
                     <td><?php echo e($key); ?></td>
                     <td><?php echo e($user->name); ?></td>
                     <td><?php echo e($user->email); ?></td>
-                    <td><?php echo e($user->company_name); ?></td>
                     <td><?php echo e($user->phone); ?></td>
                     <?php $role = DB::table('roles')->find($user->role_id);?>
                     <td><?php echo e($role->name); ?></td>

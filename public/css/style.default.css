@@ -76,9 +76,9 @@ table {
 
 .page {
     position: relative;
-    margin-left: 230px;
+    margin: 0 auto;
     -webkit-transition: width 0.3s linear;
-    width: calc(100% - 230px);
+    width: 90%;
     background-color: #fafbfe;
     min-height: 100vh;
     padding-bottom: 50px;
