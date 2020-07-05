@@ -61,8 +61,53 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
+                                        <?php 
+                                            $belongs_to_hygiene = $companies->search("hygiene");
+                                            $belongs_to_sweet = $companies->search("sweet");
+                                            $belongs_to_hafko = $companies->search("hafko");
+                                            $belongs_to_sanfora = $companies->search("sanfora");
+                                            $belongs_to_service = $companies->search("service");
+                                            $belongs_to_goods = $companies->search("goods");
+                                            
+                                        ?>
                                         <label><strong>{{trans('file.Company Name')}}</strong></label>
-                                        <input type="text" name="company_name" class="form-control" value="{{$lims_user_data->company_name}}">
+                                       <br>
+                                        <div class="form-check form-group form-check-inline ">
+                                            <input type="checkbox" class="form-check-input" name="hygiene" id="hygiene" value="hygiene" <?php if($belongs_to_hygiene) echo "checked" ?>
+                                            >
+                                            <label class="form-check-label " for="hygiene">hygiene</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="checkbox" class="form-check-input" name="sweet" id="sweet" value="sweet" 
+                                            <?php if($belongs_to_sweet) echo "checked" ?>
+                                            >
+                                            <label class="form-check-label " for="sweet">sweet</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="checkbox" class="form-check-input" id="hafko" name="hafko" value="hafko" 
+                                            <?php if($belongs_to_hafko) echo "checked" ?>
+                                            >
+                                            <label class="form-check-label " for="hafko">hafko</label>
+                                        </div>
+                                        <br>
+                                        <div class="form-check form-check-inline">
+                                            <input type="checkbox" class="form-check-input" id="sanfora" name="sanfora"  value="sanfora"
+                                            <?php if($belongs_to_sanfora) echo "checked" ?>
+                                            >
+                                            <label class="form-check-label " for="sanfora">sanfora</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="checkbox" class="form-check-input" id="service" name="service" value="service"
+                                            <?php if($belongs_to_service) echo "checked" ?>
+                                            >
+                                            <label class="form-check-label " for="service">service</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="checkbox" class="form-check-input" id="goods" name="goods" value="goods"
+                                            <?php if($belongs_to_goods) echo "checked" ?>
+                                            >
+                                            <label class="form-check-label " for="goods">goods</label>
+                                        </div>
                                     </div>
                                     <div class="form-group">
                                         <label><strong>{{trans('file.Role')}} *</strong></label>

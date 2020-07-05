@@ -62,31 +62,40 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-check form-group form-check-inline ">
-                                        <input type="checkbox" class="form-check-input" name="hygiene" id="hygiene" value="hygiene">
-                                        <label class="form-check-label " for="hygiene">hygiene</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                    
-                                        <input type="checkbox" class="form-check-input" name="sweet" id="sweet" value="sweet">
-                                        <label class="form-check-label " for="sweet">sweet</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input type="checkbox" class="form-check-input" id="hafko" name="hafko" value="hafko">
-                                        <label class="form-check-label " for="hafko">hafko</label>
-                                    </div>
-                                    <br>
-                                    <div class="form-check form-check-inline">
-                                        <input type="checkbox" class="form-check-input" id="sanfora" name="sanfora"  value="sanfora" >
-                                        <label class="form-check-label " for="sanfora">sanfora</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input type="checkbox" class="form-check-input" id="service" name="service" value="service">
-                                        <label class="form-check-label " for="service">service</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input type="checkbox" class="form-check-input" id="goods" name="goods" value="goods">
-                                        <label class="form-check-label " for="goods">goods</label>
+                                    <div class="form-group">
+                                        <label><strong><?php echo e(trans('file.Company Name')); ?></strong></label>
+                                        <br>
+                                        <div class="form-check form-group form-check-inline ">
+                                            <input type="checkbox" class="form-check-input" name="all" id="all" value="all">
+                                            <label class="form-check-label " for="all">all</label>
+                                        </div>
+                                        <br>
+                                        <div class="form-check form-group form-check-inline ">
+                                            <input type="checkbox" class="form-check-input" name="hygiene" id="hygiene" value="hygiene">
+                                            <label class="form-check-label " for="hygiene">hygiene</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                        
+                                            <input type="checkbox" class="form-check-input" name="sweet" id="sweet" value="sweet">
+                                            <label class="form-check-label " for="sweet">sweet</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="checkbox" class="form-check-input" id="hafko" name="hafko" value="hafko">
+                                            <label class="form-check-label " for="hafko">hafko</label>
+                                        </div>
+                                        <br>
+                                        <div class="form-check form-check-inline">
+                                            <input type="checkbox" class="form-check-input" id="sanfora" name="sanfora"  value="sanfora" >
+                                            <label class="form-check-label " for="sanfora">sanfora</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="checkbox" class="form-check-input" id="service" name="service" value="service">
+                                            <label class="form-check-label " for="service">service</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="checkbox" class="form-check-input" id="goods" name="goods" value="goods">
+                                            <label class="form-check-label " for="goods">goods</label>
+                                        </div>
                                     </div>
                                     <div class="form-group">
                                         <label><strong><?php echo e(trans('file.Role')); ?> *</strong></label>

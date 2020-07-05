@@ -26,4 +26,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::get('user/genpass', 'UserController@generatePassword');
     Route::resource('user', 'UserController');
+    
+    Route::resource('module', 'ModuleController');
+
 });
