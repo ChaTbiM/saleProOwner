@@ -38,5 +38,5 @@ class User extends Authenticatable
     {
         return $this->is_active;
     }
-    
+
 }

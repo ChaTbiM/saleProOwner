@@ -12,4 +12,5 @@ class Company extends Model
         return $this->belongsToMany('App\Module', 'companies_modules', 'company_id', 'module_id');
     }
     
+
 }

@@ -8,6 +8,7 @@ use App\Roles;
 use App\Biller;
 use App\Warehouse;
 use App\Company;
+use App\Module;
 // use App\GeneralSetting;
 use Hash;
 use Keygen\Keygen;
@@ -40,12 +41,45 @@ class UserController extends Controller
     public function create()
     {
 
+        // all companies , modules
+        $companies = Company::all();
+        $all_modules = Module::all();
+
+        //comapnies modules 
+        foreach($companies as $company){
+            $companies_modules[$company->name] = $company->modules->pluck('name','name')->toArray();
+        }
+
+        
+        //all permissions according to all modules
+        foreach($all_modules as $module){
+            $module_permissions = $module->name.'Permissions';
+            $all_permissions[$module->name] = $module->$module_permissions();
+        }
+
+        foreach($companies_modules as $company_name => $company_modules){
+
+            if(!empty($company_modules)){
+                foreach($company_modules as $company_module){
+                    $companies_permissions[$company_name][$company_module] = $all_permissions[$company_module]; 
+                }
+            }else {
+                $companies_permissions[$company_name] = null;
+            }
+        }
+
+        // $test = $companies_permissions['hygiene']['product'][0];
+        // $splited = explode('-',$test); 
+        // $splited[1] = 'list';
+        // $string = implode(' ', $splited);
+        // dd($string);
+
         $role = Role::find(Auth::user()->role_id);
         if ($role->hasPermissionTo('users-add')) {
             $lims_role_list = Roles::where('is_active', true)->get();
             $lims_biller_list = Biller::where('is_active', true)->get();
             $lims_warehouse_list = Warehouse::where('is_active', true)->get();
-            return view('user.create', compact('lims_role_list', 'lims_biller_list', 'lims_warehouse_list'));
+            return view('user.create', compact('lims_role_list', 'lims_biller_list', 'lims_warehouse_list','companies','companies_permissions'));
         } else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
     }

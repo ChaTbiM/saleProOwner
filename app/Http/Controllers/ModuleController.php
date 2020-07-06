@@ -11,6 +11,7 @@ use App\Module;
 use Auth;
 use DB;
 
+
 class ModuleController extends Controller
 {
     /**
@@ -22,7 +23,7 @@ class ModuleController extends Controller
     {
         $role = Role::find(Auth::user()->role_id);
 
-        if ($role->hasPermissionTo('users-index')) {
+        if ($role->hasPermissionTo('modules-index')) {
             $permissions = Role::findByName($role->name)->permissions;
             foreach ($permissions as $permission)
                 $all_permission[] = $permission->name;
@@ -30,7 +31,7 @@ class ModuleController extends Controller
 
             $companies = Company::all();
 
-            return view('module.index', compact('companies'));
+            return view('module.index', compact('companies', 'role'));
         } else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
     }
@@ -75,23 +76,17 @@ class ModuleController extends Controller
      */
     public function edit($id)
     {
-        $company = Company::find($id);
-        $company_name = $company->name;
-        $company_modules = ($company->modules)->pluck('name','name')->toArray();
-        $all_modules = Module::all()->pluck('name','name')->toArray();
-        $desactivated_modules =  array_diff($all_modules,$company_modules); // modules that are not activated 
+        $role = Role::find(Auth::user()->role_id);
+        if ($role->hasPermissionTo('modules-edit')) {
+            $company = Company::find($id);
+            $company_name = $company->name;
+            $company_modules = ($company->modules)->pluck('name', 'name')->toArray();
+            $all_modules = Module::all()->pluck('name', 'name')->toArray();
+            $desactivated_modules =  array_diff($all_modules, $company_modules); // modules that are not activated 
 
-        return view('module.edit',compact('company_name','company_modules','desactivated_modules', 'company'));
-
-        // $role = Role::find(Auth::user()->role_id);
-        // if ($role->hasPermissionTo('users-edit')) {
-        //     $lims_user_data = User::find($id);
-            
-        //     $lims_role_list = Role::where('is_active', true)->get();
-            // return view('module.edit',compact('company'));
-            // return view('module.edit', compact('lims_user_data', 'lims_role_list'));
-        // } else
-            // return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
+            return view('module.edit', compact('company_name', 'company_modules', 'desactivated_modules', 'company', 'role'));
+        } else
+            return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
     }
 
     /**
@@ -104,13 +99,13 @@ class ModuleController extends Controller
     public function update(Request $request, $id)
     {
         //
-        
-        $all_modules = Module::all()->pluck('name','name')->toArray();
+
+        $all_modules = Module::all()->pluck('name', 'name')->toArray();
         $company = Company::find($id);
-        $company_modules = $company->modules->pluck('name','name')->toArray();
-            
-        foreach($all_modules as $module ){
-                $updated_modules[$module]= $request[$module];
+        $company_modules = $company->modules->pluck('name', 'name')->toArray();
+
+        foreach ($all_modules as $module) {
+            $updated_modules[$module] = $request[$module];
         }
 
         $desactivated_modules = array_diff($company_modules, $updated_modules);
@@ -119,10 +114,10 @@ class ModuleController extends Controller
         // desactivate modules for a company
         foreach ($desactivated_modules as $module_key => $module_value) {
             if (isset($module_value)) {
-                
+
                 try {
-                    $module = Module::where('name','=',$module_value)->get()[0];
-                     $module_id = $module->id;
+                    $module = Module::where('name', '=', $module_value)->get()[0];
+                    $module_id = $module->id;
                     $found_company_relation = DB::table('companies_modules')->where("company_id", '=', $id)->where('module_id', '=', $module_id)->delete();
                 } catch (\Throwable $th) {
                     return redirect('module')->with('message2', $module->name .  ' module is not desactivated for company ' . $company->name);
@@ -133,19 +128,18 @@ class ModuleController extends Controller
         // Activate a module for a company
         foreach ($activated_modules as $module_key => $module_value) {
             if (isset($module_value)) {
-                
+
                 try {
-                    $module = Module::where('name','=',$module_value)->get()[0];
+                    $module = Module::where('name', '=', $module_value)->get()[0];
                     $module_id = $module->id;
                     DB::insert('insert into companies_modules (company_id, module_id) values (?, ?)', [$id, $module_id]);
                 } catch (\Throwable $th) {
-                    return redirect('module')->with('message2', $module->name. ' module is not activated for company ' . $company->name);
+                    return redirect('module')->with('message2', $module->name . ' module is not activated for company ' . $company->name);
                 }
             }
         }
 
         return redirect('module')->with('message2', 'Data updated successfullly');
-
     }
 
     /**

@@ -120,17 +120,17 @@
 
           <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
             <?php 
-                  // $add_permission = DB::table('permissions')->where('name', 'sales-add')->first();
-                  // $add_permission_active = DB::table('role_has_permissions')->where([
-                  //     ['permission_id', $add_permission->id],
-                  //     ['role_id', $role->id]
-                  // ])->first();
+                  $add_permission = DB::table('permissions')->where('name', 'sales-add')->first();
+                  $add_permission_active = DB::table('role_has_permissions')->where([
+                      ['permission_id', $add_permission->id],
+                      ['role_id', $role->id]
+                  ])->first();
 
-                  // $empty_database_permission = DB::table('permissions')->where('name', 'empty_database')->first();
-                  // $empty_database_permission_active = DB::table('role_has_permissions')->where([
-                  //     ['permission_id', $empty_database_permission->id],
-                  //     ['role_id', $role->id]
-                  // ])->first();
+                  $empty_database_permission = DB::table('permissions')->where('name', 'empty_database')->first();
+                  $empty_database_permission_active = DB::table('role_has_permissions')->where([
+                      ['permission_id', $empty_database_permission->id],
+                      ['role_id', $role->id]
+                  ])->first();
                 ?>
 
             <li class="nav-item"><a id="btnFullscreen"><i class="dripicons-expand"></i></a></li>

@@ -29,4 +29,7 @@ Route::group(['middleware' => 'auth'], function () {
     
     Route::resource('module', 'ModuleController');
 
+
+	Route::get('language_switch/{locale}', 'LanguageController@switchLanguage');
+
 });
