@@ -30,6 +30,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('module', 'ModuleController');
 
 
-	Route::get('language_switch/{locale}', 'LanguageController@switchLanguage');
+    Route::get('language_switch/{locale}', 'LanguageController@switchLanguage');
+    
+
+    // warehouse 
+    Route::post('importwarehouse', 'WarehouseController@importWarehouse')->name('warehouse.import');
+	Route::post('warehouse/deletebyselection', 'WarehouseController@deleteBySelection');
+	Route::get('warehouse/lims_warehouse_search', 'WarehouseController@limsWarehouseSearch')->name('warehouse.search');
+	Route::resource('warehouse', 'WarehouseController');
 
 });

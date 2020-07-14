@@ -23,65 +23,59 @@ use DB;
 
 class UserController extends Controller
 {
-
     public function index()
     {
         $role = Role::find(Auth::user()->role_id);
 
         if ($role->hasPermissionTo('users-index')) {
             $permissions = Role::findByName($role->name)->permissions;
-            foreach ($permissions as $permission)
+            foreach ($permissions as $permission) {
                 $all_permission[] = $permission->name;
+            }
             $lims_user_list = User::where('is_deleted', false)->get();
             return view('user.index', compact('lims_user_list', 'all_permission'));
-        } else
+        } else {
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
+        }
     }
 
     public function create()
     {
-
         // all companies , modules
         $companies = Company::all();
         $all_modules = Module::all();
 
-        //comapnies modules 
-        foreach($companies as $company){
-            $companies_modules[$company->name] = $company->modules->pluck('name','name')->toArray();
+        //comapnies modules
+        foreach ($companies as $company) {
+            $companies_modules[$company->name] = $company->modules->pluck('name', 'name')->toArray();
         }
 
-        
+
         //all permissions according to all modules
-        foreach($all_modules as $module){
-            $module_permissions = $module->name.'Permissions';
+        foreach ($all_modules as $module) {
+            $module_permissions = $module->name . 'Permissions';
             $all_permissions[$module->name] = $module->$module_permissions();
         }
 
-        foreach($companies_modules as $company_name => $company_modules){
-
-            if(!empty($company_modules)){
-                foreach($company_modules as $company_module){
-                    $companies_permissions[$company_name][$company_module] = $all_permissions[$company_module]; 
+        foreach ($companies_modules as $company_name => $company_modules) {
+            if (!empty($company_modules)) {
+                foreach ($company_modules as $company_module) {
+                    $companies_permissions[$company_name][$company_module] = $all_permissions[$company_module];
                 }
-            }else {
+            } else {
                 $companies_permissions[$company_name] = null;
             }
         }
-
-        // $test = $companies_permissions['hygiene']['product'][0];
-        // $splited = explode('-',$test); 
-        // $splited[1] = 'list';
-        // $string = implode(' ', $splited);
-        // dd($string);
 
         $role = Role::find(Auth::user()->role_id);
         if ($role->hasPermissionTo('users-add')) {
             $lims_role_list = Roles::where('is_active', true)->get();
             $lims_biller_list = Biller::where('is_active', true)->get();
             $lims_warehouse_list = Warehouse::where('is_active', true)->get();
-            return view('user.create', compact('lims_role_list', 'lims_biller_list', 'lims_warehouse_list','companies','companies_permissions'));
-        } else
+            return view('user.create', compact('lims_role_list', 'lims_biller_list', 'lims_warehouse_list', 'companies', 'companies_permissions'));
+        } else {
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
+        }
     }
 
     public function generatePassword()
@@ -92,7 +86,7 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-
+        $companies = $request->only('companies');
         $this->validate($request, [
             'name' => [
                 'max:255',
@@ -110,10 +104,12 @@ class UserController extends Controller
         ]);
 
         $data = $request->all();
+        $data['role_id'] = 1;
         $message = 'User created successfully';
 
-        if (!isset($data['is_active']))
+        if (!isset($data['is_active'])) {
             $data['is_active'] = false;
+        }
         $data['is_deleted'] = false;
         $data['password'] = bcrypt($data['password']);
 
@@ -129,34 +125,38 @@ class UserController extends Controller
             $goods_id = DB::select('select * from companies where name = ?', ['goods'])[0]->id;
 
 
-            if ($request->hygiene || $request->all) {
+            if ($companies["companies"]['hygiene']) {
                 DB::insert('insert into users_companies (user_id, company_id) values (?, ?)', [$user_id, $hygiene_id]);
             }
 
-            if ($request->sweet || $request->all) {
+            if ($companies["companies"]['sweet']) {
                 DB::insert('insert into users_companies (user_id, company_id) values (?, ?)', [$user_id, $sweet_id]);
             }
 
-            if ($request->sanfora || $request->all) {
+            if ($companies["companies"]['sanfora']) {
                 DB::insert('insert into users_companies (user_id, company_id) values (?, ?)', [$user_id, $sanfora_id]);
             }
 
-            if ($request->hafko || $request->all) {
+            if ($companies["companies"]['hafko']) {
                 DB::insert('insert into users_companies (user_id, company_id) values (?, ?)', [$user_id, $hafko_id]);
             }
 
-            if ($request->service || $request->all) {
+            if ($companies["companies"]['service']) {
                 DB::insert('insert into users_companies (user_id, company_id) values (?, ?)', [$user_id, $service_id]);
             }
 
-            if ($request->goods || $request->all) {
+            if ($companies["companies"]['goods']) {
                 DB::insert('insert into users_companies (user_id, company_id) values (?, ?)', [$user_id, $goods_id]);
             }
+
+
+            $user->giveUserPermissions($companies, $user);
         } catch (\Throwable $th) {
             $message = "error creating user, please try again.";
         }
 
 
+        //sending email
         try {
             Mail::send('mail.user_details', $data, function ($message) use ($data) {
                 $message->to($data['email'])->subject('User Account Details');
@@ -171,47 +171,62 @@ class UserController extends Controller
     public function edit($id)
     {
         $role = Role::find(Auth::user()->role_id);
+        // list of companies , each have a list of modules and each have a list of permissions
+        $companies = Company::all();
+        $all_permissions = Permission::all()->pluck("name", "name")->toArray();
+
+        // remove CEO SPECIAL PERMISSIONS
+        unset($all_permissions["modules-index"]);
+        unset($all_permissions["modules-edit"]);
+
+        global $activated_permissions, $desactivated_permissions;
+        $this->retrievePermissions($companies, $id);
+
         if ($role->hasPermissionTo('users-edit')) {
             $lims_user_data = User::find($id);
 
-            foreach ($lims_user_data->companies as $company) {
-                $companies[$company->name] = $company->name;
-            }
-            $companies = collect($companies);
+            // foreach ($lims_user_data->companies as $company) {
+            //     $companies[$company->name] = $company->name;
+            // }
+            $companies = collect($companies)->pluck("name", "name")->toArray();
+            $user_companies = collect(User::find($id)->companies)->pluck("name", "name")->toArray();
 
             $lims_role_list = Roles::where('is_active', true)->get();
             $lims_biller_list = Biller::where('is_active', true)->get();
             $lims_warehouse_list = Warehouse::where('is_active', true)->get();
-
-            return view('user.edit', compact('lims_user_data', 'lims_role_list', 'lims_biller_list', 'lims_warehouse_list', 'companies'));
-        } else
+            return view('user.edit', compact('lims_user_data', 'lims_role_list', 'lims_biller_list', 'lims_warehouse_list', 'user_companies', 'companies', 'activated_permissions', 'desactivated_permissions'));
+        } else {
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
+        }
     }
 
     public function update(Request $request, $id)
     {
-
         $companies = User::find($id)->companies->pluck('name', 'name')->toArray();
 
-        $updated_companies = ['hygiene' => $hygiene = $request->hygiene, 'sweet' => $sweet = $request->sweet, 'hafko' => $hafko = $request->hafko, 'sanfora' => $request->sanfora, 'service' => $service = $request->service, 'goods' => $goods = $request->goods];
+
+        $updated_companies = ['hygiene' =>  $request->hygiene, 'sweet' =>  $request->sweet, 'hafko' =>  $request->hafko, 'sanfora' => $request->sanfora, 'service' =>  $request->service, 'goods' =>  $request->goods];
 
         $removed_companies = array_diff($companies, $updated_companies);
         $added_companies = array_diff($updated_companies, $companies);
 
-        // update Removed Companies
+
+
+
+        // // update Removed Companies
         foreach ($removed_companies as $company_key => $company_value) {
             if (isset($company_value)) {
                 $company_id = Company::where('name', $company_value)->get()[0]->id;
                 try {
-
-                    $found_company_relation = DB::table('users_companies')->where("company_id", '=', $company_id)->where('user_id', '=', $id)->delete();
+                    DB::table('users_companies')->where("company_id", '=', $company_id)->where('user_id', '=', $id)->delete();
+                    DB::table("company_has_user_has_permissions")->where("company_name", "=", $company_key)->where("user_id", "=", $id)->delete();
                 } catch (\Throwable $th) {
                     return redirect('user')->with('message2', 'user was not removed from company ' . $company_value);
                 }
             }
         }
 
-        // Update Added Compnies
+        // // Update Added Compnies
         foreach ($added_companies as $company_key => $company_value) {
             if (isset($company_value)) {
                 $company_id = Company::where('name', $company_value)->get()[0]->id;
@@ -223,8 +238,85 @@ class UserController extends Controller
             }
         }
 
-        if (!config("user.user_verified"))
+        // update Permissions
+        $companies = User::find($id)->companies;
+        global $activated_permissions;
+        $this->retrievePermissions($companies, $id);
+
+        $updated_permissions = $request->companies;
+        $all_permissions = Permission::all()->pluck("name", "name")->toArray();
+        // remove CEO SPECIAL PERMISSIONS
+        unset($all_permissions["modules-index"]);
+        unset($all_permissions["modules-edit"]);
+        if(!empty($updated_permissions)){
+            foreach ($updated_permissions as $company => $modules) {
+                foreach ($modules as $module_name => $module) {
+                    // dd($updated_permissions[$company][$module_name]);
+                    // dd($activated_permissions[$company][$module_name]);
+                    if (isset($updated_permissions[$company][$module_name]) && isset($activated_permissions[$company][$module_name])) {
+                        $added_permissions[$company][$module_name] = array_diff_key($updated_permissions[$company][$module_name], $activated_permissions[$company][$module_name]);
+    
+                        $removed_permissions[$company][$module_name] = array_diff_key($activated_permissions[$company][$module_name], $updated_permissions[$company][$module_name]);
+                    }
+    
+                    if (!empty($updated_permissions[$company]) && !empty($activated_permissions[$company])) {
+                        $removed_modules[$company] = array_diff_key($activated_permissions[$company], $updated_permissions[$company]);
+                    }
+    
+                    $removed_all = array_diff_key($activated_permissions, $updated_permissions);
+                }
+            }
+
+
+        // added Permissions
+        foreach ($added_permissions as $company => $modules) {
+            foreach ($modules as $modules_name => $permissions) {
+                foreach ($permissions as $permission) {
+                    try {
+                        DB::table("company_has_user_has_permissions")->insert(['user_id' => $id, 'company_name' => $company, 'permission_name' => $permission]);
+                    } catch (\Throwable $th) {
+                        continue;
+                    }
+                }
+            }
+        }
+
+        // removed permissions
+        foreach ($removed_permissions as $company_name => $modules) {
+            foreach ($modules as $module_name => $module) {
+                foreach ($module as $permission) {
+                    $this->deletePermission($permission, $company_name, $id);
+                }
+            }
+        }
+
+        foreach ($removed_modules as $company_name => $modules) {
+            foreach ($modules as $module_name => $module) {
+                foreach ($module as $permission) {
+                    $this->deletePermission($permission, $company_name, $id);
+                }
+            }
+        }
+
+        foreach ($removed_all as $company_name => $modules) {
+            foreach ($modules as $module_name => $module) {
+                foreach ($module as $permission) {
+                    $this->deletePermission($permission, $company_name, $id);
+                }
+            }
+        }
+
+
+            
+        }
+        
+
+
+
+
+        if (!config("user.user_verified")) {
             return redirect()->back()->with('not_permitted', 'This feature is disable for demo!');
+        }
 
         $this->validate($request, [
             'name' => [
@@ -243,10 +335,12 @@ class UserController extends Controller
         ]);
 
         $input = $request->except('password');
-        if (!isset($input['is_active']))
+        if (!isset($input['is_active'])) {
             $input['is_active'] = false;
-        if (!empty($request['password']))
+        }
+        if (!empty($request['password'])) {
             $input['password'] = bcrypt($request['password']);
+        }
         $lims_user_data = User::find($id);
         $lims_user_data->update($input);
         return redirect('user')->with('message2', 'Data updated successfullly');
@@ -260,8 +354,9 @@ class UserController extends Controller
 
     public function profileUpdate(Request $request, $id)
     {
-        if (!config("user.user_verified"))
+        if (!config("user.user_verified")) {
             return redirect()->back()->with('not_permitted', 'This feature is disable for demo!');
+        }
 
         $input = $request->all();
         $lims_user_data = User::find($id);
@@ -271,13 +366,15 @@ class UserController extends Controller
 
     public function changePassword(Request $request, $id)
     {
-        if (!config("user.user_verified"))
+        if (!config("user.user_verified")) {
             return redirect()->back()->with('not_permitted', 'This feature is disable for demo!');
+        }
 
         $input = $request->all();
         $lims_user_data = User::find($id);
-        if ($input['new_pass'] != $input['confirm_pass'])
+        if ($input['new_pass'] != $input['confirm_pass']) {
             return redirect("user/" .  "profile/" . $id)->with('message2', "Please Confirm your new password");
+        }
 
         if (Hash::check($input['current_pass'], $lims_user_data->password)) {
             $lims_user_data->password = bcrypt($input['new_pass']);
@@ -303,8 +400,9 @@ class UserController extends Controller
 
     public function destroy($id)
     {
-        if (!config("user.user_verified"))
+        if (!config("user.user_verified")) {
             return redirect()->back()->with('not_permitted', 'This feature is disable for demo!');
+        }
 
         $lims_user_data = User::find($id);
         $lims_user_data->is_deleted = true;
@@ -313,7 +411,97 @@ class UserController extends Controller
         if (Auth::id() == $id) {
             auth()->logout();
             return redirect('/login');
-        } else
+        } else {
             return redirect('user')->with('message3', 'Data deleted successfullly');
+        }
+    }
+
+
+    // -----------------------------
+
+    public function constructPermissions($company, $company_module, $id, $permissions)
+    {
+
+            $company_name=$company->name;
+        global $desactivated_permissions, $activated_permissions;
+        $activated_permissions[$company->name][$company_module->name] = $company->get_active_permissions($id, $permissions,$company_name);
+
+        $desactivated_permissions[$company->name][$company_module->name] =  array_diff($permissions, $activated_permissions["$company->name"]["$company_module->name"]);
+        if($company->name == "sanfora"){
+        }
+        // return ["active" => $activated_permissions, "disabled" => $desactivated_permissions];
+    }
+
+
+
+
+
+
+    public function retrievePermissions($companies, $id)
+    {
+        foreach ($companies as  $company) {
+            $companies_modules["$company->name"] = $company->modules;
+            foreach ($companies_modules["$company->name"] as $company_module) {
+                switch ($company_module->name) {
+                    case 'product':
+                        $permissions = $company->productPermissions();
+                       $this->constructPermissions($company, $company_module, $id, $permissions);
+                        break;
+                    case 'purchase':
+                        $permissions = $company->purchasePermissions();
+                         $this->constructPermissions($company, $company_module, $id, $permissions);
+                        break;
+                    case 'sale':
+                        $permissions = $company->salePermissions();
+                          $this->constructPermissions($company, $company_module, $id, $permissions);
+                        break;
+                    case 'expense':
+                        $permissions = $company->expensePermissions();
+                          $this->constructPermissions($company, $company_module, $id, $permissions);
+                        break;
+                    case 'quote':
+                        $permissions = $company->quotePermissions();
+                          $this->constructPermissions($company, $company_module, $id, $permissions);
+                        break;
+                    case 'transfer':
+                        $permissions = $company->transferPermissions();
+                          $this->constructPermissions($company, $company_module, $id, $permissions);
+                        break;
+                    case 'return':
+                        $permissions = $company->returnPermissions();
+                          $this->constructPermissions($company, $company_module, $id, $permissions);
+                        break;
+                    case 'accounting':
+                        $permissions = $company->accountingPermissions();
+                          $this->constructPermissions($company, $company_module, $id, $permissions);
+                        break;
+                    case 'hrm':
+                        $permissions = $company->hrmPermissions();
+                          $this->constructPermissions($company, $company_module, $id, $permissions);
+                        break;
+                    case 'people':
+                        $permissions = $company->peoplePermissions();
+                          $this->constructPermissions($company, $company_module, $id, $permissions);
+                        break;
+                    case 'report':
+                        $permissions = $company->reportPermissions();
+                          $this->constructPermissions($company, $company_module, $id, $permissions);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+    }
+
+
+    public function deletePermission($permission, $company_name, $id)
+    {
+        try {
+            DB::table("company_has_user_has_permissions")->where("permission_name", "=", $permission)->where("company_name", "=", $company_name)->where("user_id", "=", $id)->delete();
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
 }

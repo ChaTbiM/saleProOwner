@@ -5,7 +5,9 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
-
+// use App\Module;
+use DB;
+use App\CompanyPermissions;
 class User extends Authenticatable
 {
     use Notifiable;
@@ -38,5 +40,22 @@ class User extends Authenticatable
     {
         return $this->is_active;
     }
+
+
+    // Logic
+    // Itereate over the 11 module 
+    public function giveUserPermissions($companies,User $user){
+        foreach($companies as  $company_modules){ 
+            
+            foreach($company_modules as $company_name => $company_module){
+                foreach($company_module as $company_permissions){
+                    foreach($company_permissions as $company_permission){
+                        $result = CompanyPermissions::create(['user_id' => $user->id,'permission_name'=>$company_permission,'company_name'=>$company_name]);
+                    }
+                }
+            }
+        }
+    }
+
 
 }

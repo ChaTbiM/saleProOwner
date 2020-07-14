@@ -67,7 +67,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label><strong>{{trans('file.Company Name')}}</strong></label>
+                                    <label><strong>{{trans('file.Companies Name')}}</strong></label>
                                     <br>
                                     <div class="form-check form-group form-check-inline ">
                                         <input type="checkbox" class="form-check-input" name="all" id="all" value="all">
@@ -76,16 +76,12 @@
                                     <br>
                                     @for ($i = 0; $i < count($companies); $i++) <div class="form-check form-group  ">
                                         <input type="checkbox" class="form-check-input check-company "
-                                            name="<?=$companies[$i]->name?>" id="check-company-<?=$i?>"
+                                            name="<?='companies['.$companies[$i]->name.']'?>" id="check-company-<?=$i?>"
                                             value="<?=$companies[$i]->name?>">
                                         <label class="form-check-label "
                                             for="<?=$companies[$i]->name?>"><?=$companies[$i]->name?></label>
-
-
-                                        {{-- @endforeach --}}
                                 </div>
                                 <div class="d-none permissions form-group" id="permissions-<?=$i?>">
-                                    {{-- @foreach ($companies_permissions as $company => $company_modules) --}}
                                     <?php $company_modules = $companies_permissions[$companies[$i]->name]; ?>
                                     @if (empty($company_modules))
                                     empty
@@ -93,8 +89,9 @@
                                     @foreach ($company_modules as $company_module => $module_permissions)
                                     @foreach ($module_permissions as $permission)
                                     <div class="form-check form-group form-check-inline ">
-                                        <input type="checkbox" class="form-check-input " name="<?=$permission?>"
-                                            id="company-<?=$i?>-permission" value="<?=$permission?>">
+                                        <input type="checkbox" class="form-check-input "
+                                            name="<?='companies['.$companies[$i]->name.']'.'['. $company_module .'][]'?>"
+                                            value="<?=$permission?>">
                                         <label class="form-check-label " for="<?=$permission?>">
                                             <?php
                                                 if(strpos($permission,'index')){
@@ -120,33 +117,6 @@
                                     @endif
                                 </div>
                                 @endfor
-                            </div>
-                            <div class="form-group">
-                                <label><strong>{{trans('file.Role')}} *</strong></label>
-                                <select name="role_id" required class="selectpicker form-control"
-                                    data-live-search="true" data-live-search-style="begins" title="Select Role...">
-                                    @foreach($lims_role_list as $role)
-                                    <option value="{{$role->id}}">{{$role->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group" id="biller-id">
-                                <label><strong>{{trans('file.Biller')}} *</strong></label>
-                                <select name="biller_id" required class="selectpicker form-control"
-                                    data-live-search="true" data-live-search-style="begins" title="Select Biller...">
-                                    @foreach($lims_biller_list as $biller)
-                                    <option value="{{$biller->id}}">{{$biller->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group" id="warehouseId">
-                                <label><strong>{{trans('file.Warehouse')}} *</strong></label>
-                                <select name="warehouse_id" required class="selectpicker form-control"
-                                    data-live-search="true" data-live-search-style="begins" title="Select Warehouse...">
-                                    @foreach($lims_warehouse_list as $warehouse)
-                                    <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
-                                    @endforeach
-                                </select>
                             </div>
                         </div>
                     </div>
@@ -205,16 +175,19 @@
     });
 
     // Showing permissions for selected company
+    checkCompany = $('.check-company');
+    checkCompany.on('change', showPermissions);
 
-    $('.check-company').on('change',function(){
-            const company_id = $(this).prop('id');
+
+    function showPermissions(){
+        const company_id = $(this).prop('id');
             const company_id_number = company_id.split('-')[2];
         if($(this).prop('checked')){
             $('#permissions-'+company_id_number).removeClass('d-none')
         }else {
             $('#permissions-'+company_id_number).addClass('d-none')
         }
-    });
+    }
 
 
 </script>
