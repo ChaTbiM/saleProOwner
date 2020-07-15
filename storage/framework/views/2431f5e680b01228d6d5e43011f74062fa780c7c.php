@@ -68,8 +68,9 @@
                             <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
                                 <?php if(in_array("billers-edit", $all_permission)): ?>
                                 <li>
-                                    <a href="<?php echo e(route('biller.edit', ['id' => $biller->id])); ?>" class="btn btn-link"><i
-                                            class="dripicons-document-edit"></i> <?php echo e(trans('file.edit')); ?></a>
+                                    <a href="<?php echo e(route('biller.edit', ['id' => $biller->id,'company'=> $company])); ?>"
+                                        class="btn btn-link"><i class="dripicons-document-edit"></i>
+                                        <?php echo e(trans('file.edit')); ?></a>
                                 </li>
                                 <?php endif; ?>
                                 <li class="divider"></li>

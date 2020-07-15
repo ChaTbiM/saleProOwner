@@ -107,10 +107,28 @@ class BillerController extends Controller
 
     public function edit($id, Request $request)
     {
-        dd($request);
+        $company_name = $request->company;
+
         $role = Role::find(Auth::user()->role_id);
+
         if($role->hasPermissionTo('billers-edit')) {
-            $lims_biller_data = Biller::where('id',$id)->first();
+
+            if($company_name == "hygiene"){
+                $lims_biller_data = Biller_Hygiene::where('id',$id)->first();
+            }else if($company_name == "sweet"){
+                $lims_biller_data = Biller_Sweet::where('id',$id)->first();
+            }else if($company_name == "hafko"){
+                $lims_biller_data = Biller_Hafko::where('id',$id)->first();
+            }else if($company_name == "sanfora"){
+                $lims_biller_data = Biller_Sanfora::where('id',$id)->first();
+            }else if($company_name == "service"){
+                $lims_biller_data = Biller_Service::where('id',$id)->first();
+            }else if($company_name == "goods"){
+                $lims_biller_data = Biller_Goods::where('id',$id)->first();
+            }
+
+            $lims_biller_data['company']= $company_name;
+
             return view('biller.edit',compact('lims_biller_data'));
         }
         else
@@ -119,6 +137,7 @@ class BillerController extends Controller
 
     public function update(Request $request, $id)
     {
+        $company_name = $request->company;
         $this->validate($request, [
             'company_name' => [
                 'max:255',

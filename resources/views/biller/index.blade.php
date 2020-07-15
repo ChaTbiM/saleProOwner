@@ -66,8 +66,9 @@
                             <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
                                 @if(in_array("billers-edit", $all_permission))
                                 <li>
-                                    <a href="{{ route('biller.edit', ['id' => $biller->id]) }}" class="btn btn-link"><i
-                                            class="dripicons-document-edit"></i> {{trans('file.edit')}}</a>
+                                    <a href="{{ route('biller.edit', ['id' => $biller->id,'company'=> $company]) }}"
+                                        class="btn btn-link"><i class="dripicons-document-edit"></i>
+                                        {{trans('file.edit')}}</a>
                                 </li>
                                 @endif
                                 <li class="divider"></li>
