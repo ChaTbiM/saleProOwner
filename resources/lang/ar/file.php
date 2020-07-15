@@ -110,6 +110,7 @@ return [
 	"Return" => "إرجاع",
 	"User" => "المستعمل",
 	"Email" => "البريد الإلكتروني",
+	"From Company" => "من الشركة",
 	"Company Name" => "اسم الشركة",
 	"Phone Number" => "رقم الهاتف",
 	"Role" => "وظيفة",

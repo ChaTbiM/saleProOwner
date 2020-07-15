@@ -68,7 +68,7 @@
                             </button>
                             <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
                                 <li>
-                                    <button type="button" data-id="{{$warehouse->id}}"
+                                    <button type="button" data-company="{{$company}}" data-id="{{$warehouse->id}}"
                                         class="open-EditWarehouseDialog btn btn-link" data-toggle="modal"
                                         data-target="#editModal"><i class="dripicons-document-edit"></i>
                                         {{trans('file.edit')}}
@@ -145,7 +145,7 @@
     class="modal fade text-left">
     <div role="document" class="modal-dialog">
         <div class="modal-content">
-            {!! Form::open(['route' => ['warehouse.update',1], 'method' => 'put']) !!}
+            {!! Form::open(['route' => ['warehouse.update',$warehouse->id], 'method' => 'put']) !!}
             <div class="modal-header">
                 <h5 id="exampleModalLabel" class="modal-title"> {{trans('file.Update Warehouse')}}</h5>
                 <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true"><i
@@ -155,7 +155,9 @@
                 <p class="italic">
                     <small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
                 <div class="form-group">
-                    <input type="hidden" name="warehouse_id">
+                    <input type="hidden" name="company" value=<?=$company?>>
+
+                    <input type="hidden" name="warehouse_id" value=<?=$warehouse->id?>>
                     <label>{{trans('file.name')}} *</label>
                     <input type="text" placeholder="Type WareHouse Name..." name="name" required="required"
                         class="form-control">
@@ -262,14 +264,20 @@
 	    $('.open-EditWarehouseDialog').on('click', function() {
 	        var url = "warehouse/"
 	        var id = $(this).data('id').toString();
+            var company = $(this).closest('tr').data('company').toString();
+
 	        url = url.concat(id).concat("/edit");
 
-	        $.get(url, function(data) {
+
+	        $.get(url,{company,id}, function(data) {
+                console.log(data,'data');
 	            $("#editModal input[name='name']").val(data['name']);
 	            $("#editModal input[name='phone']").val(data['phone']);
 	            $("#editModal input[name='email']").val(data['email']);
 	            $("#editModal textarea[name='address']").val(data['address']);
 	            $("#editModal input[name='warehouse_id']").val(data['id']);
+	            $("#editModal input[name='company']").val(data['company']);
+
 
 	        });
 	    });

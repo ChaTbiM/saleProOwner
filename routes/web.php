@@ -37,6 +37,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('importwarehouse', 'WarehouseController@importWarehouse')->name('warehouse.import');
 	Route::post('warehouse/deletebyselection', 'WarehouseController@deleteBySelection');
 	Route::get('warehouse/lims_warehouse_search', 'WarehouseController@limsWarehouseSearch')->name('warehouse.search');
-	Route::resource('warehouse', 'WarehouseController');
+    Route::resource('warehouse', 'WarehouseController');
+    
+
+    // Biller
+    Route::post('importbiller', 'BillerController@importBiller')->name('biller.import');
+	Route::post('biller/deletebyselection', 'BillerController@deleteBySelection');
+	Route::get('biller/lims_biller_search', 'BillerController@limsBillerSearch')->name('biller.search');
+	Route::resource('biller', 'BillerController');
 
 });

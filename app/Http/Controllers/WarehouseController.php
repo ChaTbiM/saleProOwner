@@ -32,7 +32,6 @@ class WarehouseController extends Controller
         $companies = Company::all();
 
         $hygiene_warehouses = DB::connection("hygiene")->select("SELECT * FROM `warehouses` WHERE (is_active) = (true) ");
-        // dd($hygiene_warehouses);
         $sweet_warehouses = DB::connection("sweet")->select("SELECT * FROM `warehouses` WHERE (is_active) = (true) ");
         $hafko_warehouses = DB::connection("hafko")->select("SELECT * FROM `warehouses` WHERE (is_active) = (true) ");
         $sanfora_warehouses = DB::connection("sanfora")->select("SELECT * FROM `warehouses` WHERE (is_active) = (true) ");
@@ -108,9 +107,27 @@ class WarehouseController extends Controller
     }
 
 
-    public function edit($id)
+    public function edit($id,Request $request)
     {
-        $lims_warehouse_data = Warehouse::findOrFail($id);
+        $company_name = $request->company;
+        $company_id = $request->id;
+        
+        if($company_name == "hygiene"){
+            $lims_warehouse_data = Warehouse_Hygiene::findOrFail($company_id);
+        }else if($company_name == "sweet"){
+            $lims_warehouse_data = Warehouse_Sweet::findOrFail($company_id);
+        }else if($company_name == "hafko"){
+            $lims_warehouse_data = Warehouse_Hafko::findOrFail($company_id);
+        }else if($company_name == "sanfora"){
+            $lims_warehouse_data = Warehouse_Sanfora::findOrFail($company_id);
+        }else if($company_name == "service"){
+            $lims_warehouse_data = Warehouse_Service::findOrFail($company_id);
+        }else if($company_name == "goods"){
+            $lims_warehouse_data = Warehouse_Goods::findOrFail($company_id);
+        }
+
+        $lims_warehouse_data['company'] = $request->company;
+
         return $lims_warehouse_data;
     }
 
@@ -124,9 +141,26 @@ class WarehouseController extends Controller
                 }),
             ],
         ]);
+
         $input = $request->all();
-        $lims_warehouse_data = Warehouse::find($input['warehouse_id']);
+        $company_name = $request->company;
+        $warehouse_id = $request->warehouse_id;
+        if($company_name == "hygiene"){
+            $lims_warehouse_data = Warehouse_Hygiene::find($warehouse_id);
+        }else if($company_name == "sweet"){
+            $lims_warehouse_data = Warehouse_Sweet::find($warehouse_id);
+        }else if($company_name == "hafko"){
+            $lims_warehouse_data = Warehouse_Hafko::find($warehouse_id);
+        }else if($company_name == "sanfora"){
+            $lims_warehouse_data = Warehouse_Sanfora::find($warehouse_id);
+        }else if($company_name == "service"){
+            $lims_warehouse_data = Warehouse_Service::find($warehouse_id);
+        }else if($company_name == "goods"){
+            $lims_warehouse_data = Warehouse_Goods::find($warehouse_id);
+        }
+
         $lims_warehouse_data->update($input);
+
         return redirect('warehouse')->with('message', 'Data updated successfully');
     }
 

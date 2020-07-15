@@ -110,6 +110,7 @@ return [
 	'Return' => 'Return',
 	'User' => 'User',
 	'Email' => 'Email',
+	"From Company" => "From Company",
 	'Company Name' => 'Company Name',
 	'Phone Number' => 'Phone Number',
 	'Role' => 'Role',

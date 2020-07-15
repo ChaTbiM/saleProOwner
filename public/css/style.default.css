@@ -78,7 +78,7 @@ table {
     position: relative;
     margin: 0 auto;
     -webkit-transition: width 0.3s linear;
-    width: 90%;
+    width: 95%;
     background-color: #fafbfe;
     min-height: 100vh;
     padding-bottom: 50px;
