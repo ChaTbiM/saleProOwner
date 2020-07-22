@@ -81,11 +81,22 @@
                                         <label class="form-check-label "
                                             for="<?=$companies[$i]->name?>"><?=$companies[$i]->name?></label>
                                 </div>
+                                <div class="d-none form-group roles_list" id=<?="roles-$i"?>>
+                                    <label><strong>{{trans('file.Role')}} *</strong></label>
+                                    <select id=<?="roles-$i"?> name="role_id" required
+                                        class="selectpicker form-control " data-live-search="true"
+                                        data-live-search-style="begins" title="Select Role...">
+                                        @foreach($lims_role_list as $role)
+                                        <option value="{{$role->id}}">{{$role->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                 <div class="d-none permissions form-group" id="permissions-<?=$i?>">
                                     <?php $company_modules = $companies_permissions[$companies[$i]->name]; ?>
                                     @if (empty($company_modules))
                                     empty
                                     @else
+
                                     @foreach ($company_modules as $company_module => $module_permissions)
                                     @foreach ($module_permissions as $permission)
                                     <div class="form-check form-group form-check-inline ">
@@ -146,20 +157,20 @@
       });
     });
 
-    $('select[name="role_id"]').on('change', function() {
-        if($(this).val() > 2){
-            $('select[name="warehouse_id"]').prop('required',true);
-            $('select[name="biller_id"]').prop('required',true);
-            $('#biller-id').show();
-            $('#warehouseId').show();
-        }
-        else{
-            $('select[name="warehouse_id"]').prop('required',false);
-            $('select[name="biller_id"]').prop('required',false);
-            $('#biller-id').hide();
-            $('#warehouseId').hide();
-        }
-    });
+    // $('select[name="role_id"]').on('change', function() {
+    //     if($(this).val() > 2){
+    //         $('select[name="warehouse_id"]').prop('required',true);
+    //         $('select[name="biller_id"]').prop('required',true);
+    //         $('#biller-id').show();
+    //         $('#warehouseId').show();
+    //     }
+    //     else{
+    //         $('select[name="warehouse_id"]').prop('required',false);
+    //         $('select[name="biller_id"]').prop('required',false);
+    //         $('#biller-id').hide();
+    //         $('#warehouseId').hide();
+    //     }
+    // });
 
     // Companies  and permissions
     // Selecting all Companies
@@ -176,19 +187,36 @@
 
     // Showing permissions for selected company
     checkCompany = $('.check-company');
-    checkCompany.on('change', showPermissions);
+    // checkCompany.on('change', showPermissions);
+    checkCompany.on('change', showRoles);
 
 
-    function showPermissions(){
-        const company_id = $(this).prop('id');
-            const company_id_number = company_id.split('-')[2];
-        if($(this).prop('checked')){
-            $('#permissions-'+company_id_number).removeClass('d-none')
-        }else {
-            $('#permissions-'+company_id_number).addClass('d-none')
+
+    function showPermissions(id,state,){
+        if(state === "show"){
+            $('#permissions-'+id).removeClass('d-none')
+        }else if(state === "hide"){
+            $('#permissions-'+id).addClass('d-none')
         }
     }
 
+    function showRoles(){
+        const company_id = $(this).prop('id');
+        const company_id_number = company_id.split('-')[2];
+
+        if($(this).prop('checked')){
+            $('#roles-'+company_id_number).removeClass('d-none')
+            $('#roles-'+company_id_number).on('change',()=> showPermissions(company_id_number,'show'));
+
+        }else {
+            $('#roles-'+company_id_number).addClass('d-none')
+            showPermissions(company_id_number,'hide');
+        }
+
+    }
+
+    
+    
 
 </script>
 @endsection

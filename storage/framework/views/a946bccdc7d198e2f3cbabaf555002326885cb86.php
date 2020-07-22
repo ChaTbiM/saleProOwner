@@ -82,11 +82,22 @@
                                         <label class="form-check-label "
                                             for="<?=$companies[$i]->name?>"><?=$companies[$i]->name?></label>
                                 </div>
+                                <div class="d-none form-group roles_list" id=<?="roles-$i"?>>
+                                    <label><strong><?php echo e(trans('file.Role')); ?> *</strong></label>
+                                    <select id=<?="roles-$i"?> name="role_id" required
+                                        class="selectpicker form-control " data-live-search="true"
+                                        data-live-search-style="begins" title="Select Role...">
+                                        <?php $__currentLoopData = $lims_role_list; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($role->id); ?>"><?php echo e($role->name); ?></option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </select>
+                                </div>
                                 <div class="d-none permissions form-group" id="permissions-<?=$i?>">
                                     <?php $company_modules = $companies_permissions[$companies[$i]->name]; ?>
                                     <?php if(empty($company_modules)): ?>
                                     empty
                                     <?php else: ?>
+
                                     <?php $__currentLoopData = $company_modules; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $company_module => $module_permissions): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <?php $__currentLoopData = $module_permissions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $permission): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <div class="form-check form-group form-check-inline ">
@@ -148,20 +159,20 @@
       });
     });
 
-    $('select[name="role_id"]').on('change', function() {
-        if($(this).val() > 2){
-            $('select[name="warehouse_id"]').prop('required',true);
-            $('select[name="biller_id"]').prop('required',true);
-            $('#biller-id').show();
-            $('#warehouseId').show();
-        }
-        else{
-            $('select[name="warehouse_id"]').prop('required',false);
-            $('select[name="biller_id"]').prop('required',false);
-            $('#biller-id').hide();
-            $('#warehouseId').hide();
-        }
-    });
+    // $('select[name="role_id"]').on('change', function() {
+    //     if($(this).val() > 2){
+    //         $('select[name="warehouse_id"]').prop('required',true);
+    //         $('select[name="biller_id"]').prop('required',true);
+    //         $('#biller-id').show();
+    //         $('#warehouseId').show();
+    //     }
+    //     else{
+    //         $('select[name="warehouse_id"]').prop('required',false);
+    //         $('select[name="biller_id"]').prop('required',false);
+    //         $('#biller-id').hide();
+    //         $('#warehouseId').hide();
+    //     }
+    // });
 
     // Companies  and permissions
     // Selecting all Companies
@@ -178,19 +189,44 @@
 
     // Showing permissions for selected company
     checkCompany = $('.check-company');
-    checkCompany.on('change', showPermissions);
+    // checkCompany.on('change', showPermissions);
+    checkCompany.on('change', showRoles);
 
 
-    function showPermissions(){
-        const company_id = $(this).prop('id');
-            const company_id_number = company_id.split('-')[2];
-        if($(this).prop('checked')){
-            $('#permissions-'+company_id_number).removeClass('d-none')
-        }else {
-            $('#permissions-'+company_id_number).addClass('d-none')
+
+    function showPermissions(id,state){
+        // const company_id = $(this).prop('id');
+        //     const company_id_number = company_id.split('-')[2];
+        // if($(this).prop('checked')){
+        //     $('#permissions-'+company_id_number).removeClass('d-none')
+        // }else {
+        //     $('#permissions-'+company_id_number).addClass('d-none')
+        // }
+        if(state === "show"){
+            $('#permissions-'+id).removeClass('d-none')
+        }else if(state === "hide"){
+            $('#permissions-'+id).addClass('d-none')
         }
     }
 
+    function showRoles(){
+        const company_id = $(this).prop('id');
+        const company_id_number = company_id.split('-')[2];
+
+        if($(this).prop('checked')){
+            $('#roles-'+company_id_number).removeClass('d-none')
+            $('#roles-'+company_id_number).on('change',()=> showPermissions(company_id_number,'show'));
+
+        }else {
+            $('#roles-'+company_id_number).addClass('d-none')
+            // $('#roles-'+company_id_number).on('change',()=> showPermissions(company_id_number,'hide'));
+            showPermissions(company_id_number,'hide');
+        }
+
+    }
+
+    
+    
 
 </script>
 <?php $__env->stopSection(); ?>

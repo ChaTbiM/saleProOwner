@@ -54,6 +54,7 @@ class UserController extends Controller
         //all permissions according to all modules
         foreach ($all_modules as $module) {
             $module_permissions = $module->name . 'Permissions';
+
             $all_permissions[$module->name] = $module->$module_permissions();
         }
 
@@ -69,7 +70,7 @@ class UserController extends Controller
 
         $role = Role::find(Auth::user()->role_id);
         if ($role->hasPermissionTo('users-add')) {
-            $lims_role_list = Roles::where('is_active', true)->get();
+            $lims_role_list = Roles::where('is_active', true)->where('name', '!=', 'ceo')->get();
             $lims_biller_list = Biller::where('is_active', true)->get();
             $lims_warehouse_list = Warehouse::where('is_active', true)->get();
             return view('user.create', compact('lims_role_list', 'lims_biller_list', 'lims_warehouse_list', 'companies', 'companies_permissions'));
@@ -248,68 +249,65 @@ class UserController extends Controller
         // remove CEO SPECIAL PERMISSIONS
         unset($all_permissions["modules-index"]);
         unset($all_permissions["modules-edit"]);
-        if(!empty($updated_permissions)){
+        if (!empty($updated_permissions)) {
             foreach ($updated_permissions as $company => $modules) {
                 foreach ($modules as $module_name => $module) {
                     // dd($updated_permissions[$company][$module_name]);
                     // dd($activated_permissions[$company][$module_name]);
                     if (isset($updated_permissions[$company][$module_name]) && isset($activated_permissions[$company][$module_name])) {
                         $added_permissions[$company][$module_name] = array_diff_key($updated_permissions[$company][$module_name], $activated_permissions[$company][$module_name]);
-    
+
                         $removed_permissions[$company][$module_name] = array_diff_key($activated_permissions[$company][$module_name], $updated_permissions[$company][$module_name]);
                     }
-    
+
                     if (!empty($updated_permissions[$company]) && !empty($activated_permissions[$company])) {
                         $removed_modules[$company] = array_diff_key($activated_permissions[$company], $updated_permissions[$company]);
                     }
-    
+
                     $removed_all = array_diff_key($activated_permissions, $updated_permissions);
                 }
             }
 
 
-        // added Permissions
-        foreach ($added_permissions as $company => $modules) {
-            foreach ($modules as $modules_name => $permissions) {
-                foreach ($permissions as $permission) {
-                    try {
-                        DB::table("company_has_user_has_permissions")->insert(['user_id' => $id, 'company_name' => $company, 'permission_name' => $permission]);
-                    } catch (\Throwable $th) {
-                        continue;
+            // added Permissions
+            foreach ($added_permissions as $company => $modules) {
+                foreach ($modules as $modules_name => $permissions) {
+                    foreach ($permissions as $permission) {
+                        try {
+                            DB::table("company_has_user_has_permissions")->insert(['user_id' => $id, 'company_name' => $company, 'permission_name' => $permission]);
+                        } catch (\Throwable $th) {
+                            continue;
+                        }
+                    }
+                }
+            }
+
+            // removed permissions
+            foreach ($removed_permissions as $company_name => $modules) {
+                foreach ($modules as $module_name => $module) {
+                    foreach ($module as $permission) {
+                        $this->deletePermission($permission, $company_name, $id);
+                    }
+                }
+            }
+
+            foreach ($removed_modules as $company_name => $modules) {
+                foreach ($modules as $module_name => $module) {
+                    foreach ($module as $permission) {
+                        $this->deletePermission($permission, $company_name, $id);
+                    }
+                }
+            }
+
+            foreach ($removed_all as $company_name => $modules) {
+                foreach ($modules as $module_name => $module) {
+                    foreach ($module as $permission) {
+                        $this->deletePermission($permission, $company_name, $id);
                     }
                 }
             }
         }
 
-        // removed permissions
-        foreach ($removed_permissions as $company_name => $modules) {
-            foreach ($modules as $module_name => $module) {
-                foreach ($module as $permission) {
-                    $this->deletePermission($permission, $company_name, $id);
-                }
-            }
-        }
-
-        foreach ($removed_modules as $company_name => $modules) {
-            foreach ($modules as $module_name => $module) {
-                foreach ($module as $permission) {
-                    $this->deletePermission($permission, $company_name, $id);
-                }
-            }
-        }
-
-        foreach ($removed_all as $company_name => $modules) {
-            foreach ($modules as $module_name => $module) {
-                foreach ($module as $permission) {
-                    $this->deletePermission($permission, $company_name, $id);
-                }
-            }
-        }
-
-
-            
-        }
-        
 
 
 
@@ -422,12 +420,12 @@ class UserController extends Controller
     public function constructPermissions($company, $company_module, $id, $permissions)
     {
 
-            $company_name=$company->name;
+        $company_name = $company->name;
         global $desactivated_permissions, $activated_permissions;
-        $activated_permissions[$company->name][$company_module->name] = $company->get_active_permissions($id, $permissions,$company_name);
+        $activated_permissions[$company->name][$company_module->name] = $company->get_active_permissions($id, $permissions, $company_name);
 
         $desactivated_permissions[$company->name][$company_module->name] =  array_diff($permissions, $activated_permissions["$company->name"]["$company_module->name"]);
-        if($company->name == "sanfora"){
+        if ($company->name == "sanfora") {
         }
         // return ["active" => $activated_permissions, "disabled" => $desactivated_permissions];
     }
@@ -445,54 +443,53 @@ class UserController extends Controller
                 switch ($company_module->name) {
                     case 'product':
                         $permissions = $company->productPermissions();
-                       $this->constructPermissions($company, $company_module, $id, $permissions);
+                        $this->constructPermissions($company, $company_module, $id, $permissions);
                         break;
                     case 'purchase':
                         $permissions = $company->purchasePermissions();
-                         $this->constructPermissions($company, $company_module, $id, $permissions);
+                        $this->constructPermissions($company, $company_module, $id, $permissions);
                         break;
                     case 'sale':
                         $permissions = $company->salePermissions();
-                          $this->constructPermissions($company, $company_module, $id, $permissions);
+                        $this->constructPermissions($company, $company_module, $id, $permissions);
                         break;
                     case 'expense':
                         $permissions = $company->expensePermissions();
-                          $this->constructPermissions($company, $company_module, $id, $permissions);
+                        $this->constructPermissions($company, $company_module, $id, $permissions);
                         break;
                     case 'quote':
                         $permissions = $company->quotePermissions();
-                          $this->constructPermissions($company, $company_module, $id, $permissions);
+                        $this->constructPermissions($company, $company_module, $id, $permissions);
                         break;
                     case 'transfer':
                         $permissions = $company->transferPermissions();
-                          $this->constructPermissions($company, $company_module, $id, $permissions);
+                        $this->constructPermissions($company, $company_module, $id, $permissions);
                         break;
                     case 'return':
                         $permissions = $company->returnPermissions();
-                          $this->constructPermissions($company, $company_module, $id, $permissions);
+                        $this->constructPermissions($company, $company_module, $id, $permissions);
                         break;
                     case 'accounting':
                         $permissions = $company->accountingPermissions();
-                          $this->constructPermissions($company, $company_module, $id, $permissions);
+                        $this->constructPermissions($company, $company_module, $id, $permissions);
                         break;
                     case 'hrm':
                         $permissions = $company->hrmPermissions();
-                          $this->constructPermissions($company, $company_module, $id, $permissions);
+                        $this->constructPermissions($company, $company_module, $id, $permissions);
                         break;
                     case 'people':
                         $permissions = $company->peoplePermissions();
-                          $this->constructPermissions($company, $company_module, $id, $permissions);
+                        $this->constructPermissions($company, $company_module, $id, $permissions);
                         break;
                     case 'report':
                         $permissions = $company->reportPermissions();
-                          $this->constructPermissions($company, $company_module, $id, $permissions);
+                        $this->constructPermissions($company, $company_module, $id, $permissions);
                         break;
                     default:
                         break;
                 }
             }
         }
-
     }
 
 
