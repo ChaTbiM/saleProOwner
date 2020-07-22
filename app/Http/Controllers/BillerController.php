@@ -160,14 +160,15 @@ class BillerController extends Controller
         $image = $request->image;
         if ($image) {
             $ext = pathinfo($image->getClientOriginalName(), PATHINFO_EXTENSION);
-            $imageName = preg_replace('/[^a-zA-Z0-9]/', '', $request['company_name']);
+            $file_name = $request['company_name'].'_'.$company_name;
+            $imageName = preg_replace('/[^a-zA-Z0-9]/', '',$file_name );
             $imageName = $imageName . '.' . $ext;
             $image->move('public/images/biller', $imageName);
             $input['image'] = $imageName;
         }
 
-        $lims_biller_data = Biller::findOrFail($id);
-        $lims_biller_data->update($input);
+        // $lims_biller_data = Biller::findOrFail($id);
+        // $lims_biller_data->update($input);
         return redirect('biller')->with('message','Data updated successfully');
     }
 
