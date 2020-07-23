@@ -98,46 +98,81 @@
                                     <br>
                                     @foreach ($companies as $company)
                                     <div class="form-check  form-group ">
-                                        <input type="checkbox" class="form-check-input" name=<?=$company?>
-                                            id=<?=$company?> value=<?=$company?>
+                                        <input type="checkbox" class="form-check-input check-company"
+                                            id="check-company-<?=$loop->index?>" name=<?=$company?> id=<?=$company?>
+                                            value=<?=$company?>
                                             <?php if(belongsTo($user_companies,$company)) echo "checked" ?>>
                                         <label class="form-check-label " for=<?=$company?>> <?=$company?> </label>
                                     </div>
+                                    {{-- roles --}}
+                                    @if (isset($roles[$company]))
 
-                                    {{-- enabled permissions --}}
-                                    @if (!empty($activated_permissions[$company]))
-                                    <div class="ml-2">
-                                        @foreach ($activated_permissions[$company] as $module_name => $module)
-                                        @foreach ($module as $permission)
-                                        <div class=" form-check form-check-inline  form-group ">
-                                            <input type="checkbox" class="form-check-input"
-                                                name=<?="companies[$company][$module_name][$permission]"?>
-                                                id=<?="$company-$permission"?> value=<?=$permission?> checked>
-                                            <label class="form-check-label "
-                                                for=<?="$company-$permission"?>><?=printPermission($permission)?>
-                                            </label>
-                                        </div>
-                                        @endforeach
-                                        @endforeach
+                                    <div class=" form-group roles_list" id=<?="roles-$loop->index"?>>
+                                        <label><strong>{{trans('file.Role')}} *</strong></label>
+                                        <select id=<?="roles-$loop->index"?> name=<?="companies[".$company."][role]" ?>
+                                            class="selectpicker form-control " data-live-search="true"
+                                            data-live-search-style="begins" title="Select Role...">
+                                            @foreach($lims_role_list as $role)
+                                            <option value="{{$role->id}}"
+                                                <?php if($roles[$company] == $role->id) echo "selected" ?>>
+                                                {{$role->name}}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    @else
+                                    <div class="d-none form-group roles_list" id=<?="roles-$loop->index"?>>
+                                        <label><strong>{{trans('file.Role')}} *</strong></label>
+                                        <select id=<?="roles-$loop->index"?> name=<?="companies[".$company."][role]" ?>
+                                            class="selectpicker form-control " data-live-search="true"
+                                            data-live-search-style="begins" title="Select Role...">
+                                            @foreach($lims_role_list as $role)
+                                            <option value="{{$role->id}}">
+                                                {{$role->name}}
+                                            </option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     @endif
-                                    {{-- disabled permissions --}}
-                                    @if (!empty($desactivated_permissions[$company]))
-                                    <div class="ml-2">
-                                        @foreach ($desactivated_permissions[$company] as $module_name => $module)
-                                        @foreach ($module as $permission)
-                                        <div class=" form-check form-check-inline  form-group ">
-                                            <input type="checkbox" class="form-check-input"
-                                                name=<?="companies[$company][$module_name][$permission]"?>
-                                                id=<?="$company-$permission"?> value=<?=$permission?>>
-                                            <label class="form-check-label "
-                                                for=<?="$company-$permission"?>><?=printPermission($permission)?>
-                                            </label>
+
+                                    <div id="permissions-<?=$loop->index?>"
+                                        class=<?php if(!belongsTo($user_companies,$company)) echo "d-none" ?>>
+
+                                        {{-- enabled permissions --}}
+                                        @if (!empty($activated_permissions[$company]))
+                                        <div class=" ml-2">
+                                            @foreach ($activated_permissions[$company] as $module_name => $module)
+                                            @foreach ($module as $permission)
+                                            <div class=" form-check form-check-inline  form-group ">
+                                                <input type="checkbox" class="form-check-input"
+                                                    name=<?="companies[$company][$module_name][$permission]"?>
+                                                    id=<?="$company-$permission"?> value=<?=$permission?> checked>
+                                                <label class="form-check-label "
+                                                    for=<?="$company-$permission"?>><?=printPermission($permission)?>
+                                                </label>
+                                            </div>
+                                            @endforeach
+                                            @endforeach
                                         </div>
-                                        @endforeach
-                                        @endforeach
+                                        @endif
+                                        {{-- disabled permissions --}}
+                                        @if (!empty($desactivated_permissions[$company]))
+                                        <div class="ml-2">
+                                            @foreach ($desactivated_permissions[$company] as $module_name => $module)
+                                            @foreach ($module as $permission)
+                                            <div class=" form-check form-check-inline  form-group ">
+                                                <input type="checkbox" class="form-check-input"
+                                                    name=<?="companies[$company][$module_name][$permission]"?>
+                                                    id=<?="$company-$permission"?> value=<?=$permission?>>
+                                                <label class="form-check-label "
+                                                    for=<?="$company-$permission"?>><?=printPermission($permission)?>
+                                                </label>
+                                            </div>
+                                            @endforeach
+                                            @endforeach
+                                        </div>
+                                        @endif
                                     </div>
-                                    @endif
                                     @endforeach
 
 
@@ -200,26 +235,89 @@
     }
     $('.selectpicker').selectpicker('refresh');
 
-    $('select[name="role_id"]').on('change', function() {
-        if($(this).val() > 2){
-            $('select[name="warehouse_id"]').prop('required',true);
-            $('select[name="biller_id"]').prop('required',true);
-            $('#biller-id').show();
-            $('#warehouseId').show();
-        }
-        else{
-            $('select[name="warehouse_id"]').prop('required',false);
-            $('select[name="biller_id"]').prop('required',false);
-            $('#biller-id').hide();
-            $('#warehouseId').hide();
-        }
-    });
+    // $('select[name="role_id"]').on('change', function() {
+    //     if($(this).val() > 2){
+    //         $('select[name="warehouse_id"]').prop('required',true);
+    //         $('select[name="biller_id"]').prop('required',true);
+    //         $('#biller-id').show();
+    //         $('#warehouseId').show();
+    //     }
+    //     else{
+    //         $('select[name="warehouse_id"]').prop('required',false);
+    //         $('select[name="biller_id"]').prop('required',false);
+    //         $('#biller-id').hide();
+    //         $('#warehouseId').hide();
+    //     }
+    // });
 
     $('#genbutton').on("click", function(){
       $.get('../genpass', function(data){
         $("input[name='password']").val(data);
       });
     });
+
+
+    $('#all').on('change',function(){
+        const company = $('.check-company');
+      if($(this).prop("checked")){
+          company.prop('checked',true).trigger('change');
+
+      }else {
+        company.prop('checked',false).trigger('change');
+      }
+    });
+
+    // Showing permissions for selected company
+    checkCompany = $('.check-company');
+    // checkCompany.on('change', showPermissions);
+    checkCompany.on('change', showRoles);
+
+
+
+    function showPermissions(id,state,roleDropDown){
+        let role;
+        if(roleDropDown){
+
+         role = Number($(roleDropDown).val());
+        }
+        if(state === "show"){
+            $('#permissions-'+id).removeClass('d-none')
+        }else if(state === "hide"){
+            console.log(roleDropDown)
+            $('#permissions-'+id).addClass('d-none')
+        }
+
+        const staffPermissions = ['print_barcode','adjustment','stock_count' , 'gift-card', 'coupon', 'expenses-index', 'expenses-add','quotes-index', 'quotes-edit', 'quotes-add', 'quotes-delete','account-index', 'account-statement', 'money-transfer', 'balance-sheet','department', 'employees-index', 'attendance', 'payroll','users-index', 'users-add', 'billers-index', 'billers-add', 'suppliers-index', 'suppliers-add','profit-loss', 'best-seller', 'warehouse-report', 'warehouse-stock-report', 'product-report', 'daily-sale', 'monthly-sale', 'daily-purchase', 'monthly-purchase', 'purchase-report', 'sale-report', 'payment-report', 'product-qty-alert', 'customer-report', 'supplier-report', 'due-report']
+
+        if(role === 1){
+            staffPermissions.forEach(el=>{
+                $("#company-"+id+"-"+el).show();
+            })
+        }else if(role === 4){
+            staffPermissions.forEach(el=>{
+                $("#company-"+id+"-"+el).hide();
+            })
+        }
+    }
+
+    function showRoles(event){
+        const company_id = $(this).prop('id');
+        const company_id_number = company_id.split('-')[2];
+        const permissions = $('#permissions-'+company_id_number);
+        if($(this).prop('checked')){
+            
+            $('#roles-'+company_id_number).removeClass('d-none').prop('required',true);
+            $('#roles-'+company_id_number).on('change',(event)=> showPermissions(company_id_number,'show',event.target));
+            
+        }else {
+            $('#roles-'+company_id_number + '> .selectpicker' ).val(4);
+            
+            
+            $('#roles-'+company_id_number).addClass('d-none').prop('required',false)
+            showPermissions(company_id_number,'hide');
+        }
+
+    }
 
 </script>
 @endsection
