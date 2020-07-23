@@ -25,7 +25,7 @@ class Module extends Model
      // Permissions per module
      public function productPermissions()
      {
-         $permissions = ['products-index', 'products-edit', 'products-add', 'products-delete'];
+         $permissions = ['products-index', 'products-edit', 'products-add', 'products-delete','print_barcode','adjustment','stock_count'];
  
          return $permissions;
      }
@@ -75,14 +75,14 @@ class Module extends Model
  
      public function accountingPermissions()
      {
-         $permissions = ['account-index', 'account-statement', 'money-transfer', 'balance-sheet',];
+         $permissions = ['account-index', 'account-statement', 'money-transfer', 'balance-sheet'];
  
          return $permissions;
      }
  
      public function hrmPermissions()
      {
-         $permissions = ['department', 'employees-index', 'attendance', 'payroll', 'payroll'];
+         $permissions = ['department', 'employees-index', 'attendance', 'payroll', 'holiday'];
  
          return $permissions;
      }

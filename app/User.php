@@ -44,14 +44,16 @@ class User extends Authenticatable
 
     // Logic
     // Itereate over the 11 module 
-    public function giveUserPermissions($companies,User $user){
+    public function giveUserPermissions($companies,$user_id){
         foreach($companies as  $company_modules){ 
-            
             foreach($company_modules as $company_name => $company_module){
                 foreach($company_module as $company_permissions){
-                    foreach($company_permissions as $company_permission){
-                        $result = CompanyPermissions::create(['user_id' => $user->id,'permission_name'=>$company_permission,'company_name'=>$company_name]);
+                    if($company_permissions != 4){
+                        foreach($company_permissions as $company_permission){
+                            $result = CompanyPermissions::create(['user_id' => $user_id,'permission_name'=>$company_permission,'company_name'=>$company_name]);
                     }
+                    }
+
                 }
             }
         }

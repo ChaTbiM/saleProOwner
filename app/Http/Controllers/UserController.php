@@ -87,7 +87,16 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+     
         $companies = $request->only('companies');
+        
+        foreach($companies["companies"] as $company_name => $company){
+            if(count($company)=== 1){
+                unset($companies["companies"][$company_name]);
+            }
+        }
+        
+
         $this->validate($request, [
             'name' => [
                 'max:255',
@@ -114,8 +123,9 @@ class UserController extends Controller
         $data['is_deleted'] = false;
         $data['password'] = bcrypt($data['password']);
 
-
         try {
+
+        DB::transaction(function () use ($data,$companies) {
             $user = User::create($data);
             $user_id = $user->id;
             $hygiene_id = DB::select('select * from companies where name = ?', ['hygiene'])[0]->id;
@@ -126,32 +136,67 @@ class UserController extends Controller
             $goods_id = DB::select('select * from companies where name = ?', ['goods'])[0]->id;
 
 
-            if ($companies["companies"]['hygiene']) {
+            if (isset($companies["companies"]['hygiene']) ) {
                 DB::insert('insert into users_companies (user_id, company_id) values (?, ?)', [$user_id, $hygiene_id]);
+                
+                    $role_id = $companies["companies"]['hygiene']['role'];
+                DB::insert('insert into company_has_user_has_roles (user_id,company_name,role_id) value (?,?,?)',[$user_id,"hygiene",$role_id]);
+
             }
 
-            if ($companies["companies"]['sweet']) {
+            if ( isset($companies["companies"]['sweet'])) {
+                $role_id = $companies["companies"]['sweet']['role'];
+
                 DB::insert('insert into users_companies (user_id, company_id) values (?, ?)', [$user_id, $sweet_id]);
+
+                DB::insert('insert into company_has_user_has_roles (user_id,company_name,role_id) value (?,?,?)',[$user_id,"sweet",$role_id]);
+            
             }
 
-            if ($companies["companies"]['sanfora']) {
+            if (isset($companies["companies"]['sanfora'])) {
+                $role_id = $companies["companies"]['sanfora']['role'];
+
                 DB::insert('insert into users_companies (user_id, company_id) values (?, ?)', [$user_id, $sanfora_id]);
+                
+                DB::insert('insert into company_has_user_has_roles (user_id,company_name,role_id) value (?,?,?)',[$user_id,"sanfora",$role_id]);
+            
             }
 
-            if ($companies["companies"]['hafko']) {
+            if ( isset($companies["companies"]['hafko'])) {
+                $role_id = $companies["companies"]['hafko']['role'];
+
                 DB::insert('insert into users_companies (user_id, company_id) values (?, ?)', [$user_id, $hafko_id]);
+
+                DB::insert('insert into company_has_user_has_roles (user_id,company_name,role_id) value (?,?,?)',[$user_id,"hafko",$role_id]);
+            
             }
 
-            if ($companies["companies"]['service']) {
+            if ( isset($companies["companies"]['service'])) {
+                $role_id = $companies["companies"]['service']['role'];
+
                 DB::insert('insert into users_companies (user_id, company_id) values (?, ?)', [$user_id, $service_id]);
+                
+                DB::insert('insert into company_has_user_has_roles (user_id,company_name,role_id) value (?,?,?)',[$user_id,"service",$role_id]);
+            
             }
 
-            if ($companies["companies"]['goods']) {
+            if ( isset($companies["companies"]['goods'])) {
+                $role_id = $companies["companies"]['goods']['role'];
+
                 DB::insert('insert into users_companies (user_id, company_id) values (?, ?)', [$user_id, $goods_id]);
+                DB::insert('insert into company_has_user_has_roles (user_id,company_name,role_id) value (?,?,?)',[$user_id,"goods",$role_id]);
+            
             }
 
 
-            $user->giveUserPermissions($companies, $user);
+
+            $user->giveUserPermissions($companies, $user_id);
+        });
+
+
+            
+
+
         } catch (\Throwable $th) {
             $message = "error creating user, please try again.";
         }

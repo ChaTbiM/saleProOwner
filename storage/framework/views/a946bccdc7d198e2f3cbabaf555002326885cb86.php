@@ -84,11 +84,14 @@
                                 </div>
                                 <div class="d-none form-group roles_list" id=<?="roles-$i"?>>
                                     <label><strong><?php echo e(trans('file.Role')); ?> *</strong></label>
-                                    <select id=<?="roles-$i"?> name="role_id" required
+                                    <select id=<?="roles-$i"?> name=<?="companies[".$companies[$i]->name."][role]" ?>
                                         class="selectpicker form-control " data-live-search="true"
                                         data-live-search-style="begins" title="Select Role...">
                                         <?php $__currentLoopData = $lims_role_list; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        <option value="<?php echo e($role->id); ?>"><?php echo e($role->name); ?></option>
+                                        <option value="<?php echo e($role->id); ?>">
+                                            <?php echo e($role->name); ?>
+
+                                        </option>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
                                 </div>
@@ -100,11 +103,12 @@
 
                                     <?php $__currentLoopData = $company_modules; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $company_module => $module_permissions): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <?php $__currentLoopData = $module_permissions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $permission): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <div class="form-check form-group form-check-inline ">
+                                    <div class="form-check form-group form-check-inline "
+                                        id=<?="company-$i-$permission"?>>
                                         <input type="checkbox" class="form-check-input "
                                             name="<?='companies['.$companies[$i]->name.']'.'['. $company_module .'][]'?>"
                                             value="<?=$permission?>">
-                                        <label class="form-check-label " for="<?=$permission?>">
+                                        <label class="form-check-label" for="<?=$permission?>">
                                             <?php
                                                 if(strpos($permission,'index')){
                                                     $exploded = explode('-',$permission); 
@@ -194,18 +198,24 @@
 
 
 
-    function showPermissions(id,state){
-        // const company_id = $(this).prop('id');
-        //     const company_id_number = company_id.split('-')[2];
-        // if($(this).prop('checked')){
-        //     $('#permissions-'+company_id_number).removeClass('d-none')
-        // }else {
-        //     $('#permissions-'+company_id_number).addClass('d-none')
-        // }
+    function showPermissions(event,id,state){
+        const role = Number($(event.target).val());
         if(state === "show"){
             $('#permissions-'+id).removeClass('d-none')
         }else if(state === "hide"){
             $('#permissions-'+id).addClass('d-none')
+        }
+
+        const staffPermissions = ['print_barcode','adjustment','stock_count' , 'gift-card', 'coupon', 'expenses-index', 'expenses-add','quotes-index', 'quotes-edit', 'quotes-add', 'quotes-delete','account-index', 'account-statement', 'money-transfer', 'balance-sheet','department', 'employees-index', 'attendance', 'payroll','users-index', 'users-add', 'billers-index', 'billers-add', 'suppliers-index', 'suppliers-add','profit-loss', 'best-seller', 'warehouse-report', 'warehouse-stock-report', 'product-report', 'daily-sale', 'monthly-sale', 'daily-purchase', 'monthly-purchase', 'purchase-report', 'sale-report', 'payment-report', 'product-qty-alert', 'customer-report', 'supplier-report', 'due-report']
+
+        if(role === 1){
+            staffPermissions.forEach(el=>{
+                $("#company-"+id+"-"+el).show();
+            })
+        }else if(role === 4){
+            staffPermissions.forEach(el=>{
+                $("#company-"+id+"-"+el).hide();
+            })
         }
     }
 
@@ -214,19 +224,16 @@
         const company_id_number = company_id.split('-')[2];
 
         if($(this).prop('checked')){
-            $('#roles-'+company_id_number).removeClass('d-none')
-            $('#roles-'+company_id_number).on('change',()=> showPermissions(company_id_number,'show'));
-
+            $('#roles-'+company_id_number).removeClass('d-none').prop('required',true);
+            $('#roles-'+company_id_number).on('change',(event)=> showPermissions(event,company_id_number,'show'));
+            
         }else {
-            $('#roles-'+company_id_number).addClass('d-none')
-            // $('#roles-'+company_id_number).on('change',()=> showPermissions(company_id_number,'hide'));
+            $('#roles-'+company_id_number).addClass('d-none').prop('required',false);
             showPermissions(company_id_number,'hide');
         }
 
     }
 
-    
-    
 
 </script>
 <?php $__env->stopSection(); ?>
