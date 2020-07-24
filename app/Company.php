@@ -85,7 +85,7 @@ class Company extends Model
 
     public function hrmPermissions()
     {
-        $permissions = ['department', 'employees-index', 'attendance', 'payroll', 'payroll'];
+        $permissions = ['department', 'employees-index', 'attendance', 'payroll'];
 
         return $permissions;
     }

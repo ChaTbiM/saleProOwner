@@ -110,8 +110,8 @@
 
                                     <div class=" form-group roles_list" id=<?="roles-$loop->index"?>>
                                         <label><strong><?php echo e(trans('file.Role')); ?> *</strong></label>
-                                        <select id=<?="roles-$loop->index"?> name=<?="companies[".$company."][role]" ?>
-                                            class="selectpicker form-control " data-live-search="true"
+                                        <select id=<?="select-$loop->index"?> name=<?="companies[".$company."][role]" ?>
+                                            class="selectpicker form-control "  data-live-search="true"
                                             data-live-search-style="begins" title="Select Role...">
                                             <?php $__currentLoopData = $lims_role_list; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <option value="<?php echo e($role->id); ?>"
@@ -125,7 +125,7 @@
                                     <?php else: ?>
                                     <div class="d-none form-group roles_list" id=<?="roles-$loop->index"?>>
                                         <label><strong><?php echo e(trans('file.Role')); ?> *</strong></label>
-                                        <select id=<?="roles-$loop->index"?> name=<?="companies[".$company."][role]" ?>
+                                        <select id=<?="select-$loop->index"?> name=<?="companies[".$company."][role]" ?>
                                             class="selectpicker form-control " data-live-search="true"
                                             data-live-search-style="begins" title="Select Role...">
                                             <?php $__currentLoopData = $lims_role_list; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -283,13 +283,14 @@
         const permissions = $('#permissions-'+company_id_number);
         if($(this).prop('checked')){
             
+            
             $('#roles-'+company_id_number).removeClass('d-none').prop('required',true);
             $('#roles-'+company_id_number).on('change',(event)=> showPermissions(company_id_number,'show',event.target));
             
         }else {
-            $('#roles-'+company_id_number + '> .selectpicker' ).val(4);
-            
-            
+            $('#select-'+company_id_number).val('default');
+            $('#select-'+company_id_number).selectpicker('refresh');
+
             $('#roles-'+company_id_number).addClass('d-none').prop('required',false)
             showPermissions(company_id_number,'hide');
         }

@@ -84,7 +84,7 @@
                                 </div>
                                 <div class="d-none form-group roles_list" id=<?="roles-$i"?>>
                                     <label><strong><?php echo e(trans('file.Role')); ?> *</strong></label>
-                                    <select id=<?="roles-$i"?> name=<?="companies[".$companies[$i]->name."][role]" ?>
+                                    <select id=<?="select-$i"?> name=<?="companies[".$companies[$i]->name."][role]" ?>
                                         class="selectpicker form-control " data-live-search="true"
                                         data-live-search-style="begins" title="Select Role...">
                                         <?php $__currentLoopData = $lims_role_list; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -182,7 +182,6 @@
     // Selecting all Companies
     $('#all').on('change',function(){
         const company = $('.check-company');
-
       if($(this).prop("checked")){
           company.prop('checked',true).trigger('change');
 
@@ -198,11 +197,16 @@
 
 
 
-    function showPermissions(event,id,state){
-        const role = Number($(event.target).val());
+    function showPermissions(id,state,roleDropDown){
+        let role;
+        if(roleDropDown){
+
+         role = Number($(roleDropDown).val());
+        }
         if(state === "show"){
             $('#permissions-'+id).removeClass('d-none')
         }else if(state === "hide"){
+            console.log(roleDropDown)
             $('#permissions-'+id).addClass('d-none')
         }
 
@@ -219,16 +223,21 @@
         }
     }
 
-    function showRoles(){
+    function showRoles(event){
         const company_id = $(this).prop('id');
         const company_id_number = company_id.split('-')[2];
-
+        const permissions = $('#permissions-'+company_id_number);
         if($(this).prop('checked')){
+            
+            
             $('#roles-'+company_id_number).removeClass('d-none').prop('required',true);
-            $('#roles-'+company_id_number).on('change',(event)=> showPermissions(event,company_id_number,'show'));
+            $('#roles-'+company_id_number).on('change',(event)=> showPermissions(company_id_number,'show',event.target));
             
         }else {
-            $('#roles-'+company_id_number).addClass('d-none').prop('required',false);
+            $('#select-'+company_id_number).val('default');
+            $('#select-'+company_id_number).selectpicker('refresh');
+
+            $('#roles-'+company_id_number).addClass('d-none').prop('required',false)
             showPermissions(company_id_number,'hide');
         }
 

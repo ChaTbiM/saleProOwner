@@ -109,8 +109,8 @@
 
                                     <div class=" form-group roles_list" id=<?="roles-$loop->index"?>>
                                         <label><strong>{{trans('file.Role')}} *</strong></label>
-                                        <select id=<?="roles-$loop->index"?> name=<?="companies[".$company."][role]" ?>
-                                            class="selectpicker form-control " data-live-search="true"
+                                        <select id=<?="select-$loop->index"?> name=<?="companies[".$company."][role]" ?>
+                                            class="selectpicker form-control "  data-live-search="true"
                                             data-live-search-style="begins" title="Select Role...">
                                             @foreach($lims_role_list as $role)
                                             <option value="{{$role->id}}"
@@ -123,7 +123,7 @@
                                     @else
                                     <div class="d-none form-group roles_list" id=<?="roles-$loop->index"?>>
                                         <label><strong>{{trans('file.Role')}} *</strong></label>
-                                        <select id=<?="roles-$loop->index"?> name=<?="companies[".$company."][role]" ?>
+                                        <select id=<?="select-$loop->index"?> name=<?="companies[".$company."][role]" ?>
                                             class="selectpicker form-control " data-live-search="true"
                                             data-live-search-style="begins" title="Select Role...">
                                             @foreach($lims_role_list as $role)
@@ -306,13 +306,14 @@
         const permissions = $('#permissions-'+company_id_number);
         if($(this).prop('checked')){
             
+            
             $('#roles-'+company_id_number).removeClass('d-none').prop('required',true);
             $('#roles-'+company_id_number).on('change',(event)=> showPermissions(company_id_number,'show',event.target));
             
         }else {
-            $('#roles-'+company_id_number + '> .selectpicker' ).val(4);
-            
-            
+            $('#select-'+company_id_number).val('default');
+            $('#select-'+company_id_number).selectpicker('refresh');
+
             $('#roles-'+company_id_number).addClass('d-none').prop('required',false)
             showPermissions(company_id_number,'hide');
         }
