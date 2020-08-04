@@ -17,7 +17,8 @@ class CreateBillersTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('image')->nullable();
-            $table->string('company_name');
+            $table->string('company_name'); // hygiene , hafko ...
+            $table->string('from_company');
             $table->string('vat_number')->nullable();
             $table->string('email');
             $table->string('phone_number');

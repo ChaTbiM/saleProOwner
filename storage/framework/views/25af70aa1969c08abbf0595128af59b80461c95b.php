@@ -1,130 +1,123 @@
-@extends('layout.main') @section('content')
+ <?php $__env->startSection('content'); ?>
 <section class="forms">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header d-flex align-items-center">
-                        <h4>{{trans('file.Add Biller')}}</h4>
+                        <h4><?php echo e(trans('file.Add Biller')); ?></h4>
                     </div>
                     <div class="card-body">
-                        <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
-                        {!! Form::open(['route' => 'biller.store', 'method' => 'post', 'files' => true]) !!}
+                        <p class="italic"><small><?php echo e(trans('file.The field labels marked with * are required input fields')); ?>.</small></p>
+                        <?php echo Form::open(['route' => 'biller.store', 'method' => 'post', 'files' => true]); ?>
+
                         <div class="row">
                             <div class="col-md-7">
                             <div class="form-group roles_list" >
-                                <label><strong>{{trans('file.Company')}} *</strong></label>
+                                <label><strong><?php echo e(trans('file.Company')); ?> *</strong></label>
                                 <select  name=<?="company_name" ?>
                                     class="selectpicker form-control " data-live-search="true"
                                     data-live-search-style="begins" title="Select Company...">
-                                    @foreach($companies as $company)
-                                    <option value="{{$company->name}}" >
-                                        {{$company->name}}
+                                    <?php $__currentLoopData = $companies; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $company): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($company->name); ?>" >
+                                        <?php echo e($company->name); ?>
+
                                     </option>
-                                    @endforeach
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
                             </div>
                         </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>{{trans('file.name')}} *</strong> </label>
+                                    <label><?php echo e(trans('file.name')); ?> *</strong> </label>
                                     <input type="text" name="name" required class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>{{trans('file.Image')}}</label>
+                                    <label><?php echo e(trans('file.Image')); ?></label>
                                     <input type="file" name="image" class="form-control">
-                                    @if($errors->has('image'))
+                                    <?php if($errors->has('image')): ?>
                                    <span>
-                                       <strong>{{ $errors->first('image') }}</strong>
+                                       <strong><?php echo e($errors->first('image')); ?></strong>
                                     </span>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                             </div>
-                            {{-- <div class="col-md-6">   
-                                <div class="form-group">
-                                    <label>{{trans('file.Company Name')}} *</label>
-                                    <input type="text" name="company_name" required class="form-control">
-                                    @if($errors->has('company_name'))
-                                   <span>
-                                       <strong>{{ $errors->first('company_name') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-                            </div> --}}
+                            
                             <div class="col-md-6">   
                                 <div class="form-group">
-                                    <label>{{trans('file.From Company')}} *</label>
+                                    <label><?php echo e(trans('file.From Company')); ?> *</label>
                                     <input type="text" name="from_company" required class="form-control">
-                                    @if($errors->has('from_companys'))
+                                    <?php if($errors->has('from_companys')): ?>
                                    <span>
-                                       <strong>{{ $errors->first('from_company') }}</strong>
+                                       <strong><?php echo e($errors->first('from_company')); ?></strong>
                                     </span>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>{{trans('file.VAT Number')}}</label>
+                                    <label><?php echo e(trans('file.VAT Number')); ?></label>
                                     <input type="text" name="vat_number" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>{{trans('file.Email')}} *</label>
+                                    <label><?php echo e(trans('file.Email')); ?> *</label>
                                     <input type="email" name="email" placeholder="example@example.com" required class="form-control">
-                                    @if($errors->has('email'))
+                                    <?php if($errors->has('email')): ?>
                                    <span>
-                                       <strong>{{ $errors->first('email') }}</strong>
+                                       <strong><?php echo e($errors->first('email')); ?></strong>
                                     </span>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>{{trans('file.Phone Number')}} *</label>
+                                    <label><?php echo e(trans('file.Phone Number')); ?> *</label>
                                     <input type="text" name="phone_number" required class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>{{trans('file.Address')}} *</label>
+                                    <label><?php echo e(trans('file.Address')); ?> *</label>
                                     <input type="text" name="address" required class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>{{trans('file.City')}} *</label>
+                                    <label><?php echo e(trans('file.City')); ?> *</label>
                                     <input type="text" name="city" required class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>{{trans('file.State')}}</label>
+                                    <label><?php echo e(trans('file.State')); ?></label>
                                     <input type="text" name="state" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>{{trans('file.Postal Code')}}</label>
+                                    <label><?php echo e(trans('file.Postal Code')); ?></label>
                                     <input type="text" name="postal_code" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>{{trans('file.Country')}}</label>
+                                    <label><?php echo e(trans('file.Country')); ?></label>
                                     <input type="text" name="country" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group mt-4">
-                                    <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
+                                    <input type="submit" value="<?php echo e(trans('file.submit')); ?>" class="btn btn-primary">
                                 </div>
                             </div>
                         </div>
-                        {!! Form::close() !!}
+                        <?php echo Form::close(); ?>
+
                     </div>
                 </div>
             </div>
@@ -137,4 +130,5 @@
     $("ul#people").addClass("show");
     $("ul#people #biller-create-menu").addClass("active");
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.main', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

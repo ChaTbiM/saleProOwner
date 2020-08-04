@@ -33,10 +33,7 @@
                 </tr>
             </thead>
             <tbody>
-                <?php $__currentLoopData = $lims_biller_all; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $company => $billers): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-
-                <?php $__currentLoopData = $billers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$biller): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-
+                <?php $__currentLoopData = $lims_biller_all; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$biller): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <tr data-id="<?php echo e($biller->id); ?>">
                     <td><?php echo e($key); ?></td>
                     <?php if($biller->image): ?>
@@ -46,21 +43,20 @@
                     <td>No Image</td>
                     <?php endif; ?>
                     <td><?php echo e($biller->name); ?></td>
-                    <td> <?php echo e($company); ?> </td>
                     <td><?php echo e($biller->company_name); ?></td>
+                    <td><?php echo e($biller->from_company); ?></td>
                     <td><?php echo e($biller->vat_number); ?></td>
                     <td><?php echo e($biller->email); ?></td>
                     <td><?php echo e($biller->phone_number); ?></td>
                     <td><?php echo e($biller->address); ?>
 
-                        <?php if($biller->city): ?><?php echo e(', '.$biller->city); ?><?php endif; ?>
-                        <?php if($biller->state): ?><?php echo e(', '.$biller->state); ?><?php endif; ?>
-                        <?php if($biller->postal_code): ?><?php echo e(', '.$biller->postal_code); ?><?php endif; ?>
-                        <?php if($biller->country): ?><?php echo e(', '.$biller->country); ?><?php endif; ?></td>
+                            <?php if($biller->city): ?><?php echo e(', '.$biller->city); ?><?php endif; ?>
+                            <?php if($biller->state): ?><?php echo e(', '.$biller->state); ?><?php endif; ?>
+                            <?php if($biller->postal_code): ?><?php echo e(', '.$biller->postal_code); ?><?php endif; ?>
+                            <?php if($biller->country): ?><?php echo e(', '.$biller->country); ?><?php endif; ?></td>
                     <td>
                         <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false"><?php echo e(trans('file.action')); ?>
+                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo e(trans('file.action')); ?>
 
                                 <span class="caret"></span>
                                 <span class="sr-only">Toggle Dropdown</span>
@@ -68,9 +64,7 @@
                             <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
                                 <?php if(in_array("billers-edit", $all_permission)): ?>
                                 <li>
-                                    <a href="<?php echo e(route('biller.edit', ['id' => $biller->id,'company'=> $company])); ?>"
-                                        class="btn btn-link"><i class="dripicons-document-edit"></i>
-                                        <?php echo e(trans('file.edit')); ?></a>
+                                    <a href="<?php echo e(route('biller.edit', ['id' => $biller->id])); ?>" class="btn btn-link"><i class="dripicons-document-edit"></i> <?php echo e(trans('file.edit')); ?></a> 
                                 </li>
                                 <?php endif; ?>
                                 <li class="divider"></li>
@@ -79,8 +73,7 @@
                                 <?php echo e(Form::open(['route' => ['biller.destroy', $biller->id], 'method' => 'DELETE'] )); ?>
 
                                 <li>
-                                    <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i
-                                            class="dripicons-trash"></i> <?php echo e(trans('file.delete')); ?></button>
+                                    <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i class="dripicons-trash"></i> <?php echo e(trans('file.delete')); ?></button>
                                 </li>
                                 <?php echo e(Form::close()); ?>
 
@@ -90,8 +83,6 @@
                     </td>
                 </tr>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
             </tbody>
         </table>
     </div>

@@ -33,10 +33,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($lims_biller_all as $company => $billers)
-
-                @foreach($billers as $key=>$biller)
-
+                @foreach($lims_biller_all as $key=>$biller)
                 <tr data-id="{{$biller->id}}">
                     <td>{{$key}}</td>
                     @if($biller->image)
@@ -46,29 +43,26 @@
                     <td>No Image</td>
                     @endif
                     <td>{{ $biller->name }}</td>
-                    <td> {{$company}} </td>
                     <td>{{ $biller->company_name}}</td>
+                    <td>{{ $biller->from_company}}</td>
                     <td>{{ $biller->vat_number}}</td>
                     <td>{{ $biller->email}}</td>
                     <td>{{ $biller->phone_number}}</td>
                     <td>{{ $biller->address}}
-                        @if($biller->city){{ ', '.$biller->city}}@endif
-                        @if($biller->state){{ ', '.$biller->state}}@endif
-                        @if($biller->postal_code){{ ', '.$biller->postal_code}}@endif
-                        @if($biller->country){{ ', '.$biller->country}}@endif</td>
+                            @if($biller->city){{ ', '.$biller->city}}@endif
+                            @if($biller->state){{ ', '.$biller->state}}@endif
+                            @if($biller->postal_code){{ ', '.$biller->postal_code}}@endif
+                            @if($biller->country){{ ', '.$biller->country}}@endif</td>
                     <td>
                         <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
+                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
                                 <span class="caret"></span>
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
                                 @if(in_array("billers-edit", $all_permission))
                                 <li>
-                                    <a href="{{ route('biller.edit', ['id' => $biller->id,'company'=> $company]) }}"
-                                        class="btn btn-link"><i class="dripicons-document-edit"></i>
-                                        {{trans('file.edit')}}</a>
+                                    <a href="{{ route('biller.edit', ['id' => $biller->id]) }}" class="btn btn-link"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</a> 
                                 </li>
                                 @endif
                                 <li class="divider"></li>
@@ -76,8 +70,7 @@
 
                                 {{ Form::open(['route' => ['biller.destroy', $biller->id], 'method' => 'DELETE'] ) }}
                                 <li>
-                                    <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i
-                                            class="dripicons-trash"></i> {{trans('file.delete')}}</button>
+                                    <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
                                 </li>
                                 {{ Form::close() }}
                                 @endif
@@ -86,8 +79,6 @@
                     </td>
                 </tr>
                 @endforeach
-                @endforeach
-
             </tbody>
         </table>
     </div>
