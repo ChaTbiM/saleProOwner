@@ -382,7 +382,7 @@ class UserController extends Controller
             if (isset($old_roles[$company_name][0]) && $old_roles[$company_name][0]->role_id != $company['role']) {
                 $updated_roles[$company_name] = $company['role'];
                 DB::table("company_has_user_has_roles")->where('id', $old_roles[$company_name][0]->id)->delete();
-            }else if(empty($old_roles[$company_name]) && isset($company['role'])){
+            } elseif (empty($old_roles[$company_name]) && isset($company['role'])) {
                 $updated_roles[$company_name] = $company['role'];
             }
 
@@ -390,8 +390,10 @@ class UserController extends Controller
             unset($updated_permissions[$company_name]['role']);
         }
         
-        foreach ($updated_roles as $company_name => $role) {
-            DB::insert('insert into  company_has_user_has_roles (user_id, company_name,role_id) values (?, ?,?)', [$id, $company_name,$role]);
+        if (isset($updated_roles)) {
+            foreach ($updated_roles as $company_name => $role) {
+                DB::insert('insert into  company_has_user_has_roles (user_id, company_name,role_id) values (?, ?,?)', [$id, $company_name,$role]);
+            }
         }
             
 

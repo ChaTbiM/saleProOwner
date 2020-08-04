@@ -111,7 +111,7 @@
                                     <div class=" form-group roles_list" id=<?="roles-$loop->index"?>>
                                         <label><strong><?php echo e(trans('file.Role')); ?> *</strong></label>
                                         <select id=<?="select-$loop->index"?> name=<?="companies[".$company."][role]" ?>
-                                            class="selectpicker form-control "  data-live-search="true"
+                                            class="selectpicker form-control " data-live-search="true"
                                             data-live-search-style="begins" title="Select Role...">
                                             <?php $__currentLoopData = $lims_role_list; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <option value="<?php echo e($role->id); ?>"

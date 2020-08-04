@@ -15,11 +15,11 @@ class Company extends Model
 
 
     
-    public function get_active_permissions($user_id, $permissions,$company_name)
+    public function get_active_permissions($user_id, $permissions, $company_name)
     {
         try {
             return collect(DB::table("company_has_user_has_permissions")
-                ->where("user_id", $user_id)->whereIn('permission_name',$permissions)->where("company_name",$company_name)->get())->pluck("permission_name","permission_name")->toArray();
+                ->where("user_id", $user_id)->whereIn('permission_name', $permissions)->where("company_name", $company_name)->get())->pluck("permission_name", "permission_name")->toArray();
         } catch (\Throwable $th) {
             return null;
         }
@@ -85,7 +85,7 @@ class Company extends Model
 
     public function hrmPermissions()
     {
-        $permissions = ['department', 'employees-index', 'attendance', 'payroll'];
+        $permissions = ['department', 'employees-index', 'employees-edit' , 'employeed-add' , 'employees-delete', 'attendance', 'payroll'];
 
         return $permissions;
     }

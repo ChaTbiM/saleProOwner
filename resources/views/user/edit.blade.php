@@ -110,7 +110,7 @@
                                     <div class=" form-group roles_list" id=<?="roles-$loop->index"?>>
                                         <label><strong>{{trans('file.Role')}} *</strong></label>
                                         <select id=<?="select-$loop->index"?> name=<?="companies[".$company."][role]" ?>
-                                            class="selectpicker form-control "  data-live-search="true"
+                                            class="selectpicker form-control " data-live-search="true"
                                             data-live-search-style="begins" title="Select Role...">
                                             @foreach($lims_role_list as $role)
                                             <option value="{{$role->id}}"
