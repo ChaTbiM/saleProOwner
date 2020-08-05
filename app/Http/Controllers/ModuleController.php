@@ -11,7 +11,6 @@ use App\Module;
 use Auth;
 use DB;
 
-
 class ModuleController extends Controller
 {
     /**
@@ -23,17 +22,24 @@ class ModuleController extends Controller
     {
         $role = Role::find(Auth::user()->role_id);
 
+        
+        if ($role->id != 3) {
+            return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
+        }
+
         if ($role->hasPermissionTo('modules-index')) {
             $permissions = Role::findByName($role->name)->permissions;
-            foreach ($permissions as $permission)
+            foreach ($permissions as $permission) {
                 $all_permission[] = $permission->name;
+            }
             $lims_user_list = User::where('is_deleted', false)->get();
 
             $companies = Company::all();
 
             return view('module.index', compact('companies', 'role'));
-        } else
+        } else {
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
+        }
     }
 
     /**
@@ -82,11 +88,12 @@ class ModuleController extends Controller
             $company_name = $company->name;
             $company_modules = ($company->modules)->pluck('name', 'name')->toArray();
             $all_modules = Module::all()->pluck('name', 'name')->toArray();
-            $desactivated_modules =  array_diff($all_modules, $company_modules); // modules that are not activated 
+            $desactivated_modules =  array_diff($all_modules, $company_modules); // modules that are not activated
 
             return view('module.edit', compact('company_name', 'company_modules', 'desactivated_modules', 'company', 'role'));
-        } else
+        } else {
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
+        }
     }
 
     /**
@@ -114,7 +121,6 @@ class ModuleController extends Controller
         // desactivate modules for a company
         foreach ($desactivated_modules as $module_key => $module_value) {
             if (isset($module_value)) {
-
                 try {
                     $module = Module::where('name', '=', $module_value)->get()[0];
                     $module_id = $module->id;
@@ -128,7 +134,6 @@ class ModuleController extends Controller
         // Activate a module for a company
         foreach ($activated_modules as $module_key => $module_value) {
             if (isset($module_value)) {
-
                 try {
                     $module = Module::where('name', '=', $module_value)->get()[0];
                     $module_id = $module->id;

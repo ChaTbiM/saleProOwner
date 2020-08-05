@@ -28,7 +28,7 @@ class Company extends Model
     // Permissions per module
     public function productPermissions()
     {
-        $permissions = ['products-index', 'products-edit', 'products-add', 'products-delete'];
+        $permissions = ['products-index', 'products-edit', 'products-add', 'products-delete','services-index', 'services-edit', 'services-add', 'services-delete'];
 
         return $permissions;
     }

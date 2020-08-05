@@ -24,6 +24,13 @@ class BillerController extends Controller
     public function index()
     {
         $role = Role::find(Auth::user()->role_id);
+
+
+        
+        if ($role->id != 3) {
+            return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
+        }
+
         if ($role->hasPermissionTo('billers-index')) {
             $permissions = Role::findByName($role->name)->permissions;
             foreach ($permissions as $permission) {
