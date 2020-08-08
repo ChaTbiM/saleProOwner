@@ -107,18 +107,29 @@
 <body onload="myFunction()">
   <div id="loader"></div>
   <!-- Side Navbar -->
-
+  
   <!-- navbar-->
   <header class="header">
     <nav class="navbar">
       <div class="container-fluid">
         <div class="navbar-holder d-flex align-items-center justify-content-between">
-          <a id="toggle-btn" href="#" class="menu-btn"><i class="fa fa-bars"> </i></a>
-          <span class="brand-big"><img src="<?php echo e(url('logo/logo.png')); ?>" width="50">&nbsp;&nbsp;<a href="<?php echo e(url('/')); ?>">
-              <h1 class="d-inline">akeed groupe</h1>
-            </a></span>
+            <?php $role = Auth::user()->role_id ?>
+            <?php if($role == 3): ?>
+                
+            <ul class="  nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+              <li class="nav-item">
+                <a class="dropdown-item" href="<?php echo e(url('user')); ?>" ><i class="dripicons-user"></i>
+                  User </a>
+              </li>
+              <li class="nav-item">
+                <a class="dropdown-item" href="<?php echo e(url('module')); ?>" ><i class="dripicons-checklist"></i>
+                  Modules</a>
+              </li>
 
-          <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+            </ul>
+            <?php endif; ?>
+
+          <ul class="ml-auto nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
             <?php 
                   // $add_permission = DB::table('permissions')->where('name', 'sales-add')->first();
                   // $add_permission_active = DB::table('role_has_permissions')->where([
