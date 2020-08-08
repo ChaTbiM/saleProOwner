@@ -134,7 +134,7 @@
                                         </select>
                                     </div>
                                     @endif
-
+                                    <?php $i = $loop->index; ?>
                                     <div id="permissions-<?=$loop->index?>"
                                         class=<?php if(!belongsTo($user_companies,$company)) echo "d-none" ?>>
 
@@ -143,7 +143,7 @@
                                         <div class=" ml-2">
                                             @foreach ($activated_permissions[$company] as $module_name => $module)
                                             @foreach ($module as $permission)
-                                            <div class=" form-check form-check-inline  form-group ">
+                                            <div class=" form-check form-check-inline  form-group " id=<?="company-$i-$permission"?>>
                                                 <input type="checkbox" class="form-check-input"
                                                     name=<?="companies[$company][$module_name][$permission]"?>
                                                     id=<?="$company-$permission"?> value=<?=$permission?> checked>
@@ -160,7 +160,7 @@
                                         <div class="ml-2">
                                             @foreach ($desactivated_permissions[$company] as $module_name => $module)
                                             @foreach ($module as $permission)
-                                            <div class=" form-check form-check-inline  form-group ">
+                                            <div class=" form-check form-check-inline  form-group " id=<?="company-$i-$permission"?>>
                                                 <input type="checkbox" class="form-check-input"
                                                     name=<?="companies[$company][$module_name][$permission]"?>
                                                     id=<?="$company-$permission"?> value=<?=$permission?>>
@@ -175,46 +175,15 @@
                                     </div>
                                     @endforeach
 
-
                                 </div>
 
-                                {{-- <div class="form-group">
-                                    <label><strong>{{trans('file.Role')}} *</strong></label>
-                                <input type="hidden" name="role_id_hidden" value="{{$lims_user_data->role_id}}">
-                                <select name="role_id" required class="selectpicker form-control"
-                                    data-live-search="true" data-live-search-style="begins" title="Select Role...">
-                                    @foreach($lims_role_list as $role)
-                                    <option value="{{$role->id}}">{{$role->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div> --}}
-                            {{-- <div class="form-group" id="biller-id">
-                                    <label><strong>{{trans('file.Biller')}} *</strong></label>
-                            <input type="hidden" name="biller_id_hidden" value="{{$lims_user_data->biller_id}}">
-                            <select name="biller_id" class="selectpicker form-control" data-live-search="true"
-                                data-live-search-style="begins" title="Select Biller...">
-                                @foreach($lims_biller_list as $biller)
-                                <option value="{{$biller->id}}">{{$biller->name}}</option>
-                                @endforeach
-                            </select>
-                        </div> --}}
-                        {{-- <div class="form-group" id="warehouseId">
-                                    <label><strong>{{trans('file.Warehouse')}} *</strong></label>
-                        <input type="hidden" name="warehouse_id_hidden" value="{{$lims_user_data->warehouse_id}}">
-                        <select name="warehouse_id" class="selectpicker form-control" data-live-search="true"
-                            data-live-search-style="begins" title="Select Warehouse...">
-                            @foreach($lims_warehouse_list as $warehouse)
-                            <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
-                            @endforeach
-                        </select>
-                    </div> --}}
+                            </div>
+                        </div>
+                        {!! Form::close() !!}
+                    </div>
                 </div>
             </div>
-            {!! Form::close() !!}
         </div>
-    </div>
-    </div>
-    </div>
     </div>
 </section>
 
@@ -235,20 +204,6 @@
     }
     $('.selectpicker').selectpicker('refresh');
 
-    // $('select[name="role_id"]').on('change', function() {
-    //     if($(this).val() > 2){
-    //         $('select[name="warehouse_id"]').prop('required',true);
-    //         $('select[name="biller_id"]').prop('required',true);
-    //         $('#biller-id').show();
-    //         $('#warehouseId').show();
-    //     }
-    //     else{
-    //         $('select[name="warehouse_id"]').prop('required',false);
-    //         $('select[name="biller_id"]').prop('required',false);
-    //         $('#biller-id').hide();
-    //         $('#warehouseId').hide();
-    //     }
-    // });
 
     $('#genbutton').on("click", function(){
       $.get('../genpass', function(data){
@@ -276,18 +231,17 @@
 
     function showPermissions(id,state,roleDropDown){
         let role;
+        
         if(roleDropDown){
-
          role = Number($(roleDropDown).val());
         }
         if(state === "show"){
             $('#permissions-'+id).removeClass('d-none')
         }else if(state === "hide"){
-            console.log(roleDropDown)
             $('#permissions-'+id).addClass('d-none')
         }
 
-        const staffPermissions = ['print_barcode','adjustment','stock_count' , 'gift-card', 'coupon', 'expenses-index', 'expenses-add','quotes-index', 'quotes-edit', 'quotes-add', 'quotes-delete','account-index', 'account-statement', 'money-transfer', 'balance-sheet','department', 'employees-index', 'attendance', 'payroll','users-index', 'users-add', 'billers-index', 'billers-add', 'suppliers-index', 'suppliers-add','profit-loss', 'best-seller', 'warehouse-report', 'warehouse-stock-report', 'product-report', 'daily-sale', 'monthly-sale', 'daily-purchase', 'monthly-purchase', 'purchase-report', 'sale-report', 'payment-report', 'product-qty-alert', 'customer-report', 'supplier-report', 'due-report']
+        // const staffPermissions = ['print_barcode','adjustment','stock_count' , 'gift-card', 'coupon', 'expenses-index', 'expenses-add','quotes-index', 'quotes-edit', 'quotes-add', 'quotes-delete','account-index', 'account-statement', 'money-transfer', 'balance-sheet','department', 'employees-index', 'attendance', 'payroll','users-index', 'users-add', 'billers-index', 'billers-add', 'suppliers-index', 'suppliers-add','profit-loss', 'best-seller', 'warehouse-report', 'warehouse-stock-report', 'product-report', 'daily-sale', 'monthly-sale', 'daily-purchase', 'monthly-purchase', 'purchase-report', 'sale-report', 'payment-report', 'product-qty-alert', 'customer-report', 'supplier-report', 'due-report']
 
         if(role === 1){
             staffPermissions.forEach(el=>{
@@ -297,6 +251,7 @@
             staffPermissions.forEach(el=>{
                 $("#company-"+id+"-"+el).hide();
             })
+
         }
     }
 
@@ -305,7 +260,6 @@
         const company_id_number = company_id.split('-')[2];
         const permissions = $('#permissions-'+company_id_number);
         if($(this).prop('checked')){
-            
             
             $('#roles-'+company_id_number).removeClass('d-none').prop('required',true);
             $('#roles-'+company_id_number).on('change',(event)=> showPermissions(company_id_number,'show',event.target));
@@ -319,6 +273,56 @@
         }
 
     }
+
+    
+
+    
+    $(document).ready(()=>{
+        $('.roles_list').on('change',()=>{
+            let company_id_number = $(event.target).prop('id').split("-")[1]; 
+            let role = $(event.target).val();
+            if(role == 1){
+                staffPermissions.forEach((el)=>{
+                    $("#company-"+company_id_number+"-"+el).show();
+                })
+            }else if(role == 4){
+                staffPermissions.forEach((el)=>{
+                    $("#company-"+company_id_number+"-"+el).hide();
+                })
+            }
+        })
+
+        $('.check-company').each((index,el)=>{
+            let isChecked = $(`#check-company-${index}`).prop('checked');
+            if(isChecked){
+            let role = $(`#select-${index}`).val();
+            if(role == 1){
+                staffPermissions.forEach((permission)=>{
+                    $("#company-"+index+"-"+permission).show();
+                })
+            }else if(role == 4){
+                staffPermissions.forEach((permission)=>{
+                    $("#company-"+index+"-"+permission).hide();
+                })
+            }
+            }
+        })
+    })
+
+
+    const staffPermissions = ['print_barcode','adjustment','stock_count' , 'gift-card', 'coupon', 'expenses-index', 'expenses-add','quotes-index', 'quotes-edit', 'quotes-add', 'quotes-delete','account-index', 'account-statement', 'money-transfer', 'balance-sheet','department', 'employees-index', 'attendance', 'payroll','users-index', 'users-add', 'billers-index', 'billers-add', 'suppliers-index', 'suppliers-add','profit-loss', 'best-seller', 'warehouse-report', 'warehouse-stock-report', 'product-report', 'daily-sale', 'monthly-sale', 'daily-purchase', 'monthly-purchase', 'purchase-report', 'sale-report', 'payment-report', 'product-qty-alert', 'customer-report', 'supplier-report', 'due-report']
+
+    // $(document).ready(()=> {
+    //     // id=<?="$company-$permission"?>
+    //     $('.roles_list').on('change',(e)=>{
+    //         company_id_number = $(event.target).prop('id').split("-")[1]; 
+    //         let role = event.target.val();
+    //         console.log("role",role);
+    //         // $('#roles-'+company_id_number).on('change',(event)=> showPermissions(company_id_number,'show',event.target));
+    //     })
+
+    // }
+    // )
 
 </script>
 @endsection
