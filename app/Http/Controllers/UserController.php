@@ -275,6 +275,7 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+        dd($request);
         if (!config("user.user_verified")) {
             return redirect()->back()->with('not_permitted', 'This feature is disable for demo!');
         }
@@ -297,11 +298,6 @@ class UserController extends Controller
 
         $companies = User::find($id)->companies->pluck('name', 'name')->toArray();
 
-
-            
-
-
-
         // update roles
         // get all current user roles
         $old_role["hygiene"] = DB::select('select * from  company_has_user_has_roles where (company_name,user_id) = (?,?)', ["hygiene",$id]);
@@ -313,6 +309,7 @@ class UserController extends Controller
         if (!empty($old_role["sweet"])) {
             $old_roles["sweet"] =  $old_role["sweet"];
         }
+
 
         $old_role["sanfora"] = DB::select('select * from  company_has_user_has_roles where (company_name,user_id) = (?,?)', ["sanfora",$id]);
         if (!empty($old_role["sanfora"])) {
@@ -380,10 +377,6 @@ class UserController extends Controller
 
 
         foreach ($updated_permissions as $company_name => $company) {
-            if ($company_name == "hygiene") {
-                continue;
-            }
-
             if (isset($old_roles[$company_name][0]) && $old_roles[$company_name][0]->role_id != $company['role']) {
                 $updated_roles[$company_name] = $company['role'];
                 DB::table("company_has_user_has_roles")->where('id', $old_roles[$company_name][0]->id)->delete();

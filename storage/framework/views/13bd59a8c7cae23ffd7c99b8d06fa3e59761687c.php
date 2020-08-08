@@ -269,8 +269,8 @@
             $('#roles-'+company_id_number).on('change',(event)=> showPermissions(company_id_number,'show',event.target));
             
         }else {
-            $('#select-'+company_id_number).val('default');
-            $('#select-'+company_id_number).selectpicker('refresh');
+            // $('#select-'+company_id_number).val('default');
+            // $('#select-'+company_id_number).selectpicker('refresh');
 
             $('#roles-'+company_id_number).addClass('d-none').prop('required',false)
             showPermissions(company_id_number,'hide');
@@ -309,8 +309,13 @@
                     $("#company-"+index+"-"+permission).hide();
                 })
             }
+            }else if (!isChecked){
+                $('#roles-'+index).addClass('d-none').prop('required',false)
+            showPermissions(index,'hide');
             }
         })
+
+        
     })
 
 
