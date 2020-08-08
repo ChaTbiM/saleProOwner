@@ -114,9 +114,14 @@
       <div class="container-fluid">
         <div class="navbar-holder d-flex align-items-center justify-content-between">
             <?php $role = Auth::user()->role_id ?>
-            <?php if($role == 3): ?>
                 
             <ul class="  nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+              <li class="nav-item">
+                <a class="dropdown-item" href="<?php echo e(url('')); ?>" ><i class="dripicons-home"></i>
+                  Home </a>
+              </li>
+            <?php if($role == 3): ?>
+
               <li class="nav-item">
                 <a class="dropdown-item" href="<?php echo e(url('user')); ?>" ><i class="dripicons-user"></i>
                   User </a>
@@ -125,9 +130,9 @@
                 <a class="dropdown-item" href="<?php echo e(url('module')); ?>" ><i class="dripicons-checklist"></i>
                   Modules</a>
               </li>
+              <?php endif; ?>
 
             </ul>
-            <?php endif; ?>
 
           <ul class="ml-auto nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
             <?php 
