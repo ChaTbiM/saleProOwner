@@ -16,38 +16,33 @@
 @endif
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-8 mt-2">
             <div class="card">
-                <div class="card-header">Dashboard</div>
-
-                <div class="card-body">
+                <div class="card-header">{{ trans('file.dashboard') }}</div>
+                <div class="card-body pt-0">
                     @if (session('status'))
                         <div class="alert alert-success" role="alert">
                             {{ session('status') }}
                         </div>
                     @endif
-                    @if($role_id == 3)
-                        ceo
-                    @endif
                     <div class="container">
                         @for ($i = 0 ; $i< count($companies) ; $i += 2 )
                             <div class="row">
-                                
                                 <div class="card col-5 m-3"  >
-                                    <a href="#">
+                                    <a href={{url($companies[$i]->name)}}>
                                         <div class="card-body">
                                         <p class="card-text text-center"> {{$companies[$i]->name}} </p>
                                         </div>
-                                        <img class="card-img-top pb-3" src='images/picture.jpg' alt="Card image cap">
+                                        <img class="card-img-top pb-3" src=<?= "images/".$companies[$i]->name.".png"?> alt="Card image cap">
                                     </a>
                                 </div>
                                 @if( count($companies) > $i +1 )
                                     <div class="card col-5 m-3"  >
-                                        <a href="#">
+                                        <a href={{$companies[$i+1]->name}}>
                                             <div class="card-body">
                                             <p class="card-text text-center"> {{$companies[$i+1]->name}} </p>
                                             </div>
-                                            <img class="card-img-top pb-3" src='images/picture.jpg' alt="Card image cap">
+                                            <img class="card-img-top pb-3" src=<?= "images/".$companies[$i+1]->name.".png"?> alt="Card image cap">
                                         </a>
                                     </div>
                                 @endif
