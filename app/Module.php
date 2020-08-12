@@ -105,8 +105,8 @@ class Module extends Model
  
     public function reportPermissions()
     {
-        $permissions = ['profit-loss', 'best-seller', 'warehouse-report', 'warehouse-stock-report', 'product-report', 'daily-sale', 'monthly-sale', 'daily-purchase', 'monthly-purchase', 'purchase-report', 'sale-report', 'payment-report', 'product-qty-alert', 'customer-report', 'supplier-report', 'due-report'];
- 
+        $permissions = ['profit-loss', 'best-seller',  'warehouse-report', 'warehouse-stock-report', 'product-report', 'daily-sale', 'monthly-sale', 'daily-purchase', 'monthly-purchase', 'purchase-report', 'sale-report', 'payment-report', 'product-qty-alert', 'customer-report', 'supplier-report', 'due-report','best-seller-service' , 'service-report' , 'monthly-service-sale'];
+
         return $permissions;
     }
 }

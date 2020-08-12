@@ -265,8 +265,6 @@
             $('#roles-'+company_id_number).on('change',(event)=> showPermissions(company_id_number,'show',event.target));
             
         }else {
-            // $('#select-'+company_id_number).val('default');
-            // $('#select-'+company_id_number).selectpicker('refresh');
 
             $('#roles-'+company_id_number).addClass('d-none').prop('required',false)
             showPermissions(company_id_number,'hide');
@@ -310,24 +308,10 @@
             showPermissions(index,'hide');
             }
         })
-
-        
     })
 
 
     const staffPermissions = ['print_barcode','adjustment','stock_count' , 'gift-card', 'coupon', 'expenses-index', 'expenses-add','quotes-index', 'quotes-edit', 'quotes-add', 'quotes-delete','account-index', 'account-statement', 'money-transfer', 'balance-sheet','department', 'employees-index', 'attendance', 'payroll','users-index', 'users-add', 'billers-index', 'billers-add', 'suppliers-index', 'suppliers-add','profit-loss', 'best-seller', 'warehouse-report', 'warehouse-stock-report', 'product-report', 'daily-sale', 'monthly-sale', 'daily-purchase', 'monthly-purchase', 'purchase-report', 'sale-report', 'payment-report', 'product-qty-alert', 'customer-report', 'supplier-report', 'due-report']
-
-    // $(document).ready(()=> {
-    //     // id=<?="$company-$permission"?>
-    //     $('.roles_list').on('change',(e)=>{
-    //         company_id_number = $(event.target).prop('id').split("-")[1]; 
-    //         let role = event.target.val();
-    //         console.log("role",role);
-    //         // $('#roles-'+company_id_number).on('change',(event)=> showPermissions(company_id_number,'show',event.target));
-    //     })
-
-    // }
-    // )
 
 </script>
 @endsection

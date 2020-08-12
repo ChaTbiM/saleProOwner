@@ -275,7 +275,6 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        dd($request);
         if (!config("user.user_verified")) {
             return redirect()->back()->with('not_permitted', 'This feature is disable for demo!');
         }
@@ -404,8 +403,6 @@ class UserController extends Controller
         if (!empty($updated_permissions)) {
             foreach ($updated_permissions as $company => $modules) {
                 foreach ($modules as $module_name => $module) {
-                    // dd($updated_permissions[$company][$module_name]);
-                    // dd($activated_permissions[$company][$module_name]);
                     if (isset($updated_permissions[$company][$module_name]) && isset($activated_permissions[$company][$module_name])) {
                         $added_permissions[$company][$module_name] = array_diff_key($updated_permissions[$company][$module_name], $activated_permissions[$company][$module_name]);
 
