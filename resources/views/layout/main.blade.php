@@ -130,6 +130,14 @@
                 <a class="dropdown-item" href="{{ url('module') }}" ><i class="dripicons-checklist"></i>
                   Modules</a>
               </li>
+              <li class="nav-item">
+                <a class="dropdown-item" href="{{ url('biller') }}" ><i class="dripicons-checklist"></i>
+                  billers</a>
+              </li>
+              <li class="nav-item">
+                <a class="dropdown-item" href="{{ url('warehouse') }}" ><i class="dripicons-checklist"></i>
+                  warehouses</a>
+              </li>
               @endif
 
             </ul>
