@@ -384,10 +384,13 @@ class UserController extends Controller
             
             unset($updated_permissions[$company_name]['role']);
         }
+
         
         if (isset($updated_roles)) {
             foreach ($updated_roles as $company_name => $role) {
-                DB::insert('insert into  company_has_user_has_roles (user_id, company_name,role_id) values (?, ?,?)', [$id, $company_name,$role]);
+                if (isset($role)) {
+                    DB::insert('insert into  company_has_user_has_roles (user_id, company_name,role_id) values (?, ?,?)', [$id, $company_name,$role]);
+                }
             }
         }
             
