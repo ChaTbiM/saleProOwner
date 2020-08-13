@@ -263,7 +263,6 @@
 
             $('#roles-'+company_id_number).removeClass('d-none').prop('required',true);
             $('#roles-'+company_id_number).on('change',(event)=> showPermissions(company_id_number,'show',event.target));
-            $('#select-'+company_id_number).val(1)
         }else {
 
             $('#roles-'+company_id_number).addClass('d-none').prop('required',false)

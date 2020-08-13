@@ -337,7 +337,7 @@ class UserController extends Controller
         $added_companies = array_diff($updated_companies, $companies);
 
         
-
+        // dd($request);
         // update Removed Companies
         foreach ($removed_companies as $company_key => $company_value) {
             if (isset($company_value)) {
@@ -476,11 +476,6 @@ class UserController extends Controller
             }
         }
 
-
-
-
-
-        
 
         $input = $request->except('password');
         if (!isset($input['is_active'])) {
