@@ -331,7 +331,6 @@ class UserController extends Controller
         }
 
 
-
         $updated_companies = ['hygiene' =>  $request->hygiene, 'sweet' =>  $request->sweet, 'hafko' =>  $request->hafko, 'sanfora' => $request->sanfora, 'service' =>  $request->service, 'goods' =>  $request->goods];
 
         $removed_companies = array_diff($companies, $updated_companies);
@@ -343,29 +342,29 @@ class UserController extends Controller
 
 
         // update Removed Companies
-        foreach ($removed_companies as $company_key => $company_value) {
-            if (isset($company_value)) {
-                $company_id = Company::where('name', $company_value)->get()[0]->id;
-                try {
-                    DB::table('users_companies')->where("company_id", '=', $company_id)->where('user_id', '=', $id)->delete();
-                    DB::table("company_has_user_has_permissions")->where("company_name", "=", $company_key)->where("user_id", "=", $id)->delete();
-                } catch (\Throwable $th) {
-                    return redirect('user')->with('message2', 'user was not removed from company ' . $company_value);
-                }
-            }
-        }
+        // foreach ($removed_companies as $company_key => $company_value) {
+        //     if (isset($company_value)) {
+        //         $company_id = Company::where('name', $company_value)->get()[0]->id;
+        //         try {
+        //             DB::table('users_companies')->where("company_id", '=', $company_id)->where('user_id', '=', $id)->delete();
+        //             DB::table("company_has_user_has_permissions")->where("company_name", "=", $company_key)->where("user_id", "=", $id)->delete();
+        //         } catch (\Throwable $th) {
+        //             return redirect('user')->with('message2', 'user was not removed from company ' . $company_value);
+        //         }
+        //     }
+        // }
 
         // Update Added Compnies
-        foreach ($added_companies as $company_key => $company_value) {
-            if (isset($company_value)) {
-                $company_id = Company::where('name', $company_value)->get()[0]->id;
-                try {
-                    DB::insert('insert into users_companies (company_id, user_id) values (?, ?)', [$company_id, $id]);
-                } catch (\Throwable $th) {
-                    return redirect('user')->with('message2', 'user was not assigned to company ' . $company_value);
-                }
-            }
-        }
+        // foreach ($added_companies as $company_key => $company_value) {
+        //     if (isset($company_value)) {
+        //         $company_id = Company::where('name', $company_value)->get()[0]->id;
+        //         try {
+        //             DB::insert('insert into users_companies (company_id, user_id) values (?, ?)', [$company_id, $id]);
+        //         } catch (\Throwable $th) {
+        //             return redirect('user')->with('message2', 'user was not assigned to company ' . $company_value);
+        //         }
+        //     }
+        // }
 
         // update Permissions
         $companies = User::find($id)->companies;
@@ -373,11 +372,14 @@ class UserController extends Controller
         $this->retrievePermissions($companies, $id);
 
         $updated_permissions = $request->companies;
-
-
+        
         foreach ($updated_permissions as $company_name => $company) {
-            if (isset($old_roles[$company_name][0]) && $old_roles[$company_name][0]->role_id != $company['role']) {
+            if ($company_name == "hygiene") {
+                continue;
+            }
+            if (isset($old_roles[$company_name][0]) &&  !isset($company['role'])) {
                 $updated_roles[$company_name] = $company['role'];
+                dd($old_roles[$company_name][0]->id, 'finally');
                 DB::table("company_has_user_has_roles")->where('id', $old_roles[$company_name][0]->id)->delete();
             } elseif (empty($old_roles[$company_name]) && isset($company['role'])) {
                 $updated_roles[$company_name] = $company['role'];
@@ -412,46 +414,64 @@ class UserController extends Controller
                     if (!empty($updated_permissions[$company]) && !empty($activated_permissions[$company])) {
                         $removed_modules[$company] = array_diff_key($activated_permissions[$company], $updated_permissions[$company]);
                     }
-
+                    
+                    if (empty($updated_permissions)) {
+                        $updated_permissions = array();
+                    }
+        
+                    if (empty($activated_permissions)) {
+                        $activated_permissions = array();
+                    }
+                    
+                   
+              
                     $removed_all = array_diff_key($activated_permissions, $updated_permissions);
                 }
             }
 
 
             // added Permissions
-            foreach ($added_permissions as $company => $modules) {
-                foreach ($modules as $modules_name => $permissions) {
-                    foreach ($permissions as $permission) {
-                        try {
-                            DB::table("company_has_user_has_permissions")->insert(['user_id' => $id, 'company_name' => $company, 'permission_name' => $permission]);
-                        } catch (\Throwable $th) {
-                            continue;
+            if (isset($added_permissions)) {
+                foreach ($added_permissions as $company => $modules) {
+                    foreach ($modules as $modules_name => $permissions) {
+                        foreach ($permissions as $permission) {
+                            try {
+                                DB::table("company_has_user_has_permissions")->insert(['user_id' => $id, 'company_name' => $company, 'permission_name' => $permission]);
+                            } catch (\Throwable $th) {
+                                continue;
+                            }
                         }
                     }
                 }
             }
 
             // removed permissions
-            foreach ($removed_permissions as $company_name => $modules) {
-                foreach ($modules as $module_name => $module) {
-                    foreach ($module as $permission) {
-                        $this->deletePermission($permission, $company_name, $id);
+            if (isset($removed_permissions)) {
+                foreach ($removed_permissions as $company_name => $modules) {
+                    foreach ($modules as $module_name => $module) {
+                        foreach ($module as $permission) {
+                            $this->deletePermission($permission, $company_name, $id);
+                        }
                     }
                 }
             }
 
-            foreach ($removed_modules as $company_name => $modules) {
-                foreach ($modules as $module_name => $module) {
-                    foreach ($module as $permission) {
-                        $this->deletePermission($permission, $company_name, $id);
+            if (isset($removed_modules)) {
+                foreach ($removed_modules as $company_name => $modules) {
+                    foreach ($modules as $module_name => $module) {
+                        foreach ($module as $permission) {
+                            $this->deletePermission($permission, $company_name, $id);
+                        }
                     }
                 }
             }
 
-            foreach ($removed_all as $company_name => $modules) {
-                foreach ($modules as $module_name => $module) {
-                    foreach ($module as $permission) {
-                        $this->deletePermission($permission, $company_name, $id);
+            if (isset($removed_all)) {
+                foreach ($removed_all as $company_name => $modules) {
+                    foreach ($modules as $module_name => $module) {
+                        foreach ($module as $permission) {
+                            $this->deletePermission($permission, $company_name, $id);
+                        }
                     }
                 }
             }
