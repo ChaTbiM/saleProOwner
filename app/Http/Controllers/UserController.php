@@ -371,9 +371,6 @@ class UserController extends Controller
         $updated_permissions = $request->companies;
         
         foreach ($updated_permissions as $company_name => $company) {
-            if ($company_name == "hygiene") {
-                continue;
-            }
             if (isset($old_roles[$company_name][0]) &&  !isset($company['role'])) {
                 $updated_roles[$company_name] = $company['role'];
                 DB::table("company_has_user_has_roles")->where('id', $old_roles[$company_name][0]->id)->delete();
