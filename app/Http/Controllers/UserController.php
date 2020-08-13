@@ -336,6 +336,7 @@ class UserController extends Controller
         $removed_companies = array_diff($companies, $updated_companies);
         $added_companies = array_diff($updated_companies, $companies);
 
+        
 
         // update Removed Companies
         foreach ($removed_companies as $company_key => $company_value) {
@@ -375,7 +376,6 @@ class UserController extends Controller
             }
             if (isset($old_roles[$company_name][0]) &&  !isset($company['role'])) {
                 $updated_roles[$company_name] = $company['role'];
-                dd($old_roles[$company_name][0]->id, 'finally');
                 DB::table("company_has_user_has_roles")->where('id', $old_roles[$company_name][0]->id)->delete();
             } elseif (empty($old_roles[$company_name]) && isset($company['role'])) {
                 $updated_roles[$company_name] = $company['role'];
