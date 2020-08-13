@@ -337,34 +337,30 @@ class UserController extends Controller
         $added_companies = array_diff($updated_companies, $companies);
 
 
-        
-
-
-
         // update Removed Companies
-        // foreach ($removed_companies as $company_key => $company_value) {
-        //     if (isset($company_value)) {
-        //         $company_id = Company::where('name', $company_value)->get()[0]->id;
-        //         try {
-        //             DB::table('users_companies')->where("company_id", '=', $company_id)->where('user_id', '=', $id)->delete();
-        //             DB::table("company_has_user_has_permissions")->where("company_name", "=", $company_key)->where("user_id", "=", $id)->delete();
-        //         } catch (\Throwable $th) {
-        //             return redirect('user')->with('message2', 'user was not removed from company ' . $company_value);
-        //         }
-        //     }
-        // }
+        foreach ($removed_companies as $company_key => $company_value) {
+            if (isset($company_value)) {
+                $company_id = Company::where('name', $company_value)->get()[0]->id;
+                try {
+                    DB::table('users_companies')->where("company_id", '=', $company_id)->where('user_id', '=', $id)->delete();
+                    DB::table("company_has_user_has_permissions")->where("company_name", "=", $company_key)->where("user_id", "=", $id)->delete();
+                } catch (\Throwable $th) {
+                    return redirect('user')->with('message2', 'user was not removed from company ' . $company_value);
+                }
+            }
+        }
 
         // Update Added Compnies
-        // foreach ($added_companies as $company_key => $company_value) {
-        //     if (isset($company_value)) {
-        //         $company_id = Company::where('name', $company_value)->get()[0]->id;
-        //         try {
-        //             DB::insert('insert into users_companies (company_id, user_id) values (?, ?)', [$company_id, $id]);
-        //         } catch (\Throwable $th) {
-        //             return redirect('user')->with('message2', 'user was not assigned to company ' . $company_value);
-        //         }
-        //     }
-        // }
+        foreach ($added_companies as $company_key => $company_value) {
+            if (isset($company_value)) {
+                $company_id = Company::where('name', $company_value)->get()[0]->id;
+                try {
+                    DB::insert('insert into users_companies (company_id, user_id) values (?, ?)', [$company_id, $id]);
+                } catch (\Throwable $th) {
+                    return redirect('user')->with('message2', 'user was not assigned to company ' . $company_value);
+                }
+            }
+        }
 
         // update Permissions
         $companies = User::find($id)->companies;
