@@ -37,7 +37,7 @@
                 <tr data-id="<?php echo e($biller->id); ?>">
                     <td><?php echo e($key); ?></td>
                     <?php if($biller->image): ?>
-                    <td> <img src="<?php echo e(url('public/images/biller',$biller->image)); ?>" height="80" width="80">
+                    <td> <img src="<?php echo e(url('images/biller',$biller->image)); ?>" height="80" width="80">
                     </td>
                     <?php else: ?>
                     <td>No Image</td>
@@ -64,7 +64,7 @@
                             <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
                                 <?php if(in_array("billers-edit", $all_permission)): ?>
                                 <li>
-                                    <a href="<?php echo e(route('biller.edit', ['id' => $biller->id])); ?>" class="btn btn-link"><i class="dripicons-document-edit"></i> <?php echo e(trans('file.edit')); ?></a> 
+                                    <a href="<?php echo e(route('biller.edit', ['id' => $biller->id ,'company'=> $biller->company_name])); ?>" class="btn btn-link"><i class="dripicons-document-edit"></i> <?php echo e(trans('file.edit')); ?></a> 
                                 </li>
                                 <?php endif; ?>
                                 <li class="divider"></li>
@@ -103,7 +103,7 @@
                 <p class="italic">
                     <small><?php echo e(trans('file.The field labels marked with * are required input fields')); ?>.</small></p>
                 <p><?php echo e(trans('file.The correct column order is')); ?> (name*, image, company_name*, vat_number, email*,
-                    phone_number*, address*, city*,state, postal_code, country)
+                    phone_number*, address*, city*,state, postal_code, country , from_company*)
                     <?php echo e(trans('file.and you must follow this')); ?>.</p>
                 <p><?php echo e(trans('file.To display Image it must be stored in')); ?> public/images/biller
                     <?php echo e(trans('file.directory')); ?></p>
@@ -118,7 +118,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label> <?php echo e(trans('file.Sample File')); ?></label>
-                            <a href="public/sample_file/sample_biller.csv" class="btn btn-info btn-block btn-md"><i
+                            <a href="sample_file/sample_biller.csv" class="btn btn-info btn-block btn-md"><i
                                     class="dripicons-download"></i> <?php echo e(trans('file.Download')); ?></a>
                         </div>
                     </div>

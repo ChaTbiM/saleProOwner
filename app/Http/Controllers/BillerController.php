@@ -11,12 +11,6 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Auth;
 use App\Biller;
-use App\Biller_Hygiene;
-use App\Biller_Sweet;
-use App\Biller_Hafko;
-use App\Biller_Sanfora;
-use App\Biller_Service;
-use App\Biller_Goods;
 use App\Company;
 
 class BillerController extends Controller
@@ -25,13 +19,7 @@ class BillerController extends Controller
     {
         $role = Role::find(Auth::user()->role_id);
 
-
-        
-        if ($role->id != 3) {
-            return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
-        }
-
-        if ($role->hasPermissionTo('billers-index')) {
+        if ($role->id == 3) {
             $permissions = Role::findByName($role->name)->permissions;
             foreach ($permissions as $permission) {
                 $all_permission[] = $permission->name;
@@ -39,8 +27,7 @@ class BillerController extends Controller
             if (empty($all_permission)) {
                 $all_permission[] = 'dummy text';
             }
-            $lims_biller_all = Biller::where('is_active', true)->get();
-
+            $lims_biller_all = biller::where('is_active', true)->get();
             return view('biller.index', compact('lims_biller_all', 'all_permission'));
         } else {
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
@@ -61,12 +48,6 @@ class BillerController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'company_name' => [
-                'max:255',
-                    Rule::unique('billers')->where(function ($query) {
-                        return $query->where('is_active', 1);
-                    }),
-            ],
             'email' => [
                 'email',
                 'max:255',
@@ -108,28 +89,12 @@ class BillerController extends Controller
 
     public function edit($id, Request $request)
     {
-        $company_name = $request->company;
-
         $role = Role::find(Auth::user()->role_id);
-
+        $selected_company = $request->company;
+        $companies = Company::all();
         if ($role->hasPermissionTo('billers-edit')) {
-            if ($company_name == "hygiene") {
-                $lims_biller_data = Biller_Hygiene::where('id', $id)->first();
-            } elseif ($company_name == "sweet") {
-                $lims_biller_data = Biller_Sweet::where('id', $id)->first();
-            } elseif ($company_name == "hafko") {
-                $lims_biller_data = Biller_Hafko::where('id', $id)->first();
-            } elseif ($company_name == "sanfora") {
-                $lims_biller_data = Biller_Sanfora::where('id', $id)->first();
-            } elseif ($company_name == "service") {
-                $lims_biller_data = Biller_Service::where('id', $id)->first();
-            } elseif ($company_name == "goods") {
-                $lims_biller_data = Biller_Goods::where('id', $id)->first();
-            }
-
-            $lims_biller_data['company']= $company_name;
-
-            return view('biller.edit', compact('lims_biller_data'));
+            $lims_biller_data = Biller::where('id', $id)->first();
+            return view('biller.edit', compact('lims_biller_data', 'companies', 'selected_company'));
         } else {
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
         }
@@ -167,8 +132,8 @@ class BillerController extends Controller
             $input['image'] = $imageName;
         }
 
-        // $lims_biller_data = Biller::findOrFail($id);
-        // $lims_biller_data->update($input);
+        $lims_biller_data = Biller::findOrFail($id);
+        $lims_biller_data->update($input);
         return redirect('biller')->with('message', 'Data updated successfully');
     }
 
@@ -200,7 +165,6 @@ class BillerController extends Controller
                 $value=preg_replace('/\D/', '', $value);
             }
             $data= array_combine($escapedHeader, $columns);
-
             $biller = Biller::firstOrNew(['company_name'=>$data['companyname']]);
             $biller->name = $data['name'];
             $biller->image = $data['image'];
@@ -213,6 +177,8 @@ class BillerController extends Controller
             $biller->postal_code = $data['postalcode'];
             $biller->country = $data['country'];
             $biller->is_active = true;
+            $biller->from_company = $data['fromcompany'];
+
             $biller->save();
             $message = 'Biller Imported successfully';
             if ($data['email']) {

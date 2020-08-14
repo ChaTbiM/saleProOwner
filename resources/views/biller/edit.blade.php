@@ -34,13 +34,28 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
+                                <div class=" form-group companies_list" >
+                                    <label><strong>{{trans('file.Company Name')}} *</strong></label>
+                                    <select  required name="company_name"
+                                        class="selectpicker form-control " data-live-search="true"
+                                        data-live-search-style="begins" title="Select Company...">
+                                        @foreach($companies as $company)
+                                        <option value="{{$company->name}}" <?php if($selected_company == $company->name){ echo "selected";} ?> >
+                                            {{$company->name}}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>{{trans('file.Company Name')}} *</label>
-                                    <input type="text" name="company_name" value="{{$lims_biller_data->company_name}}"
+                                    <label>{{trans('file.From Company')}} *</label>
+                                    <input type="text" name="from_company" value="{{$lims_biller_data->from_company}}"
                                         required class="form-control">
-                                    @if($errors->has('company_name'))
+                                    @if($errors->has('from_company'))
                                     <span>
-                                        <strong>{{ $errors->first('company_name') }}</strong>
+                                        <strong>{{ $errors->first('from_company') }}</strong>
                                     </span>
                                     @endif
                                 </div>

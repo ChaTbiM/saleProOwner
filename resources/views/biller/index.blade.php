@@ -37,7 +37,7 @@
                 <tr data-id="{{$biller->id}}">
                     <td>{{$key}}</td>
                     @if($biller->image)
-                    <td> <img src="{{url('public/images/biller',$biller->image)}}" height="80" width="80">
+                    <td> <img src="{{url('images/biller',$biller->image)}}" height="80" width="80">
                     </td>
                     @else
                     <td>No Image</td>
@@ -62,7 +62,7 @@
                             <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
                                 @if(in_array("billers-edit", $all_permission))
                                 <li>
-                                    <a href="{{ route('biller.edit', ['id' => $biller->id]) }}" class="btn btn-link"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</a> 
+                                    <a href="{{ route('biller.edit', ['id' => $biller->id ,'company'=> $biller->company_name]) }}" class="btn btn-link"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</a> 
                                 </li>
                                 @endif
                                 <li class="divider"></li>
@@ -98,7 +98,7 @@
                 <p class="italic">
                     <small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
                 <p>{{trans('file.The correct column order is')}} (name*, image, company_name*, vat_number, email*,
-                    phone_number*, address*, city*,state, postal_code, country)
+                    phone_number*, address*, city*,state, postal_code, country , from_company*)
                     {{trans('file.and you must follow this')}}.</p>
                 <p>{{trans('file.To display Image it must be stored in')}} public/images/biller
                     {{trans('file.directory')}}</p>
@@ -112,7 +112,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label> {{trans('file.Sample File')}}</label>
-                            <a href="public/sample_file/sample_biller.csv" class="btn btn-info btn-block btn-md"><i
+                            <a href="sample_file/sample_biller.csv" class="btn btn-info btn-block btn-md"><i
                                     class="dripicons-download"></i> {{trans('file.Download')}}</a>
                         </div>
                     </div>
