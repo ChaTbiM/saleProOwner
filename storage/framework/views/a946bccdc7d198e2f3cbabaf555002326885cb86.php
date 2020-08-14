@@ -1,80 +1,81 @@
-@extends('layout.main') @section('content')
+ <?php $__env->startSection('content'); ?>
 
-@if(session()->has('not_permitted'))
+<?php if(session()->has('not_permitted')): ?>
 <div class="alert alert-danger alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert"
-        aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('not_permitted') }}</div>
-@endif
+        aria-label="Close"><span aria-hidden="true">&times;</span></button><?php echo e(session()->get('not_permitted')); ?></div>
+<?php endif; ?>
 <section class="forms">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header d-flex align-items-center">
-                        <h4>{{trans('file.Add User')}}</h4>
+                        <h4><?php echo e(trans('file.Add User')); ?></h4>
                     </div>
                     <div class="card-body">
                         <p class="italic">
-                            <small>{{trans('file.The field labels marked with * are required input fields')}}.</small>
+                            <small><?php echo e(trans('file.The field labels marked with * are required input fields')); ?>.</small>
                         </p>
-                        {!! Form::open(['route' => 'user.store', 'method' => 'post', 'files' => true]) !!}
+                        <?php echo Form::open(['route' => 'user.store', 'method' => 'post', 'files' => true]); ?>
+
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label><strong>{{trans('file.UserName')}} *</strong> </label>
+                                    <label><strong><?php echo e(trans('file.UserName')); ?> *</strong> </label>
                                     <input type="text" name="name" required class="form-control">
-                                    @if($errors->has('name'))
+                                    <?php if($errors->has('name')): ?>
                                     <span>
-                                        <strong>{{ $errors->first('name') }}</strong>
+                                        <strong><?php echo e($errors->first('name')); ?></strong>
                                     </span>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                                 <div class="form-group">
-                                    <label><strong>{{trans('file.Password')}} *</strong> </label>
+                                    <label><strong><?php echo e(trans('file.Password')); ?> *</strong> </label>
                                     <div class="input-group">
                                         <input type="password" name="password" required class="form-control">
                                         <div class="input-group-append">
                                             <button id="genbutton" type="button"
-                                                class="btn btn-default">{{trans('file.Generate')}}</button>
+                                                class="btn btn-default"><?php echo e(trans('file.Generate')); ?></button>
                                         </div>
-                                        @if($errors->has('password'))
+                                        <?php if($errors->has('password')): ?>
                                         <span>
-                                            <strong>{{ $errors->first('password') }}</strong>
+                                            <strong><?php echo e($errors->first('password')); ?></strong>
                                         </span>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label><strong>{{trans('file.Email')}} *</strong></label>
+                                    <label><strong><?php echo e(trans('file.Email')); ?> *</strong></label>
                                     <input type="email" name="email" placeholder="example@example.com" required
                                         class="form-control">
-                                    @if($errors->has('email'))
+                                    <?php if($errors->has('email')): ?>
                                     <span>
-                                        <strong>{{ $errors->first('email') }}</strong>
+                                        <strong><?php echo e($errors->first('email')); ?></strong>
                                     </span>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                                 <div class="form-group">
-                                    <label><strong>{{trans('file.Phone Number')}} *</strong></label>
+                                    <label><strong><?php echo e(trans('file.Phone Number')); ?> *</strong></label>
                                     <input type="text" name="phone" required class="form-control">
                                 </div>
                                 <div class="form-group">
                                     <input class="mt-2" type="checkbox" name="is_active" value="1" checked>
-                                    <label class="mt-2"><strong>{{trans('file.Active')}}</strong></label>
+                                    <label class="mt-2"><strong><?php echo e(trans('file.Active')); ?></strong></label>
                                 </div>
                                 <div class="form-group">
-                                    <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
+                                    <input type="submit" value="<?php echo e(trans('file.submit')); ?>" class="btn btn-primary">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label><strong>{{trans('file.Companies Name')}}</strong></label>
+                                    <label><strong><?php echo e(trans('file.Companies Name')); ?></strong></label>
                                     <br>
                                     <div class="form-check form-group form-check-inline ">
                                         <input type="checkbox" class="form-check-input" name="all" id="all" value="all">
                                         <label class="form-check-label " for="all">all</label>
                                     </div>
                                     <br>
-                                    @for ($i = 0; $i < count($companies); $i++) <div class="form-check form-group  ">
+                                    <?php for($i = 0; $i < count($companies); $i++): ?> <div class="form-check form-group  ">
                                         <input type="checkbox" class="form-check-input check-company "
                                             name="<?='companies['.$companies[$i]->name.']'?>" id="check-company-<?=$i?>"
                                             value="<?=$companies[$i]->name?>">
@@ -82,28 +83,29 @@
                                             for="<?=$companies[$i]->name?>"><?=$companies[$i]->name?></label>
                                 </div>
                                 <div class="d-none form-group roles_list" id=<?="roles-$i"?>>
-                                    <label><strong>{{trans('file.Role')}} *</strong></label>
+                                    <label><strong><?php echo e(trans('file.Role')); ?> *</strong></label>
                                     <select id=<?="select-$i"?> name=<?="companies[".$companies[$i]->name."][role]" ?>
                                         class="selectpicker form-control " data-live-search="true"
                                         data-live-search-style="begins" title="Select Role...">
-                                        @foreach($lims_role_list as $role)
-                                        <option value="{{$role->id}}">
-                                            {{$role->name}}
+                                        <?php $__currentLoopData = $lims_role_list; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($role->id); ?>">
+                                            <?php echo e($role->name); ?>
+
                                         </option>
-                                        @endforeach
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
                                 </div>
                                 <div class="d-none permissions form-group" id="permissions-<?=$i?>">
                                     <?php $company_modules = $companies_permissions[$companies[$i]->name]; ?>
-                                    @if (empty($company_modules))
+                                    <?php if(empty($company_modules)): ?>
                                     empty
-                                    @else
+                                    <?php else: ?>
 
-                                    @foreach ($company_modules as $company_module => $module_permissions)
+                                    <?php $__currentLoopData = $company_modules; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $company_module => $module_permissions): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     
                                     
-                                    <p>{{count($module_permissions) }} yes / no</p>
-                                    @foreach ($module_permissions as $permission)
+                                    <p><?php echo e(count($module_permissions)); ?> yes / no</p>
+                                    <?php $__currentLoopData = $module_permissions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $permission): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <div class="form-check form-group form-check-inline "
                                         id=<?="company-$i-$permission"?>>
                                         <input type="checkbox" class="form-check-input "
@@ -129,15 +131,16 @@
                                             ?>
                                         </label>
                                     </div>
-                                    @endforeach
-                                    @endforeach
-                                    @endif
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    <?php endif; ?>
                                 </div>
-                                @endfor
+                                <?php endfor; ?>
                             </div>
                         </div>
                     </div>
-                    {!! Form::close() !!}
+                    <?php echo Form::close(); ?>
+
                 </div>
             </div>
         </div>
@@ -247,4 +250,5 @@
 
 
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.main', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
