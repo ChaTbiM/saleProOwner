@@ -103,8 +103,11 @@
 
                                     <?php $__currentLoopData = $company_modules; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $company_module => $module_permissions): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     
-                                    
-                                    <p><?php echo e(count($module_permissions)); ?> yes / no</p>
+                                        
+                                    <p>
+                                        <?php echo e(trans('file.'.$company_module)); ?>
+
+                                    </p>
                                     <?php $__currentLoopData = $module_permissions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $permission): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <div class="form-check form-group form-check-inline "
                                         id=<?="company-$i-$permission"?>>

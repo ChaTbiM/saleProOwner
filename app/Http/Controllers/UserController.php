@@ -588,6 +588,10 @@ class UserController extends Controller
                         $permissions = $company->productPermissions();
                         $this->constructPermissions($company, $company_module, $id, $permissions);
                         break;
+                    case 'service':
+                            $permissions = $company->servicePermissions();
+                            $this->constructPermissions($company, $company_module, $id, $permissions);
+                            break;
                     case 'purchase':
                         $permissions = $company->purchasePermissions();
                         $this->constructPermissions($company, $company_module, $id, $permissions);

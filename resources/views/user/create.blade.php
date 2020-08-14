@@ -101,8 +101,10 @@
 
                                     @foreach ($company_modules as $company_module => $module_permissions)
                                     
-                                    
-                                    <p>{{count($module_permissions) }} yes / no</p>
+                                        
+                                    <p>
+                                        {{ trans('file.'.$company_module) }}
+                                    </p>
                                     @foreach ($module_permissions as $permission)
                                     <div class="form-check form-group form-check-inline "
                                         id=<?="company-$i-$permission"?>>
