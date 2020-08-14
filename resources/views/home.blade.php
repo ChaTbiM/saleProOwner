@@ -25,6 +25,17 @@
                             {{ session('status') }}
                         </div>
                     @endif
+                    @php
+                     $user_role_id = Auth::user()->role_id;
+                     $number_of_companies = count($companies);
+                     if($number_of_companies == 1){
+                         $redirectTo = $companies[0]->name;
+                     }
+                    @endphp
+                    @if ($number_of_companies == 1)
+                        
+                    <input type="hidden" name="redirect" id="redirect" value={{$redirectTo}}>
+                    @endif
                     <div class="container">
                         @for ($i = 0 ; $i< count($companies) ; $i += 2 )
                             <div class="row">
@@ -55,3 +66,11 @@
     </div>
 </div>
 @endsection
+
+<script>
+    document.addEventListener('DOMContentLoaded',()=>{
+        let redirectTo = document.querySelector('#redirect').value;
+        let url = "https://www.akeedgroups.com/"+redirectTo;
+        window.location.assign(url);
+    })
+</script>

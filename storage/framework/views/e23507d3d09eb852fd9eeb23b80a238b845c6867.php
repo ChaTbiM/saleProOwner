@@ -26,6 +26,17 @@
 
                         </div>
                     <?php endif; ?>
+                    <?php
+                     $user_role_id = Auth::user()->role_id;
+                     $number_of_companies = count($companies);
+                     if($number_of_companies == 1){
+                         $redirectTo = $companies[0]->name;
+                     }
+                    ?>
+                    <?php if($number_of_companies == 1): ?>
+                        
+                    <input type="hidden" name="redirect" id="redirect" value=<?php echo e($redirectTo); ?>>
+                    <?php endif; ?>
                     <div class="container">
                         <?php for($i = 0 ; $i< count($companies) ; $i += 2 ): ?>
                             <div class="row">
@@ -57,4 +68,11 @@
 </div>
 <?php $__env->stopSection(); ?>
 
+<script>
+    document.addEventListener('DOMContentLoaded',()=>{
+        let redirectTo = document.querySelector('#redirect').value;
+        let url = "https://www.akeedgroups.com/"+redirectTo;
+        window.location.assign(url);
+    })
+</script>
 <?php echo $__env->make('layout.main', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
