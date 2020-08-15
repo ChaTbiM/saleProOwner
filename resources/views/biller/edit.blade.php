@@ -33,6 +33,24 @@
                                     @endif
                                 </div>
                             </div>
+
+                            <?php
+                                function printCompanyName($company){
+                                    if($company == "hygiene"){
+                                        return "akeed hygiene";
+                                    }else if($company == "sweet"){
+                                        return "akeed sweet";
+                                    }else if ($company == "sanfora"){
+                                        return "akeed food";
+                                    }else if($company == "hafko"){
+                                        return "akeed factory";
+                                    }else if($company == "service"){
+                                        return "bruxelle salon";
+                                    }else if($company == "goods"){
+                                        return "akeed trading";
+                                    }
+                                }
+                            ?>
                             <div class="col-md-6">
                                 <div class=" form-group companies_list" >
                                     <label><strong>{{trans('file.Company Name')}} *</strong></label>
@@ -41,12 +59,14 @@
                                         data-live-search-style="begins" title="Select Company...">
                                         @foreach($companies as $company)
                                         <option value="{{$company->name}}" <?php if($selected_company == $company->name){ echo "selected";} ?> >
-                                            {{$company->name}}
+                                            {{printCompanyName($company->name)}}
                                         </option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
+
+
 
                             <div class="col-md-6">
                                 <div class="form-group">

@@ -18,6 +18,23 @@
     </div>
     <div class="table-responsive">
         <table id="biller-table" class="table">
+            <?php
+                                function printCompanyName($company){
+                                    if($company == "hygiene"){
+                                        return "akeed hygiene";
+                                    }else if($company == "sweet"){
+                                        return "akeed sweet";
+                                    }else if ($company == "sanfora"){
+                                        return "akeed food";
+                                    }else if($company == "hafko"){
+                                        return "akeed factory";
+                                    }else if($company == "service"){
+                                        return "bruxelle salon";
+                                    }else if($company == "goods"){
+                                        return "akeed trading";
+                                    }
+                                }
+                            ?>
             <thead>
                 <tr>
                     <th class="not-exported"></th>
@@ -43,7 +60,8 @@
                     <td>No Image</td>
                     <?php endif; ?>
                     <td><?php echo e($biller->name); ?></td>
-                    <td><?php echo e($biller->company_name); ?></td>
+                    
+                    <td><?= printCompanyName($biller->company_name)?></td>
                     <td><?php echo e($biller->from_company); ?></td>
                     <td><?php echo e($biller->vat_number); ?></td>
                     <td><?php echo e($biller->email); ?></td>

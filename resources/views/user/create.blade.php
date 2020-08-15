@@ -65,10 +65,26 @@
                                     <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
                                 </div>
                             </div>
+                            <?php
+                            function printCompanyName($company){
+                                if($company == "hygiene"){
+                                    return "akeed hygiene";
+                                }else if($company == "sweet"){
+                                    return "akeed sweet";
+                                }else if ($company == "sanfora"){
+                                    return "akeed food";
+                                }else if($company == "hafko"){
+                                    return "akeed factory";
+                                }else if($company == "service"){
+                                    return "bruxelle salon";
+                                }else if($company == "goods"){
+                                    return "akeed trading";
+                                }
+                            }
+                        ?>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label><strong>{{trans('file.Companies Name')}}</strong></label>
-                                    <br>
+                                    
                                     <div class="form-check form-group form-check-inline ">
                                         <input type="checkbox" class="form-check-input all-companies" name="all"  value="all">
                                         <label class="form-check-label " for="all">all</label>
@@ -79,7 +95,7 @@
                                             name="<?='companies['.$companies[$i]->name.']'?>" id="check-company-<?=$i?>"
                                             value="<?=$companies[$i]->name?>">
                                         <label class="form-check-label "
-                                            for="<?=$companies[$i]->name?>"><?=$companies[$i]->name?></label>
+                                            for="<?=$companies[$i]->name?>"><?=printCompanyName($companies[$i]->name)?></label>
                                 </div>
                                 <div class="d-none form-group roles_list" id=<?="roles-$i"?>>
                                     <label><strong>{{trans('file.Role')}} *</strong></label>

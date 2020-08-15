@@ -24,8 +24,25 @@
         <div class="container">
                 <div class="row justify-content-center">
                         <div class="col-md-10">
+                                <?php
+                                function printCompanyName($company){
+                                    if($company == "hygiene"){
+                                        return "akeed hygiene";
+                                    }else if($company == "sweet"){
+                                        return "akeed sweet";
+                                    }else if ($company == "sanfora"){
+                                        return "akeed food";
+                                    }else if($company == "hafko"){
+                                        return "akeed factory";
+                                    }else if($company == "service"){
+                                        return "bruxelle salon";
+                                    }else if($company == "goods"){
+                                        return "akeed trading";
+                                    }
+                                }
+                            ?>
                                 <div class="card">
-                                        <h3 class="card-header"><?= $company_name ?> {{ trans('file.modules') }} </h3>
+                                        <h3 class="card-header"><?= printCompanyName($company_name) ?> {{ trans('file.modules') }} </h3>
                                         <div class="card-body">
                                                 {!! Form::open(['route' => ['module.update', $company->id], 'method' =>
                                                 'put', 'files' => true]) !!}

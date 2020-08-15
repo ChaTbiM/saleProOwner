@@ -32,12 +32,29 @@
                                                         {{ session('status') }}
                                                 </div>
                                                 @endif
+                                                <?php
+                            function printCompanyName($company){
+                                if($company == "hygiene"){
+                                    return "akeed hygiene";
+                                }else if($company == "sweet"){
+                                    return "akeed sweet";
+                                }else if ($company == "sanfora"){
+                                    return "akeed food";
+                                }else if($company == "hafko"){
+                                    return "akeed factory";
+                                }else if($company == "service"){
+                                    return "bruxelle salon";
+                                }else if($company == "goods"){
+                                    return "akeed trading";
+                                }
+                            }
+                        ?>
                                                 <div class="container">
                                                         @for ($i = 0 ; $i< count($companies) ; $i +=2 ) <div
                                                                 class="row">
                                                                 <div class="card col-12 col-md-5 m-3">
                                                                         <div class="card-header">
-                                                                                <?= $companies[$i]->name?>
+                                                                                <?= printCompanyName($companies[$i]->name)?>
                                                                         </div>
                                                                         <div class="card-body">
                                                                                 <?php $modules = $companies[$i]->modules; ?>
@@ -45,19 +62,20 @@
                                                                                         @foreach ($modules as $module)
 
                                                                                         <li class="list-group-item">
-                                                                                                {{ trans("file.$module->name") }}</li>
+                                                                                                {{ trans("file.$module->name") }}
+                                                                                        </li>
                                                                                         @endforeach
                                                                                 </ul>
                                                                         </div>
                                                                         <a href="{{ route('module.edit', ['id' => $companies[$i]->id]) }}"
                                                                                 class="btn btn-primary  active mx-auto w-50 mb-3"
-                                                                                role="button"
-                                                                                aria-pressed="true"> {{ trans('file.edit') }} </a>
+                                                                                role="button" aria-pressed="true">
+                                                                                {{ trans('file.edit') }} </a>
                                                                 </div>
                                                                 @if( count($companies) > $i +1 )
                                                                 <div class="card col-12 col-md-5 m-3">
                                                                         <div class="card-header">
-                                                                                <?= $companies[$i+1]->name?>
+                                                                                <?= printCompanyName($companies[$i+1]->name)?>
                                                                         </div>
                                                                         <div class="card-body">
                                                                                 <?php $modules = $companies[$i+1]->modules; ?>

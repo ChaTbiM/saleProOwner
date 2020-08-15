@@ -94,13 +94,30 @@
                                         ?>
                                     <label><strong>{{trans('file.Company Name')}}</strong></label>
                                     <br>
+                                    <?php
+                                        function printCompanyName($company){
+                                            if($company == "hygiene"){
+                                                return "akeed hygiene";
+                                            }else if($company == "sweet"){
+                                                return "akeed sweet";
+                                            }else if ($company == "sanfora"){
+                                                return "akeed food";
+                                            }else if($company == "hafko"){
+                                                return "akeed factory";
+                                            }else if($company == "service"){
+                                                return "bruxelle salon";
+                                            }else if($company == "goods"){
+                                                return "akeed trading";
+                                            }
+                                        }
+                                    ?>
                                     @foreach ($companies as $company)
                                     <div class="form-check  form-group ">
                                         <input type="checkbox" class="form-check-input check-company"
                                             id="check-company-<?=$loop->index?>" name=<?=$company?> id=<?=$company?>
                                             value=<?=$company?>
                                             <?php if(belongsTo($user_companies,$company)) echo "checked" ?>>
-                                        <label class="form-check-label " for=<?=$company?>> <?=$company?> </label>
+                                        <label class="form-check-label " for=<?=$company?>> <?= printCompanyName($company)?> </label>
                                     </div>
                                     {{-- roles --}}
                                     @if (isset($roles[$company]))

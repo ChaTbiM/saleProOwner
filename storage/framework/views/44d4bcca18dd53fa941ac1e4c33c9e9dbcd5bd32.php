@@ -34,6 +34,24 @@
                                     <?php endif; ?>
                                 </div>
                             </div>
+
+                            <?php
+                                function printCompanyName($company){
+                                    if($company == "hygiene"){
+                                        return "akeed hygiene";
+                                    }else if($company == "sweet"){
+                                        return "akeed sweet";
+                                    }else if ($company == "sanfora"){
+                                        return "akeed food";
+                                    }else if($company == "hafko"){
+                                        return "akeed factory";
+                                    }else if($company == "service"){
+                                        return "bruxelle salon";
+                                    }else if($company == "goods"){
+                                        return "akeed trading";
+                                    }
+                                }
+                            ?>
                             <div class="col-md-6">
                                 <div class=" form-group companies_list" >
                                     <label><strong><?php echo e(trans('file.Company Name')); ?> *</strong></label>
@@ -42,13 +60,15 @@
                                         data-live-search-style="begins" title="Select Company...">
                                         <?php $__currentLoopData = $companies; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $company): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <option value="<?php echo e($company->name); ?>" <?php if($selected_company == $company->name){ echo "selected";} ?> >
-                                            <?php echo e($company->name); ?>
+                                            <?php echo e(printCompanyName($company->name)); ?>
 
                                         </option>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
                                 </div>
                             </div>
+
+
 
                             <div class="col-md-6">
                                 <div class="form-group">
