@@ -70,7 +70,7 @@
                                     <label><strong>{{trans('file.Companies Name')}}</strong></label>
                                     <br>
                                     <div class="form-check form-group form-check-inline ">
-                                        <input type="checkbox" class="form-check-input" name="all" id="all" value="all">
+                                        <input type="checkbox" class="form-check-input all-companies" name="all"  value="all">
                                         <label class="form-check-label " for="all">all</label>
                                     </div>
                                     <br>
@@ -101,14 +101,24 @@
 
                                     @foreach ($company_modules as $company_module => $module_permissions)
                                     
-                                        
                                     <p>
                                         {{ trans('file.'.$company_module) }}
                                     </p>
+                                    <div class="form-check form-group ">
+                                        <input type="checkbox" class="form-check-input all-permissions"
+                                                name="all"  data-permissions=<?="company-$i-$company_module"?>
+                                                >
+
+                                        <label class="form-check-label "
+                                                for="all"> {{ trans('file.all') }} </label>
+                                    </div>
                                     @foreach ($module_permissions as $permission)
-                                    <div class="form-check form-group form-check-inline "
-                                        id=<?="company-$i-$permission"?>>
-                                        <input type="checkbox" class="form-check-input "
+                                    <?php $class = " form-check-input company-$i-$company_module ";
+                                        // dd($class);
+                                    ?>
+                                    <div class="form-check form-group form-check-inline"
+                                        id=<?="company-$i-$permission"?> >
+                                        <input type="checkbox" class='{{$class}}'
                                             name="<?='companies['.$companies[$i]->name.']'.'['. $company_module .'][]'?>"
                                             value="<?=$permission?>">
                                         <label class="form-check-label" for="<?=$permission?>">
@@ -182,7 +192,7 @@
 
     // Companies  and permissions
     // Selecting all Companies
-    $('#all').on('change',function(){
+    $('.all-companies').on('change',function(){
         const company = $('.check-company');
       if($(this).prop("checked")){
           company.prop('checked',true).trigger('change');
@@ -245,6 +255,33 @@
         
         }
 
+    }
+
+
+    $(document).ready(()=>{
+        let permissionsTargetClass = $('.all-permissions').data('permissions');
+        let isAllChecked = $('.all-permissions').prop('checked') 
+        handleAllPermissionsChange(isAllChecked,permissionsTargetClass);
+        $('.all-companies').trigger('change');
+
+        $('.all-permissions').on('change',function (){
+        let permissionsTargetClass = $(this).data('permissions')
+        let isAllChecked = $(this).prop('checked') 
+        handleAllPermissionsChange(isAllChecked,permissionsTargetClass);
+    })
+
+    })
+
+    
+
+    function handleAllPermissionsChange(isAllChecked,permissionsTargetClass){
+        if(isAllChecked){
+        $('.'+permissionsTargetClass).prop('checked',true);
+
+        }else {
+        $('.'+permissionsTargetClass).prop('checked',false);
+
+        }
     }
 
 

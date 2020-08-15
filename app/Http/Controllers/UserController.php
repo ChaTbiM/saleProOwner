@@ -92,6 +92,7 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        dd($request);
         $companies = $request->only('companies');
         
         foreach ($companies["companies"] as $company_name => $company) {
