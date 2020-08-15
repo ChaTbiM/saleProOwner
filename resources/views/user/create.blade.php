@@ -114,7 +114,6 @@
                                     </div>
                                     @foreach ($module_permissions as $permission)
                                     <?php $class = " form-check-input company-$i-$company_module ";
-                                        // dd($class);
                                     ?>
                                     <div class="form-check form-group form-check-inline"
                                         id=<?="company-$i-$permission"?> >

@@ -141,14 +141,25 @@
                                     <div id="permissions-<?=$loop->index?>"
                                         class=<?php if(!belongsTo($user_companies,$company)) echo "d-none" ?>>
                                         <div class=" ml-2">
+
                                             <?php $__currentLoopData = $user_permissions[$company]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $module_name => $module): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <p>
                                                 <?php echo e(trans('file.'.$module_name)); ?>
 
                                             </p>
+                                            <div class="form-check form-group ">
+                                                <input type="checkbox" class="form-check-input all-permissions"
+                                                        name="all"  data-permissions=<?="company-$i-$module_name"?>
+                                                        >
+        
+                                                <label class="form-check-label "
+                                                        for="all"> <?php echo e(trans('file.all')); ?> </label>
+                                            </div>
                                             <?php $__currentLoopData = $module; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $permission => $has_permission): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php $class = " form-check-input company-$i-$module_name ";
+                                    ?>
                                             <div class=" form-check form-check-inline  form-group " id=<?="company-$i-$permission"?>>
-                                                <input type="checkbox" class="form-check-input"
+                                            <input type="checkbox" class='<?php echo e($class); ?>'
                                                     name=<?="companies[$company][$module_name][$permission]"?>
                                                     id=<?="$company-$permission"?> value=<?=$permission?> 
                                                     <?php if($has_permission) {echo "checked";} ?>
@@ -198,17 +209,6 @@
       $.get('../genpass', function(data){
         $("input[name='password']").val(data);
       });
-    });
-
-
-    $('#all').on('change',function(){
-        const company = $('.check-company');
-      if($(this).prop("checked")){
-          company.prop('checked',true).trigger('change');
-
-      }else {
-        company.prop('checked',false).trigger('change');
-      }
     });
 
     // Showing permissions for selected company
@@ -297,11 +297,29 @@
             showPermissions(index,'hide');
             }
         })
+
+        let permissionsTargetClass = $('.all-permissions').data('permissions');
+        let isAllChecked = $('.all-permissions').prop('checked') 
+        handleAllPermissionsChange(isAllChecked,permissionsTargetClass);
+        $('.all-companies').trigger('change');
+
+        $('.all-permissions').on('change',function (){
+        let permissionsTargetClass = $(this).data('permissions')
+        let isAllChecked = $(this).prop('checked') 
+        handleAllPermissionsChange(isAllChecked,permissionsTargetClass);
+    })
     })
 
 
     const staffPermissions = ['print_barcode','adjustment','stock_count' , 'gift-card', 'coupon', 'expenses-index', 'expenses-add','quotes-index', 'quotes-edit', 'quotes-add', 'quotes-delete','account-index', 'account-statement', 'money-transfer', 'balance-sheet','department', 'employees-index', 'attendance', 'payroll','users-index', 'users-add', 'billers-index', 'billers-add', 'suppliers-index', 'suppliers-add','profit-loss', 'best-seller', 'warehouse-report', 'warehouse-stock-report', 'product-report', 'daily-sale', 'monthly-sale', 'daily-purchase', 'monthly-purchase', 'purchase-report', 'sale-report', 'payment-report', 'product-qty-alert', 'customer-report', 'supplier-report', 'due-report']
 
+    function handleAllPermissionsChange(isAllChecked,permissionsTargetClass){
+        if(isAllChecked){
+        $('.'+permissionsTargetClass).prop('checked',true);
+        }else {
+        $('.'+permissionsTargetClass).prop('checked',false);
+        }
+    }
 </script>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layout.main', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
