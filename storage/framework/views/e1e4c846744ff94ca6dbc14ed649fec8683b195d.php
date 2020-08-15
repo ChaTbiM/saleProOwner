@@ -1,60 +1,65 @@
-@extends('layout.main') @section('content')
-@if(session()->has('message1'))
+ <?php $__env->startSection('content'); ?>
+<?php if(session()->has('message1')): ?>
 <div class="alert alert-success alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert"
-                aria-label="Close"><span aria-hidden="true">&times;</span></button>{!! session()->get('message1') !!}
+                aria-label="Close"><span aria-hidden="true">&times;</span></button><?php echo session()->get('message1'); ?>
+
 </div>
-@endif
-@if(session()->has('message2'))
+<?php endif; ?>
+<?php if(session()->has('message2')): ?>
 <div class="alert alert-success alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert"
-                aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('message2') }}
+                aria-label="Close"><span aria-hidden="true">&times;</span></button><?php echo e(session()->get('message2')); ?>
+
 </div>
-@endif
-@if(session()->has('message3'))
+<?php endif; ?>
+<?php if(session()->has('message3')): ?>
 <div class="alert alert-danger alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert"
-                aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('message3') }}
+                aria-label="Close"><span aria-hidden="true">&times;</span></button><?php echo e(session()->get('message3')); ?>
+
 </div>
-@endif
-@if(session()->has('not_permitted'))
+<?php endif; ?>
+<?php if(session()->has('not_permitted')): ?>
 <div class="alert alert-danger alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert"
-                aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('not_permitted') }}
+                aria-label="Close"><span aria-hidden="true">&times;</span></button><?php echo e(session()->get('not_permitted')); ?>
+
 </div>
-@endif
+<?php endif; ?>
 
 <section>
         <div class="container">
                 <div class="row justify-content-center">
                         <div class="col-md-10">
                                 <div class="card">
-                                        <h3 class="card-header"><?= $company_name ?> {{ trans('file.modules') }} </h3>
+                                        <h3 class="card-header"><?= $company_name ?> <?php echo e(trans('file.modules')); ?> </h3>
                                         <div class="card-body">
-                                                {!! Form::open(['route' => ['module.update', $company->id], 'method' =>
-                                                'put', 'files' => true]) !!}
+                                                <?php echo Form::open(['route' => ['module.update', $company->id], 'method' =>
+                                                'put', 'files' => true]); ?>
 
-                                                <h6> {{ trans('file.activated modules') }} </h6>
-                                                @foreach ($company_modules as $module)
+
+                                                <h6> <?php echo e(trans('file.activated modules')); ?> </h6>
+                                                <?php $__currentLoopData = $company_modules; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $module): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <div class="form-check form-group form-check-inline ">
                                                         <input type="checkbox" class="form-check-input"
                                                                 name="<?=$module?>" id="<?=$module?>"
                                                                 value="<?=$module?>" checked>
 
                                                         <label class="form-check-label "
-                                                                for="<?=$module?>"> {{ trans("file.$module") }}</label>
+                                                                for="<?=$module?>"> <?php echo e(trans("file.$module")); ?></label>
                                                 </div>
-                                                @endforeach
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-                                                <h6> {{ trans('file.desactivated modules') }} </h6>
-                                                @if (count($desactivated_modules) > 1)
+                                                <h6> <?php echo e(trans('file.desactivated modules')); ?> </h6>
+                                                <?php if(count($desactivated_modules) > 1): ?>
                                                 <div class="form-check form-group ">
                                                         <input type="checkbox" class="form-check-input"
                                                                 name="all" id="all"
                                                                 >
 
                                                         <label class="form-check-label "
-                                                                for="all"> {{ trans('file.all') }} </label>
+                                                                for="all"> <?php echo e(trans('file.all')); ?> </label>
                                                 </div>    
-                                                @endif
+                                                <?php endif; ?>
                                                 
-                                                @foreach ($desactivated_modules as $module)
+                                                <?php $__currentLoopData = $desactivated_modules; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $module): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
                                                 <div class="form-check form-group form-check-inline ">
                                                         <input type="checkbox" class="form-check-input modules"
@@ -62,16 +67,17 @@
                                                                 value="<?=$module?>">
 
                                                         <label class="form-check-label "
-                                                                for="<?=$module?>"> {{ trans("file.$module") }}</label>
+                                                                for="<?=$module?>"> <?php echo e(trans("file.$module")); ?></label>
                                                 </div>
-                                                @endforeach
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                 <div class="form-group">
-                                                        <input type="submit" value="{{trans('file.submit')}}"
+                                                        <input type="submit" value="<?php echo e(trans('file.submit')); ?>"
                                                                 class="btn btn-primary mt-3">
                                                 </div>
                                         </div>
 
-                                        {!! Form::close() !!}
+                                        <?php echo Form::close(); ?>
+
                                 </div>
                         </div>
                 </div>
@@ -100,4 +106,5 @@ function handleAllChange(isAllChecked){
 }
 
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.main', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

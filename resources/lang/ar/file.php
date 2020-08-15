@@ -563,4 +563,8 @@ return [
     "report" => "التقرير",
     "service" => "الخدمات",
     "all"=>"الكل",
+    "Companies Modules"=>"وحدات الشركات",
+    "modules"=>"وحدات",
+    "activated modules" => "الوحدات المفعلة",
+    "desactivated modules" => "الوحدات الغير مفعلة",
     ];

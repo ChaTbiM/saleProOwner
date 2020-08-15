@@ -39,7 +39,7 @@
                     <div class="container">
                         @for ($i = 0 ; $i< count($companies) ; $i += 2 )
                             <div class="row">
-                                <div class="card col-5 m-3"  >
+                                <div class="card col-12 col-md-5 m-3"  >
                                     <a href={{url($companies[$i]->name)}}>
                                         <div class="card-body">
                                         <p class="card-text text-center"> {{$companies[$i]->name}} </p>
@@ -48,7 +48,7 @@
                                     </a>
                                 </div>
                                 @if( count($companies) > $i +1 )
-                                    <div class="card col-5 m-3"  >
+                                    <div class="card col-12 col-md-5 m-3"  >
                                         <a href={{$companies[$i+1]->name}}>
                                             <div class="card-body">
                                             <p class="card-text text-center"> {{$companies[$i+1]->name}} </p>

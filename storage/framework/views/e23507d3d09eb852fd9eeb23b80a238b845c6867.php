@@ -40,7 +40,7 @@
                     <div class="container">
                         <?php for($i = 0 ; $i< count($companies) ; $i += 2 ): ?>
                             <div class="row">
-                                <div class="card col-5 m-3"  >
+                                <div class="card col-12 col-md-5 m-3"  >
                                     <a href=<?php echo e(url($companies[$i]->name)); ?>>
                                         <div class="card-body">
                                         <p class="card-text text-center"> <?php echo e($companies[$i]->name); ?> </p>
@@ -49,7 +49,7 @@
                                     </a>
                                 </div>
                                 <?php if( count($companies) > $i +1 ): ?>
-                                    <div class="card col-5 m-3"  >
+                                    <div class="card col-12 col-md-5 m-3"  >
                                         <a href=<?php echo e($companies[$i+1]->name); ?>>
                                             <div class="card-body">
                                             <p class="card-text text-center"> <?php echo e($companies[$i+1]->name); ?> </p>

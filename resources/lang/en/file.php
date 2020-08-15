@@ -563,5 +563,9 @@ return [
     "report" => "Report",
     "service" => "Service",
     "all" => "all",
+    "Companies Modules" => "Companies Modules",
+    "modules"=>"modules",
+    "activated modules" => "activated modules",
+    "desactivated modules" => "desactivated modules",
 
 ];

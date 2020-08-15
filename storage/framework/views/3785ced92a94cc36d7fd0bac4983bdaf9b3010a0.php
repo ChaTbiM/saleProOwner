@@ -1,39 +1,44 @@
-@extends('layout.main') @section('content')
-@if(session()->has('message1'))
+ <?php $__env->startSection('content'); ?>
+<?php if(session()->has('message1')): ?>
 <div class="alert alert-success alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert"
-                aria-label="Close"><span aria-hidden="true">&times;</span></button>{!! session()->get('message1') !!}
+                aria-label="Close"><span aria-hidden="true">&times;</span></button><?php echo session()->get('message1'); ?>
+
 </div>
-@endif
-@if(session()->has('message2'))
+<?php endif; ?>
+<?php if(session()->has('message2')): ?>
 <div class="alert alert-success alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert"
-                aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('message2') }}
+                aria-label="Close"><span aria-hidden="true">&times;</span></button><?php echo e(session()->get('message2')); ?>
+
 </div>
-@endif
-@if(session()->has('message3'))
+<?php endif; ?>
+<?php if(session()->has('message3')): ?>
 <div class="alert alert-danger alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert"
-                aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('message3') }}
+                aria-label="Close"><span aria-hidden="true">&times;</span></button><?php echo e(session()->get('message3')); ?>
+
 </div>
-@endif
-@if(session()->has('not_permitted'))
+<?php endif; ?>
+<?php if(session()->has('not_permitted')): ?>
 <div class="alert alert-danger alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert"
-                aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('not_permitted') }}
+                aria-label="Close"><span aria-hidden="true">&times;</span></button><?php echo e(session()->get('not_permitted')); ?>
+
 </div>
-@endif
+<?php endif; ?>
 
 <section>
         <div class="container">
                 <div class="row justify-content-center">
                         <div class="col-md-10">
                                 <div class="card">
-                                        <div class="card-header"> {{ trans('file.Companies Modules') }} </div>
+                                        <div class="card-header"> <?php echo e(trans('file.Companies Modules')); ?> </div>
                                         <div class="card-body">
-                                                @if (session('status'))
+                                                <?php if(session('status')): ?>
                                                 <div class="alert alert-success" role="alert">
-                                                        {{ session('status') }}
+                                                        <?php echo e(session('status')); ?>
+
                                                 </div>
-                                                @endif
+                                                <?php endif; ?>
                                                 <div class="container">
-                                                        @for ($i = 0 ; $i< count($companies) ; $i +=2 ) <div
+                                                        <?php for($i = 0 ; $i< count($companies) ; $i +=2 ): ?> <div
                                                                 class="row">
                                                                 <div class="card col-12 col-md-5 m-3">
                                                                         <div class="card-header">
@@ -42,19 +47,19 @@
                                                                         <div class="card-body">
                                                                                 <?php $modules = $companies[$i]->modules; ?>
                                                                                 <ul class="list-group">
-                                                                                        @foreach ($modules as $module)
+                                                                                        <?php $__currentLoopData = $modules; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $module): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
                                                                                         <li class="list-group-item">
-                                                                                                {{ trans("file.$module->name") }}</li>
-                                                                                        @endforeach
+                                                                                                <?php echo e(trans("file.$module->name")); ?></li>
+                                                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                                                 </ul>
                                                                         </div>
-                                                                        <a href="{{ route('module.edit', ['id' => $companies[$i]->id]) }}"
+                                                                        <a href="<?php echo e(route('module.edit', ['id' => $companies[$i]->id])); ?>"
                                                                                 class="btn btn-primary  active mx-auto w-50 mb-3"
                                                                                 role="button"
-                                                                                aria-pressed="true"> {{ trans('file.edit') }} </a>
+                                                                                aria-pressed="true"> <?php echo e(trans('file.edit')); ?> </a>
                                                                 </div>
-                                                                @if( count($companies) > $i +1 )
+                                                                <?php if( count($companies) > $i +1 ): ?>
                                                                 <div class="card col-12 col-md-5 m-3">
                                                                         <div class="card-header">
                                                                                 <?= $companies[$i+1]->name?>
@@ -62,25 +67,24 @@
                                                                         <div class="card-body">
                                                                                 <?php $modules = $companies[$i+1]->modules; ?>
                                                                                 <ul class="list-group ">
-                                                                                        @foreach ($modules as $module)
+                                                                                        <?php $__currentLoopData = $modules; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $module): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
                                                                                         <li class="list-group-item">
                                                                                                 <?= $module->name?></li>
-                                                                                        @endforeach
+                                                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                                                 </ul>
                                                                         </div>
-                                                                        <a href="{{ route('module.edit', ['id' => $companies[$i+1]->id]) }}"
+                                                                        <a href="<?php echo e(route('module.edit', ['id' => $companies[$i+1]->id])); ?>"
                                                                                 class="btn btn-primary  active mx-auto w-50 mb-3"
                                                                                 role="button"
                                                                                 aria-pressed="true">edit</a>
 
-                                                                        {{-- <button type="button"
-                                                                                class="btn btn-primary w-50 mx-auto mb-3">edit</button> --}}
+                                                                        
 
                                                                 </div>
-                                                                @endif
+                                                                <?php endif; ?>
                                                 </div>
-                                                @endfor
+                                                <?php endfor; ?>
                                         </div>
                                 </div>
                         </div>
@@ -92,4 +96,5 @@
 <script type="text/javascript">
 
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout.main', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
