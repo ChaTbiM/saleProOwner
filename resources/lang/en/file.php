@@ -562,6 +562,6 @@ return [
     "people" => "people",
     "report" => "report",
     "service" => "service",
-    
+    "all" => "all",
 
 ];

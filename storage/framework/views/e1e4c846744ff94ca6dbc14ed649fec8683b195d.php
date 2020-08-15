@@ -48,10 +48,21 @@
                                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                                                 <h6>Desactivated Modules</h6>
-
-                                                <?php $__currentLoopData = $desactivated_modules; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $module): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <div class="form-check form-group form-check-inline ">
+                                                <?php if(count($desactivated_modules) > 1): ?>
+                                                <div class="form-check form-group ">
                                                         <input type="checkbox" class="form-check-input"
+                                                                name="all" id="all"
+                                                                >
+
+                                                        <label class="form-check-label "
+                                                                for="all"> <?php echo e(trans('file.all')); ?> </label>
+                                                </div>    
+                                                <?php endif; ?>
+                                                
+                                                <?php $__currentLoopData = $desactivated_modules; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $module): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+
+                                                <div class="form-check form-group form-check-inline ">
+                                                        <input type="checkbox" class="form-check-input modules"
                                                                 name="<?=$module?>" id="<?=$module?>"
                                                                 value="<?=$module?>">
 
@@ -74,6 +85,25 @@
 </section>
 
 <script type="text/javascript">
+
+$(document).ready(()=>{
+                let isAllChecked = $('#all').prop('checked');
+              handleAllChange(isAllChecked);
+
+        $("#all").on('change', function(){
+                let isAllChecked = $(this).prop('checked');
+              handleAllChange(isAllChecked);
+
+        })
+})
+
+function handleAllChange(isAllChecked){
+        if(isAllChecked){
+                      $('.modules').prop('checked',true);
+              }else {
+                $('.modules').prop('checked',false);
+              }
+}
 
 </script>
 <?php $__env->stopSection(); ?>

@@ -43,10 +43,21 @@
                                                 @endforeach
 
                                                 <h6>Desactivated Modules</h6>
-
-                                                @foreach ($desactivated_modules as $module)
-                                                <div class="form-check form-group form-check-inline ">
+                                                @if (count($desactivated_modules) > 1)
+                                                <div class="form-check form-group ">
                                                         <input type="checkbox" class="form-check-input"
+                                                                name="all" id="all"
+                                                                >
+
+                                                        <label class="form-check-label "
+                                                                for="all"> {{ trans('file.all') }} </label>
+                                                </div>    
+                                                @endif
+                                                
+                                                @foreach ($desactivated_modules as $module)
+
+                                                <div class="form-check form-group form-check-inline ">
+                                                        <input type="checkbox" class="form-check-input modules"
                                                                 name="<?=$module?>" id="<?=$module?>"
                                                                 value="<?=$module?>">
 
@@ -68,6 +79,25 @@
 </section>
 
 <script type="text/javascript">
+
+$(document).ready(()=>{
+                let isAllChecked = $('#all').prop('checked');
+              handleAllChange(isAllChecked);
+
+        $("#all").on('change', function(){
+                let isAllChecked = $(this).prop('checked');
+              handleAllChange(isAllChecked);
+
+        })
+})
+
+function handleAllChange(isAllChecked){
+        if(isAllChecked){
+                      $('.modules').prop('checked',true);
+              }else {
+                $('.modules').prop('checked',false);
+              }
+}
 
 </script>
 @endsection
