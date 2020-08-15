@@ -19,7 +19,6 @@ Route::get('/', function () {
 
 
 
-
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', 'HomeController@index')->name('home');
 
@@ -46,4 +45,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('biller/deletebyselection', 'BillerController@deleteBySelection');
     Route::get('biller/lims_biller_search', 'BillerController@limsBillerSearch')->name('biller.search');
     Route::resource('biller', 'BillerController');
+    // Route::get('readme', "ReadmeController@index")->name('readme');
+    Route::get('read', function () {
+        return view('readme.index');
+    });
+    Route::get('read_me', 'ReadmeController@index')->name('readme');
 });

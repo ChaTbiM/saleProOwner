@@ -117,7 +117,6 @@
                                     </div>
                                     <?php $__currentLoopData = $module_permissions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $permission): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <?php $class = " form-check-input company-$i-$company_module ";
-                                        // dd($class);
                                     ?>
                                     <div class="form-check form-group form-check-inline"
                                         id=<?="company-$i-$permission"?> >

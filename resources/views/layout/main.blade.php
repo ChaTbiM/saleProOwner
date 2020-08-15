@@ -209,7 +209,7 @@
               </ul>
             </li>
             <li class="nav-item">
-              <a class="dropdown-item" href="{{ url('read_me') }}" target="_blank"><i class="dripicons-information"></i>
+              <a class="dropdown-item" href="{{ route('readme') }}" target="_blank"><i class="dripicons-information"></i>
                 {{trans('file.Help')}}</a>
             </li>
             <li class="nav-item">
