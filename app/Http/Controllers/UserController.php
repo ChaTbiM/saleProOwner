@@ -92,7 +92,6 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        dd($request);
         $companies = $request->only('companies');
         
         foreach ($companies["companies"] as $company_name => $company) {
@@ -218,8 +217,36 @@ class UserController extends Controller
         unset($all_permissions["modules-index"]);
         unset($all_permissions["modules-edit"]);
 
-        global $activated_permissions, $desactivated_permissions;
-        $this->retrievePermissions($companies, $id);
+        // global $activated_permissions, $desactivated_permissions;
+        // $this->retrievePermissions($companies, $id);
+
+
+        //
+        $all_modules = Module::all();
+
+        //comapnies modules
+        foreach ($companies as $company) {
+            $companies_modules[$company->name] = $company->modules->pluck('name', 'name')->toArray();
+        }
+
+
+        //all permissions according to all modules
+        foreach ($all_modules as $module) {
+            $module_permissions = $module->name . 'Permissions';
+
+            $all_permissions[$module->name] = $module->$module_permissions();
+        }
+
+        foreach ($companies_modules as $company_name => $company_modules) {
+            if (!empty($company_modules)) {
+                foreach ($company_modules as $company_module) {
+                    $companies_permissions[$company_name][$company_module] = $all_permissions[$company_module];
+                }
+            } else {
+                $companies_permissions[$company_name] = null;
+            }
+        }
+        //
 
         if ($role->hasPermissionTo('users-edit')) {
             $lims_user_data = User::find($id);
@@ -265,10 +292,11 @@ class UserController extends Controller
                 $roles["goods"] = (string)  $role[0]->role_id;
             }
 
-
+            $user_permissions = $this->checked_permissions($companies_permissions, $id);
+            
             $lims_biller_list = Biller::where('is_active', true)->get();
             $lims_warehouse_list = Warehouse::where('is_active', true)->get();
-            return view('user.edit', compact('lims_user_data', 'roles', 'lims_role_list', 'lims_biller_list', 'lims_warehouse_list', 'user_companies', 'companies', 'activated_permissions', 'desactivated_permissions'));
+            return view('user.edit', compact('lims_user_data', 'roles', 'lims_role_list', 'lims_biller_list', 'lims_warehouse_list', 'user_companies', 'companies', 'user_permissions'));
         } else {
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
         }
@@ -576,9 +604,6 @@ class UserController extends Controller
 
 
 
-
-
-
     public function retrievePermissions($companies, $id)
     {
         foreach ($companies as  $company) {
@@ -640,6 +665,24 @@ class UserController extends Controller
         }
     }
 
+    // check Permissions
+    public function checked_permissions($companies_permissions, $id)
+    {
+        foreach ($companies_permissions as $company_name => $company_modules) {
+            foreach ($company_modules as $module_name => $module_permissions) {
+                foreach ($module_permissions as $permission) {
+                    $permission_check = DB::select('select * from company_has_user_has_permissions where (company_name,permission_name,user_id) = (?,?,?)', [$company_name,$permission,$id]);
+                    if (!empty($permission_check)) {
+                        $user_permissions[$company_name][$module_name][$permission] = true;
+                    } else {
+                        $user_permissions[$company_name][$module_name][$permission] = false;
+                    }
+                }
+            }
+        }
+
+        return $user_permissions;
+    }
 
     public function deletePermission($permission, $company_name, $id)
     {

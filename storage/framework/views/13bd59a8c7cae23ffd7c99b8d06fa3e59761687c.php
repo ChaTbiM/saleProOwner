@@ -107,7 +107,7 @@
                                     </div>
                                     
                                     <?php if(isset($roles[$company])): ?>
-
+                                        
                                     <div class=" form-group roles_list" id=<?="roles-$loop->index"?>>
                                         <label><strong><?php echo e(trans('file.Role')); ?> *</strong></label>
                                         <select id=<?="select-$loop->index"?> name=<?="companies[".$company."][role]"  ?>
@@ -140,41 +140,26 @@
                                     <?php $i = $loop->index; ?>
                                     <div id="permissions-<?=$loop->index?>"
                                         class=<?php if(!belongsTo($user_companies,$company)) echo "d-none" ?>>
-
-                                        
-                                        <?php if(!empty($activated_permissions[$company])): ?>
                                         <div class=" ml-2">
-                                            <?php $__currentLoopData = $activated_permissions[$company]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $module_name => $module): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <?php $__currentLoopData = $module; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $permission): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php $__currentLoopData = $user_permissions[$company]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $module_name => $module): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <p>
+                                                <?php echo e(trans('file.'.$module_name)); ?>
+
+                                            </p>
+                                            <?php $__currentLoopData = $module; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $permission => $has_permission): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <div class=" form-check form-check-inline  form-group " id=<?="company-$i-$permission"?>>
                                                 <input type="checkbox" class="form-check-input"
                                                     name=<?="companies[$company][$module_name][$permission]"?>
-                                                    id=<?="$company-$permission"?> value=<?=$permission?> checked>
+                                                    id=<?="$company-$permission"?> value=<?=$permission?> 
+                                                    <?php if($has_permission) {echo "checked";} ?>
+                                                    >
                                                 <label class="form-check-label "
                                                     for=<?="$company-$permission"?>><?=printPermission($permission)?>
                                                 </label>
-                                            </div>
+                                            </div>    
                                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         </div>
-                                        <?php endif; ?>
-                                        
-                                        <?php if(!empty($desactivated_permissions[$company])): ?>
-                                        <div class="ml-2">
-                                            <?php $__currentLoopData = $desactivated_permissions[$company]; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $module_name => $module): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <?php $__currentLoopData = $module; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $permission): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <div class=" form-check form-check-inline  form-group " id=<?="company-$i-$permission"?>>
-                                                <input type="checkbox" class="form-check-input"
-                                                    name=<?="companies[$company][$module_name][$permission]"?>
-                                                    id=<?="$company-$permission"?> value=<?=$permission?>>
-                                                <label class="form-check-label "
-                                                    for=<?="$company-$permission"?>><?=printPermission($permission)?>
-                                                </label>
-                                            </div>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                        </div>
-                                        <?php endif; ?>
                                     </div>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 

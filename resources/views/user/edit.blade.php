@@ -106,7 +106,7 @@
                                     </div>
                                     {{-- roles --}}
                                     @if (isset($roles[$company]))
-
+                                        
                                     <div class=" form-group roles_list" id=<?="roles-$loop->index"?>>
                                         <label><strong>{{trans('file.Role')}} *</strong></label>
                                         <select id=<?="select-$loop->index"?> name=<?="companies[".$company."][role]"  ?>
@@ -137,41 +137,25 @@
                                     <?php $i = $loop->index; ?>
                                     <div id="permissions-<?=$loop->index?>"
                                         class=<?php if(!belongsTo($user_companies,$company)) echo "d-none" ?>>
-
-                                        {{-- enabled permissions --}}
-                                        @if (!empty($activated_permissions[$company]))
                                         <div class=" ml-2">
-                                            @foreach ($activated_permissions[$company] as $module_name => $module)
-                                            @foreach ($module as $permission)
+                                            @foreach ($user_permissions[$company] as $module_name => $module)
+                                            <p>
+                                                {{ trans('file.'.$module_name) }}
+                                            </p>
+                                            @foreach ($module as $permission => $has_permission)
                                             <div class=" form-check form-check-inline  form-group " id=<?="company-$i-$permission"?>>
                                                 <input type="checkbox" class="form-check-input"
                                                     name=<?="companies[$company][$module_name][$permission]"?>
-                                                    id=<?="$company-$permission"?> value=<?=$permission?> checked>
+                                                    id=<?="$company-$permission"?> value=<?=$permission?> 
+                                                    <?php if($has_permission) {echo "checked";} ?>
+                                                    >
                                                 <label class="form-check-label "
                                                     for=<?="$company-$permission"?>><?=printPermission($permission)?>
                                                 </label>
-                                            </div>
+                                            </div>    
                                             @endforeach
                                             @endforeach
                                         </div>
-                                        @endif
-                                        {{-- disabled permissions --}}
-                                        @if (!empty($desactivated_permissions[$company]))
-                                        <div class="ml-2">
-                                            @foreach ($desactivated_permissions[$company] as $module_name => $module)
-                                            @foreach ($module as $permission)
-                                            <div class=" form-check form-check-inline  form-group " id=<?="company-$i-$permission"?>>
-                                                <input type="checkbox" class="form-check-input"
-                                                    name=<?="companies[$company][$module_name][$permission]"?>
-                                                    id=<?="$company-$permission"?> value=<?=$permission?>>
-                                                <label class="form-check-label "
-                                                    for=<?="$company-$permission"?>><?=printPermission($permission)?>
-                                                </label>
-                                            </div>
-                                            @endforeach
-                                            @endforeach
-                                        </div>
-                                        @endif
                                     </div>
                                     @endforeach
 
