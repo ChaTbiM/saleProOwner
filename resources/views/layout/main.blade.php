@@ -124,19 +124,19 @@
 
               <li class="nav-item">
                 <a class="dropdown-item" href="{{ url('user') }}" ><i class="dripicons-user"></i>
-                  User </a>
+                  {{ trans('file.User') }} </a>
               </li>
               <li class="nav-item">
                 <a class="dropdown-item" href="{{ url('module') }}" ><i class="dripicons-checklist"></i>
-                  Modules</a>
+                  {{ trans('file.modules') }} </a>
               </li>
               <li class="nav-item">
                 <a class="dropdown-item" href="{{ url('biller') }}" ><i class="dripicons-checklist"></i>
-                  billers</a>
+                  {{ trans('file.Biller') }}</a>
               </li>
               <li class="nav-item">
                 <a class="dropdown-item" href="{{ url('warehouse') }}" ><i class="dripicons-checklist"></i>
-                  warehouses</a>
+                  {{ trans('file.Warehouse') }} </a>
               </li>
               @endif
 
