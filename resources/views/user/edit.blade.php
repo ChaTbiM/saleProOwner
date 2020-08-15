@@ -96,20 +96,20 @@
                                     <br>
                                     <?php
                                         function printCompanyName($company){
-                                            if($company == "hygiene"){
-                                                return "akeed hygiene";
-                                            }else if($company == "sweet"){
-                                                return "akeed sweet";
-                                            }else if ($company == "sanfora"){
-                                                return "akeed food";
-                                            }else if($company == "hafko"){
-                                                return "akeed factory";
-                                            }else if($company == "service"){
-                                                return "bruxelle salon";
-                                            }else if($company == "goods"){
-                                                return "akeed trading";
-                                            }
-                                        }
+                                    if($company == "hygiene"){
+                                        return "akeed hygiene";
+                                    }else if($company == "sweet"){
+                                        return "akeed sweet";
+                                    }else if ($company == "goods"){
+                                        return "akeed food";
+                                    }else if($company == "hafko"){
+                                        return "akeed factory";
+                                    }else if($company == "sanfora"){
+                                        return "bruxelle salon";
+                                    }else if($company == "service"){
+                                        return "akeed trading";
+                                    }
+                                }
                                     ?>
                                     @foreach ($companies as $company)
                                     <div class="form-check  form-group ">

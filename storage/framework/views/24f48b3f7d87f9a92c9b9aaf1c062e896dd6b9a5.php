@@ -124,19 +124,19 @@
 
               <li class="nav-item">
                 <a class="dropdown-item" href="<?php echo e(url('user')); ?>" ><i class="dripicons-user"></i>
-                  User </a>
+                  <?php echo e(trans('file.User')); ?> </a>
               </li>
               <li class="nav-item">
                 <a class="dropdown-item" href="<?php echo e(url('module')); ?>" ><i class="dripicons-checklist"></i>
-                  Modules</a>
+                  <?php echo e(trans('file.modules')); ?> </a>
               </li>
               <li class="nav-item">
                 <a class="dropdown-item" href="<?php echo e(url('biller')); ?>" ><i class="dripicons-checklist"></i>
-                  billers</a>
+                  <?php echo e(trans('file.Biller')); ?></a>
               </li>
               <li class="nav-item">
                 <a class="dropdown-item" href="<?php echo e(url('warehouse')); ?>" ><i class="dripicons-checklist"></i>
-                  warehouses</a>
+                  <?php echo e(trans('file.Warehouse')); ?> </a>
               </li>
               <?php endif; ?>
 

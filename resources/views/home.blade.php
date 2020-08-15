@@ -17,6 +17,23 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8 mt-2">
+             <?php
+                                 function printCompanyName($company){
+                                    if($company == "hygiene"){
+                                        return "akeed hygiene";
+                                    }else if($company == "sweet"){
+                                        return "akeed sweet";
+                                    }else if ($company == "goods"){
+                                        return "akeed food";
+                                    }else if($company == "hafko"){
+                                        return "akeed factory";
+                                    }else if($company == "sanfora"){
+                                        return "bruxelle salon";
+                                    }else if($company == "service"){
+                                        return "akeed trading";
+                                    }
+                                }
+                            ?>
             <div class="card">
                 <div class="card-header">{{ trans('file.dashboard') }}</div>
                 <div class="card-body pt-0">
@@ -42,7 +59,7 @@
                                 <div class="card col-12 col-md-5 m-3"  >
                                     <a href={{url($companies[$i]->name)}}>
                                         <div class="card-body">
-                                        <p class="card-text text-center"> {{$companies[$i]->name}} </p>
+                                        <p class="card-text text-center"> {{printCompanyName($companies[$i]->name)}} </p>
                                         </div>
                                         <img class="card-img-top pb-3" src=<?= "images/".$companies[$i]->name.".png"?> alt="Card image cap">
                                     </a>
@@ -51,7 +68,7 @@
                                     <div class="card col-12 col-md-5 m-3"  >
                                         <a href={{$companies[$i+1]->name}}>
                                             <div class="card-body">
-                                            <p class="card-text text-center"> {{$companies[$i+1]->name}} </p>
+                                            <p class="card-text text-center"> {{printCompanyName($companies[$i+1]->name)}} </p>
                                             </div>
                                             <img class="card-img-top pb-3" src=<?= "images/".$companies[$i+1]->name.".png"?> alt="Card image cap">
                                         </a>
