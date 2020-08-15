@@ -24,26 +24,26 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', 'HomeController@index')->name('home');
 
 
-	Route::get('user/genpass', 'UserController@generatePassword');
+    Route::get('user/genpass', 'UserController@generatePassword');
     Route::resource('user', 'UserController');
     
     Route::resource('module', 'ModuleController');
 
 
     Route::get('language_switch/{locale}', 'LanguageController@switchLanguage');
+    Route::get('testlang', 'LanguageController@getLang');
     
 
-    // warehouse 
+    // warehouse
     Route::post('importwarehouse', 'WarehouseController@importWarehouse')->name('warehouse.import');
-	Route::post('warehouse/deletebyselection', 'WarehouseController@deleteBySelection');
-	Route::get('warehouse/lims_warehouse_search', 'WarehouseController@limsWarehouseSearch')->name('warehouse.search');
+    Route::post('warehouse/deletebyselection', 'WarehouseController@deleteBySelection');
+    Route::get('warehouse/lims_warehouse_search', 'WarehouseController@limsWarehouseSearch')->name('warehouse.search');
     Route::resource('warehouse', 'WarehouseController');
     
 
     // Biller
     Route::post('importbiller', 'BillerController@importBiller')->name('biller.import');
-	Route::post('biller/deletebyselection', 'BillerController@deleteBySelection');
-	Route::get('biller/lims_biller_search', 'BillerController@limsBillerSearch')->name('biller.search');
-	Route::resource('biller', 'BillerController');
-
+    Route::post('biller/deletebyselection', 'BillerController@deleteBySelection');
+    Route::get('biller/lims_biller_search', 'BillerController@limsBillerSearch')->name('biller.search');
+    Route::resource('biller', 'BillerController');
 });

@@ -133,7 +133,7 @@
         'columnDefs': [
             {
                 "orderable": false,
-                'targets': [0, 7]
+                'targets': [0, 5]
             },
             {
                 'render': function(data, type, row, meta){
