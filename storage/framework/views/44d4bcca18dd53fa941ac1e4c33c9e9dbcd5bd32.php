@@ -36,7 +36,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class=" form-group companies_list" >
-                                    <label><strong><?php echo e(trans('file.Company_name')); ?> *</strong></label>
+                                    <label><strong><?php echo e(trans('file.Company Name')); ?> *</strong></label>
                                     <select  required name="company_name"
                                         class="selectpicker form-control " data-live-search="true"
                                         data-live-search-style="begins" title="Select Company...">

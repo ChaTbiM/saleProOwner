@@ -92,7 +92,7 @@ class Company extends Model
 
     public function hrmPermissions()
     {
-        $permissions = ['department', 'employees-index', 'employees-edit' , 'employeed-add' , 'employees-delete', 'attendance', 'payroll'];
+        $permissions = ['department', 'employees-index', 'employees-edit' , 'employees-add' , 'employees-delete', 'attendance', 'payroll'];
 
         return $permissions;
     }
