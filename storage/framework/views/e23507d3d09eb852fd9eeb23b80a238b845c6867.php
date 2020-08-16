@@ -18,7 +18,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8 mt-2">
              <?php
-                                function printCompanyName($company){
+                                 function printCompanyName($company){
                                     if($company == "hygiene"){
                                         return "akeed hygiene";
                                     }else if($company == "sweet"){

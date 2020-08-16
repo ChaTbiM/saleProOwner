@@ -56,8 +56,16 @@
                     <td>{{ $warehouse->phone}}</td>
                     <td>{{ $warehouse->email}}</td>
                     <td>{{ $warehouse->address}}</td>
+                    @if (isset($number_of_products[$company][$warehouse->id]))
                     <td>{{$number_of_products[$company][$warehouse->id]}}</td>
+                    @else
+                    <td>0</td>
+                    @endif
+                    @if (isset($stock_quantity[$company][$warehouse->id]))
                     <td>{{$stock_quantity[$company][$warehouse->id]}}</td>
+                    @else
+                    <td>0</td>
+                    @endif
                     <td>
                         <div class="btn-group">
                             <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"
