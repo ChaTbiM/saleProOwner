@@ -261,6 +261,8 @@
       }
       return false;
   }
+
+
 	$(document).ready(function() {
         
 	    $('.open-EditWarehouseDialog').on('click', function() {
@@ -269,7 +271,6 @@
             var company = $(this).closest('tr').data('company').toString();
 	        url = url.concat(id).concat("/edit");
 	        $.get(url,{company,id}, function(data) {
-                console.log(data,'data');
 	            $("#editModal input[name='name']").val(data['name']);
 	            $("#editModal input[name='phone']").val(data['phone']);
 	            $("#editModal input[name='email']").val(data['email']);
@@ -280,6 +281,23 @@
 	    });
   });
   $('#warehouse-table').DataTable( {
+    "drawCallback": function( settings ) {
+        $('.open-EditWarehouseDialog').on('click', function() {
+	        var url = "warehouse/"
+	        var id = $(this).data('id').toString();
+            var company = $(this).closest('tr').data('company').toString();
+	        url = url.concat(id).concat("/edit");
+	        $.get(url,{company,id}, function(data) {
+	            $("#editModal input[name='name']").val(data['name']);
+	            $("#editModal input[name='phone']").val(data['phone']);
+	            $("#editModal input[name='email']").val(data['email']);
+	            $("#editModal textarea[name='address']").val(data['address']);
+	            $("#editModal input[name='warehouse_id']").val(data['id']);
+	            $("#editModal input[name='company']").val(data['company']);
+	        });
+	    });
+
+    },
         "order": [],
         'language': {
             'lengthMenu': '_MENU_ {{trans("file.records per page")}}',
