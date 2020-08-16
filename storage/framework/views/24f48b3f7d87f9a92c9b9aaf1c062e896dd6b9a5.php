@@ -256,8 +256,7 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-sm-12">
-            <p>&copy; Akeed Groupe | <?php echo e(trans('file.Developed')); ?> <?php echo e(trans('file.By')); ?> <a href="https://lion-coders.com"
-                class="external">LionCoders</a></p>
+            <p>&copy; Akeed Groupe | <?php echo e(trans('file.Developed')); ?> <?php echo e(trans('file.By')); ?> DZ-DEV</p>
           </div>
         </div>
       </div>

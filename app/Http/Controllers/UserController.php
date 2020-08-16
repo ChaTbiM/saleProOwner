@@ -669,6 +669,10 @@ class UserController extends Controller
     public function checked_permissions($companies_permissions, $id)
     {
         foreach ($companies_permissions as $company_name => $company_modules) {
+            if (!isset($company_modules)) {
+                $user_permissions[$company_name] = array();
+                continue;
+            }
             foreach ($company_modules as $module_name => $module_permissions) {
                 foreach ($module_permissions as $permission) {
                     $permission_check = DB::select('select * from company_has_user_has_permissions where (company_name,permission_name,user_id) = (?,?,?)', [$company_name,$permission,$id]);
