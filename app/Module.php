@@ -89,14 +89,14 @@ class Module extends Model
  
     public function hrmPermissions()
     {
-        $permissions = ['department', 'employees-index', 'attendance', 'payroll', 'holiday'];
+        $permissions = ['department', 'employees-index','employees-add','employees-edit','employees-delete', 'attendance', 'payroll', 'holiday'];
  
         return $permissions;
     }
  
     public function peoplePermissions()
     {
-        $permissions = ['users-index', 'users-add', 'customers-index', 'customers-add', 'billers-index', 'billers-add', 'suppliers-index', 'suppliers-add'];
+        $permissions = ['users-index', 'users-add', 'customers-index', 'customers-add', 'billers-index', 'billers-add','billers-edit', 'billers-delete','suppliers-index', 'suppliers-add'];
  
         return $permissions;
     }
