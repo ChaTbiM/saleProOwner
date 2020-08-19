@@ -30,58 +30,70 @@ class WarehouseController extends Controller
 
         
         try {
-            $hygiene_warehouses = DB::connection("hygiene")->select("SELECT * FROM `warehouses` WHERE (is_active) = (?) ", [true]);
+            $hygiene_warehouses = DB::connection("hygiene")->select("SELECT * FROM `warehouses` WHERE (is_active) = (true) ");
             $lims_warehouse_all["hygiene"] = $hygiene_warehouses;
             $number_of_products["hygiene"] = $this->getNumberOfProducts(Product_Warehouse_Hygiene::class, $hygiene_warehouses);
             $stock_quantity["hygiene"] = $this->getStockQuantity(Product_Warehouse_Hygiene::class, $hygiene_warehouses);
         } catch (\Throwable $th) {
             //throw $th;
+            $number_of_products["hygiene"] = 0;
+            $stock_quantity["hygiene"] = 0;
         }
 
         try {
             //code...
             $sweet_warehouses = DB::connection("sweet")->select("SELECT * FROM `warehouses` WHERE (is_active) = (true) ");
-            $number_of_products["sweet"] = $this->getNumberOfProducts(Product_Warehouse_Sweet::class, $hygiene_warehouses);
-            $stock_quantity["sweet"] = $this->getStockQuantity(Product_Warehouse_Sweet::class, $hygiene_warehouses);
             $lims_warehouse_all["sweet"] = $sweet_warehouses;
+            $number_of_products["sweet"] = $this->getNumberOfProducts(Product_Warehouse_Sweet::class, $sweet_warehouses);
+            $stock_quantity["sweet"] = $this->getStockQuantity(Product_Warehouse_Sweet::class, $sweet_warehouses);
         } catch (\Throwable $th) {
             //throw $th;
+            $number_of_products["sweet"] = 0;
+            $stock_quantity["sweet"] = 0;
         }
 
         try {
             $hafko_warehouses = DB::connection("hafko")->select("SELECT * FROM `warehouses` WHERE (is_active) = (true) ");
-            $number_of_products["hafko"] = $this->getNumberOfProducts(Product_Warehouse_Hafko::class, $hygiene_warehouses);
-            $stock_quantity["hafko"] = $this->getStockQuantity(Product_Warehouse_Hafko::class, $hygiene_warehouses);
             $lims_warehouse_all["hafko"] = $hafko_warehouses;
+            $number_of_products["hafko"] = $this->getNumberOfProducts(Product_Warehouse_Hafko::class, $hafko_warehouses);
+            $stock_quantity["hafko"] = $this->getStockQuantity(Product_Warehouse_Hafko::class, $hafko_warehouses);
         } catch (\Throwable $th) {
             //throw $th;
+            $number_of_products["hafko"] = 0;
+            $stock_quantity["hafko"] = 0;
         }
 
         try {
             $sanfora_warehouses = DB::connection("sanfora")->select("SELECT * FROM `warehouses` WHERE (is_active) = (true) ");
-            $number_of_products["sanfora"] = $this->getNumberOfProducts(Product_Warehouse_Sanfora::class, $hygiene_warehouses);
-            $stock_quantity["sanfora"] = $this->getStockQuantity(Product_Warehouse_Sanfora::class, $hygiene_warehouses);
             $lims_warehouse_all["sanfora"] = $sanfora_warehouses;
+            $number_of_products["sanfora"] = $this->getNumberOfProducts(Product_Warehouse_Sanfora::class, $sanfora_warehouses);
+            $stock_quantity["sanfora"] = $this->getStockQuantity(Product_Warehouse_Sanfora::class, $sanfora_warehouses);
         } catch (\Throwable $th) {
             //throw $th;
+            $number_of_products["sanfora"] = 0;
+            $stock_quantity["sanfora"] = 0;
         }
 
         try {
             $service_warehouses = DB::connection("service")->select("SELECT * FROM `warehouses` WHERE (is_active) = (true) ");
-            $number_of_products["service"] = $this->getNumberOfProducts(Product_Warehouse_Service::class, $hygiene_warehouses);
-            $stock_quantity["service"] = $this->getStockQuantity(Product_Warehouse_Service::class, $hygiene_warehouses);
             $lims_warehouse_all["service"] = $service_warehouses;
+            $number_of_products["service"] = $this->getNumberOfProducts(Product_Warehouse_Service::class, $service_warehouses);
+            $stock_quantity["service"] = $this->getStockQuantity(Product_Warehouse_Service::class, $service_warehouses);
         } catch (\Throwable $th) {
             //throw $th;
+            $number_of_products["service"] = 0;
+            $stock_quantity["service"] = 0;
         }
 
         try {
             $goods_warehouses = DB::connection("goods")->select("SELECT * FROM `warehouses` WHERE (is_active) = (true) ");
-            $number_of_products["goods"] = $this->getNumberOfProducts(Product_Warehouse_Goods::class, $hygiene_warehouses);
-            $stock_quantity["goods"] = $this->getStockQuantity(Product_Warehouse_Goods::class, $hygiene_warehouses);
             $lims_warehouse_all["goods"] = $goods_warehouses;
+            $number_of_products["goods"] = $this->getNumberOfProducts(Product_Warehouse_Goods::class, $goods_warehouses);
+            $stock_quantity["goods"] = $this->getStockQuantity(Product_Warehouse_Goods::class, $goods_warehouses);
         } catch (\Throwable $th) {
             //throw $th;
+            $number_of_products["goods"] = 0;
+            $stock_quantity["goods"] = 0;
         }
         
 

@@ -55,6 +55,9 @@ function printCompanyName($company){
             <tbody>
                 @if(!empty($lims_warehouse_all))
                 @foreach ($lims_warehouse_all as $company => $warehouses)
+                @if(empty($warehouses))
+                    @continue
+                @endif
                 @foreach($warehouses as $key=>$warehouse)
                 <tr data-id="{{$warehouse->id}}" data-company="{{$company}}">
                     <td>{{$key}}</td>

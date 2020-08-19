@@ -54,6 +54,9 @@ function printCompanyName($company){
             <tbody>
                 <?php if(!empty($lims_warehouse_all)): ?>
                 <?php $__currentLoopData = $lims_warehouse_all; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $company => $warehouses): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <?php if(empty($warehouses)): ?>
+                    <?php continue; ?>
+                <?php endif; ?>
                 <?php $__currentLoopData = $warehouses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$warehouse): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <tr data-id="<?php echo e($warehouse->id); ?>" data-company="<?php echo e($company); ?>">
                     <td><?php echo e($key); ?></td>
