@@ -236,25 +236,29 @@ class WarehouseController extends Controller
 
     public function deleteBySelection(Request $request)
     {
-        $warehouse_id = $request['warehouseIdArray'];
-        $company = $request['company'];
+        $deleted_companies = $request->deletedCompanies;
+        
+        // $warehouse_id = $request['warehouseIdArray'];
+        // $company = $request['company'];
 
-
-        if ($company == " hygiene") {
-            $this->deleteWarehouseBySelection($warehouse_id, Warehouse_Hygiene::class);
-        } elseif ($company == "sweet") {
-            $this->deleteWarehouseBySelection($warehouse_id, Warehouse_Sweet::class);
-        } elseif ($company == "hafko") {
-            $this->deleteWarehouseBySelection($warehouse_id, Warehouse_Hafko::class);
-        } elseif ($company == "sanfora") {
-            $this->deleteWarehouseBySelection($warehouse_id, Warehouse_Sanfora::class);
-        } elseif ($company == "service") {
-            $this->deleteWarehouseBySelection($warehouse_id, Warehouse_Service::class);
-        } elseif ($company == "goods") {
-            $this->deleteWarehouseBySelection($warehouse_id, Warehouse_Goods::class);
-        } else {
-            return "Warehouses was not Deleted";
+        foreach ($deleted_companies as $deleted_company) {
+            if ($deleted_company['company'] == "hygiene") {
+                $warehouse = Warehouse_Hygiene::find($deleted_company['id']);
+            } elseif ($deleted_company['company'] == "sweet") {
+                $warehouse = Warehouse_Sweet::find($deleted_company['id']);
+            } elseif ($deleted_company['company'] == "hafko") {
+                $warehouse = Warehouse_Hafko::find($deleted_company['id']);
+            } elseif ($deleted_company['company'] == "sanfora") {
+                $warehouse = Warehouse_Sanfora::find($deleted_company['id']);
+            } elseif ($deleted_company['company'] == "service") {
+                $warehouse = Warehouse_Service::find($deleted_company['id']);
+            } elseif ($deleted_company['company'] == "goods") {
+                $warehouse = Warehouse_Goods::find($deleted_company['id']);
+            }
+            $warehouse->is_active = false;
+            $warehouse->save();
         }
+        
 
         return 'Warehouse deleted successfully!';
     }

@@ -13,6 +13,4 @@ class Warehouse_Hygiene extends Model
 
         "name", "phone", "email", "address", "is_active"
     ];
-
-
 }

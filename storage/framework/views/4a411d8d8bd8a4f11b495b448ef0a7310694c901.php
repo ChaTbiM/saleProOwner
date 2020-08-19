@@ -163,7 +163,7 @@ function printCompanyName($company){
     </div>
 </div>
 
-<?php if(!empty($lims_warehouse_all)): ?>
+<?php if(!empty($lims_warehouse_all) && isset($warehouse)): ?>
 <div id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
     class="modal fade text-left">
     <div role="document" class="modal-dialog">
@@ -416,26 +416,30 @@ function printCompanyName($company){
                 action: function ( e, dt, node, config ) {
                     if(user_verified == '1') {
                         warehouse_id.length = 0;
+                        deletedCompanies = [];
                         $(':checkbox:checked').each(function(i){
                             if(i){
                                 warehouse_id[i-1] = $(this).closest('tr').data('id');
                                 company = $(this).closest('tr').data('company');
+                                deletedCompanies.push({id:$(this).closest('tr').data('id'),company});                                
                             }
                             
                         });
-                        if(warehouse_id.length && confirm("Are you sure want to delete?")) {
+                        if(deletedCompanies.length && confirm("Are you sure want to delete?")) {
                             $.ajax({
                                 type:'POST',
                                 url:'warehouse/deletebyselection',
                                 data:{
-                                    warehouseIdArray: warehouse_id,
-                                    company
+                                    deletedCompanies
                                 },
                                 success:function(data){
                                     alert(data);
                                 }
                             });
-                            dt.rows({ page: 'current', selected: true }).remove().draw(false);
+                            // location.reload();
+                            // dt.draw();
+                            // dt.rows({ page: 'current', selected: true }).remove().draw();
+
                         }
                         else if(!warehouse_id.length)
                             alert('No warehouse is selected!');
