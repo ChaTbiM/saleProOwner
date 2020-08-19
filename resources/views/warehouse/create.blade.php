@@ -13,7 +13,24 @@
 <div class="alert alert-danger alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert"
         aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('not_permitted') }}</div>
 @endif
+<?php 
+function printCompanyName($company){
+        if($company == "hygiene"){
+            return "akeed hygiene";
+        }else if($company == "sweet"){
+            return "akeed sweet";
+        }else if ($company == "goods"){
+            return "akeed food";
+        }else if($company == "hafko"){
+            return "akeed factory";
+        }else if($company == "sanfora"){
+            return "bruxelle salon";
+        }else if($company == "service"){
+            return "akeed trading";
+        }
+    }
 
+?>
 <section>
     <div class="container-fluid">
         <a href="#" data-toggle="modal" data-target="#createModal" class="btn btn-info"><i class="dripicons-plus"></i>
@@ -36,20 +53,9 @@
                 </tr>
             </thead>
             <tbody>
+                @if(!empty($lims_warehouse_all))
                 @foreach ($lims_warehouse_all as $company => $warehouses)
                 @foreach($warehouses as $key=>$warehouse)
-                <?php
-                    // $number_of_product = App\Product_Warehouse::
-                    // join('products', 'product_warehouse.product_id', '=', 'products.id')
-                    // ->where([ ['product_warehouse.warehouse_id', $warehouse->id],
-                    //           ['products.is_active', true]
-                    // ])->count();
-                    // $stock_qty = App\Product_Warehouse::
-                    // join('products', 'product_warehouse.product_id', '=', 'products.id')
-                    // ->where([ ['product_warehouse.warehouse_id', $warehouse->id],
-                    //           ['products.is_active', true]
-                    // ])->sum('product_warehouse.qty');
-                ?>
                 <tr data-id="{{$warehouse->id}}" data-company="{{$company}}">
                     <td>{{$key}}</td>
                     <td>{{ $warehouse->name }} </td>
@@ -95,6 +101,7 @@
                 </tr>
                 @endforeach
                 @endforeach
+                @endif
             </tbody>
         </table>
     </div>
@@ -127,7 +134,7 @@
                     {{-- <input type="hidden" name="biller_id_hidden" value="{{$lims_user_data->biller_id}}"> --}}
                     <select name="company_name" class="selectpicker form-control" title="Select Company..." required>
                         @foreach($companies as $company)
-                        <option value="{{$company->name}}">{{$company->name}}</option>
+                        <option value="{{$company->name}}">{{ printCompanyName($company->name)}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -148,6 +155,7 @@
     </div>
 </div>
 
+@if(!empty($lims_warehouse_all))
 <div id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
     class="modal fade text-left">
     <div role="document" class="modal-dialog">
@@ -170,6 +178,16 @@
                         class="form-control">
                 </div>
                 <div class="form-group">
+                    <label><strong>Company name *</strong></label>
+                    {{-- <input type="hidden" name="biller_id_hidden" value="{{$lims_user_data->biller_id}}"> --}}
+                    <select id="select_company" name="company_name" class="selectpicker form-control"
+                        title="Select Company..." required>
+                        @foreach($companies as $company)
+                        <option value="{{$company->name}}">{{printCompanyName($company->name)}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
                     <label>{{trans('file.Phone Number')}} *</label>
                     <input type="text" name="phone" class="form-control" required>
                 </div>
@@ -189,6 +207,7 @@
         </div>
     </div>
 </div>
+@endif
 
 <div id="importWarehouse" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
     class="modal fade text-left">
@@ -228,6 +247,21 @@
 </div>
 
 <script type="text/javascript">
+    function printCompanyName(company){
+        if(company == "hygiene"){
+            return "akeed hygiene";
+        }else if(company == "sweet"){
+            return "akeed sweet";
+        }else if (company == "goods"){
+            return "akeed food";
+        }else if(company == "hafko"){
+            return "akeed factory";
+        }else if(company == "sanfora"){
+            return "bruxelle salon";
+        }else if(company == "service"){
+            return "akeed trading";
+        }
+    }
     //pdf Fonts 
    pdfMake.fonts = {
         Arial: {
@@ -277,6 +311,9 @@
 	            $("#editModal textarea[name='address']").val(data['address']);
 	            $("#editModal input[name='warehouse_id']").val(data['id']);
 	            $("#editModal input[name='company']").val(data['company']);
+                $("#editModal select[name='company_name']").val(data['company']);
+                $('.selectpicker').selectpicker('refresh');
+
 	        });
 	    });
   });
@@ -294,6 +331,11 @@
 	            $("#editModal textarea[name='address']").val(data['address']);
 	            $("#editModal input[name='warehouse_id']").val(data['id']);
 	            $("#editModal input[name='company']").val(data['company']);
+                $("#editModal select[name='company_name']").val(data['company']);
+                $('.selectpicker').selectpicker('refresh');
+
+                // console.log('company name 2', data['company']);
+
 	        });
 	    });
 

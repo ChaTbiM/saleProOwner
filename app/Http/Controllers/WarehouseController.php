@@ -26,12 +26,14 @@ class WarehouseController extends Controller
     public function index()
     {
         $companies = Company::all();
+        $lims_warehouse_all = array();
 
+        
         try {
-            $hygiene_warehouses = DB::connection("hygiene")->select("SELECT * FROM `warehouses` WHERE (is_active) = (true) ");
+            $hygiene_warehouses = DB::connection("hygiene")->select("SELECT * FROM `warehouses` WHERE (is_active) = (?) ", [true]);
+            $lims_warehouse_all["hygiene"] = $hygiene_warehouses;
             $number_of_products["hygiene"] = $this->getNumberOfProducts(Product_Warehouse_Hygiene::class, $hygiene_warehouses);
             $stock_quantity["hygiene"] = $this->getStockQuantity(Product_Warehouse_Hygiene::class, $hygiene_warehouses);
-            $lims_warehouse_all["hygiene"] = $hygiene_warehouses;
         } catch (\Throwable $th) {
             //throw $th;
         }

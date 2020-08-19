@@ -12,7 +12,24 @@
 <div class="alert alert-danger alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert"
         aria-label="Close"><span aria-hidden="true">&times;</span></button><?php echo e(session()->get('not_permitted')); ?></div>
 <?php endif; ?>
+<?php 
+function printCompanyName($company){
+        if($company == "hygiene"){
+            return "akeed hygiene";
+        }else if($company == "sweet"){
+            return "akeed sweet";
+        }else if ($company == "goods"){
+            return "akeed food";
+        }else if($company == "hafko"){
+            return "akeed factory";
+        }else if($company == "sanfora"){
+            return "bruxelle salon";
+        }else if($company == "service"){
+            return "akeed trading";
+        }
+    }
 
+?>
 <section>
     <div class="container-fluid">
         <a href="#" data-toggle="modal" data-target="#createModal" class="btn btn-info"><i class="dripicons-plus"></i>
@@ -35,20 +52,9 @@
                 </tr>
             </thead>
             <tbody>
+                <?php if(!empty($lims_warehouse_all)): ?>
                 <?php $__currentLoopData = $lims_warehouse_all; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $company => $warehouses): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <?php $__currentLoopData = $warehouses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$warehouse): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <?php
-                    // $number_of_product = App\Product_Warehouse::
-                    // join('products', 'product_warehouse.product_id', '=', 'products.id')
-                    // ->where([ ['product_warehouse.warehouse_id', $warehouse->id],
-                    //           ['products.is_active', true]
-                    // ])->count();
-                    // $stock_qty = App\Product_Warehouse::
-                    // join('products', 'product_warehouse.product_id', '=', 'products.id')
-                    // ->where([ ['product_warehouse.warehouse_id', $warehouse->id],
-                    //           ['products.is_active', true]
-                    // ])->sum('product_warehouse.qty');
-                ?>
                 <tr data-id="<?php echo e($warehouse->id); ?>" data-company="<?php echo e($company); ?>">
                     <td><?php echo e($key); ?></td>
                     <td><?php echo e($warehouse->name); ?> </td>
@@ -98,6 +104,7 @@
                 </tr>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                <?php endif; ?>
             </tbody>
         </table>
     </div>
@@ -131,7 +138,7 @@
                     
                     <select name="company_name" class="selectpicker form-control" title="Select Company..." required>
                         <?php $__currentLoopData = $companies; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $company): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <option value="<?php echo e($company->name); ?>"><?php echo e($company->name); ?></option>
+                        <option value="<?php echo e($company->name); ?>"><?php echo e(printCompanyName($company->name)); ?></option>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                 </div>
@@ -153,6 +160,7 @@
     </div>
 </div>
 
+<?php if(!empty($lims_warehouse_all)): ?>
 <div id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
     class="modal fade text-left">
     <div role="document" class="modal-dialog">
@@ -176,6 +184,16 @@
                         class="form-control">
                 </div>
                 <div class="form-group">
+                    <label><strong>Company name *</strong></label>
+                    
+                    <select id="select_company" name="company_name" class="selectpicker form-control"
+                        title="Select Company..." required>
+                        <?php $__currentLoopData = $companies; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $company): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($company->name); ?>"><?php echo e(printCompanyName($company->name)); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label><?php echo e(trans('file.Phone Number')); ?> *</label>
                     <input type="text" name="phone" class="form-control" required>
                 </div>
@@ -196,6 +214,7 @@
         </div>
     </div>
 </div>
+<?php endif; ?>
 
 <div id="importWarehouse" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
     class="modal fade text-left">
@@ -238,6 +257,21 @@
 </div>
 
 <script type="text/javascript">
+    function printCompanyName(company){
+        if(company == "hygiene"){
+            return "akeed hygiene";
+        }else if(company == "sweet"){
+            return "akeed sweet";
+        }else if (company == "goods"){
+            return "akeed food";
+        }else if(company == "hafko"){
+            return "akeed factory";
+        }else if(company == "sanfora"){
+            return "bruxelle salon";
+        }else if(company == "service"){
+            return "akeed trading";
+        }
+    }
     //pdf Fonts 
    pdfMake.fonts = {
         Arial: {
@@ -287,6 +321,9 @@
 	            $("#editModal textarea[name='address']").val(data['address']);
 	            $("#editModal input[name='warehouse_id']").val(data['id']);
 	            $("#editModal input[name='company']").val(data['company']);
+                $("#editModal select[name='company_name']").val(data['company']);
+                $('.selectpicker').selectpicker('refresh');
+
 	        });
 	    });
   });
@@ -304,6 +341,11 @@
 	            $("#editModal textarea[name='address']").val(data['address']);
 	            $("#editModal input[name='warehouse_id']").val(data['id']);
 	            $("#editModal input[name='company']").val(data['company']);
+                $("#editModal select[name='company_name']").val(data['company']);
+                $('.selectpicker').selectpicker('refresh');
+
+                // console.log('company name 2', data['company']);
+
 	        });
 	    });
 

@@ -41,13 +41,13 @@
                                         return "akeed hygiene";
                                     }else if($company == "sweet"){
                                         return "akeed sweet";
-                                    }else if ($company == "sanfora"){
+                                    }else if ($company == "goods"){
                                         return "akeed food";
                                     }else if($company == "hafko"){
                                         return "akeed factory";
-                                    }else if($company == "service"){
+                                    }else if($company == "sanfora"){
                                         return "bruxelle salon";
-                                    }else if($company == "goods"){
+                                    }else if($company == "service"){
                                         return "akeed trading";
                                     }
                                 }
