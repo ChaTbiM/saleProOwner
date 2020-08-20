@@ -426,7 +426,10 @@ function printCompanyName($company){
                                     alert(data);
                                 }
                             });
+                            setTimeout(()=>{
                             location.reload();
+
+                            },500);
                             // dt.draw();
                             // dt.rows({ page: 'current', selected: true }).remove().draw();
 

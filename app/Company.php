@@ -71,7 +71,7 @@ class Company extends Model
 
     public function transferPermissions()
     {
-        $permissions = ['trasnfers-index', 'trasnfers-edit', 'trasnfers-add', 'trasnfers-delete'];
+        $permissions = ['transfers-index', 'transfers-edit', 'transfers-add', 'transfers-delete'];
 
         return $permissions;
     }
