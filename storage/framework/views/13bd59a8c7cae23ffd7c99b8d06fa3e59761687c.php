@@ -66,8 +66,6 @@
                                 </div>
                                 
                             </div>
-                            
-
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <?php
@@ -193,12 +191,9 @@
                                 </div>
 
                             </div>
-
-                            
-                            
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" value="<?php echo e(trans('file.submit')); ?>" class="btn btn-primary">
+                            <div class="form-group">
+                                <input type="submit" value="<?php echo e(trans('file.submit')); ?>" class="btn btn-primary">
+                            </div>
                         </div>
                         <?php echo Form::close(); ?>
 

@@ -259,7 +259,7 @@ class UserController extends Controller
 
             $lims_role_list = Roles::where('is_active', true)->where('name', '!=', 'ceo')->get();
             
-            
+            $roles = array();
             $role = DB::select('select * from company_has_user_has_roles where (company_name,user_id) = (?,?)', ["hygiene",$id]);
             if (!empty($role)) {
                 $roles["hygiene"] = (string) $role[0]->role_id;
