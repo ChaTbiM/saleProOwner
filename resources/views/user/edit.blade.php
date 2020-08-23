@@ -90,7 +90,6 @@
                                                      return  $string;
                                                 } 
                                     }
-
                                         ?>
                                     <label><strong>{{trans('file.Company Name')}}</strong></label>
                                     <br>
@@ -160,14 +159,14 @@
                                             </p>
                                             <div class="form-check form-group ">
                                                 <input type="checkbox" class="form-check-input all-permissions"
-                                                        name="all"  data-permissions=<?="company-$i-$module_name"?>
+                                                        name="all"  data-permissions=<?="all-$i-$module_name"?>
                                                         >
         
                                                 <label class="form-check-label "
                                                         for="all"> {{ trans('file.all') }} </label>
                                             </div>
                                             @foreach ($module as $permission => $has_permission)
-                                            <?php $class = " form-check-input company-$i-$module_name ";
+                                            <?php $class = " form-check-input all-$i-$module_name ";
                                     ?>
                                             <div class=" form-check form-check-inline  form-group " id=<?="company-$i-$permission"?>>
                                             <input type="checkbox" class='{{$class}}'
@@ -207,7 +206,6 @@
     $('#warehouseId').hide();
     
     
-
     $('select[name=role_id]').val($("input[name='role_id_hidden']").val());
     if($('select[name=role_id]').val() > 2){
         $('#warehouseId').show();
@@ -216,35 +214,27 @@
         $('select[name=biller_id]').val($("input[name='biller_id_hidden']").val());
     }
     $('.selectpicker').selectpicker('refresh');
-
-
     $('#genbutton').on("click", function(){
       $.get('../genpass', function(data){
         $("input[name='password']").val(data);
       });
     });
-
     // Showing permissions for selected company
     checkCompany = $('.check-company');
     // checkCompany.on('change', showPermissions);
     checkCompany.on('change', showRoles);
-
-
-
     function showPermissions(id,state,roleDropDown){
         let role;
         
         if(roleDropDown){
          role = Number($(roleDropDown).val());
         }
-        if(state === "show"){
+        if(state == "show"){
             $('#permissions-'+id).removeClass('d-none')
-        }else if(state === "hide"){
+        }else if(state == "hide"){
             $('#permissions-'+id).addClass('d-none')
         }
-
         // const staffPermissions = ['print_barcode','adjustment','stock_count' , 'gift-card', 'coupon', 'expenses-index', 'expenses-add','quotes-index', 'quotes-edit', 'quotes-add', 'quotes-delete','account-index', 'account-statement', 'money-transfer', 'balance-sheet','department', 'employees-index', 'attendance', 'payroll','users-index', 'users-add', 'billers-index', 'billers-add', 'suppliers-index', 'suppliers-add','profit-loss', 'best-seller', 'warehouse-report', 'warehouse-stock-report', 'product-report', 'daily-sale', 'monthly-sale', 'daily-purchase', 'monthly-purchase', 'purchase-report', 'sale-report', 'payment-report', 'product-qty-alert', 'customer-report', 'supplier-report', 'due-report']
-
         if(role === 1){
             staffPermissions.forEach(el=>{
                 $("#company-"+id+"-"+el).show();
@@ -253,29 +243,22 @@
             staffPermissions.forEach(el=>{
                 $("#company-"+id+"-"+el).hide();
             })
-
         }
     }
-
     function showRoles(event){
         const company_id = $(this).prop('id');
         const company_id_number = company_id.split('-')[2];
         const permissions = $('#permissions-'+company_id_number);
         if($(this).prop('checked')){
-
             $('#roles-'+company_id_number).removeClass('d-none').prop('required',true);
             $('#roles-'+company_id_number).on('change',(event)=> showPermissions(company_id_number,'show',event.target));
         }else {
-
             $('#roles-'+company_id_number).addClass('d-none').prop('required',false)
             showPermissions(company_id_number,'hide');
             $('#select-'+company_id_number).val(null)
         }
-
     }
-
     
-
     
     $(document).ready(()=>{
         $('.roles_list').on('change',()=>{
@@ -311,21 +294,19 @@
             }
         })
 
-        let permissionsTargetClass = $('.all-permissions').data('permissions');
-        let isAllChecked = $('.all-permissions').prop('checked') 
-        handleAllPermissionsChange(isAllChecked,permissionsTargetClass);
-        $('.all-companies').trigger('change');
+        $('.all-permissions').on('change',function(){
+            let permissionsTargetClass = $(this).data('permissions');
+            let isAllChecked = $(this).prop('checked');
+            console.log('class',permissionsTargetClass);
+            console.log('isallchecked',isAllChecked);
 
-        $('.all-permissions').on('change',function (){
-        let permissionsTargetClass = $(this).data('permissions')
-        let isAllChecked = $(this).prop('checked') 
-        handleAllPermissionsChange(isAllChecked,permissionsTargetClass);
+            handleAllPermissionsChange(isAllChecked,permissionsTargetClass);
+
+        })
+        $('all-permissions').trigger('change');
+        
     })
-    })
-
-
     const staffPermissions = ['print_barcode','adjustment','stock_count' , 'gift-card', 'coupon', 'expenses-index', 'expenses-add','quotes-index', 'quotes-edit', 'quotes-add', 'quotes-delete','account-index', 'account-statement', 'money-transfer', 'balance-sheet','department', 'employees-index', 'attendance', 'payroll','users-index', 'users-add', 'billers-index', 'billers-add', 'suppliers-index', 'suppliers-add','profit-loss', 'best-seller', 'warehouse-report', 'warehouse-stock-report', 'product-report', 'daily-sale', 'monthly-sale', 'daily-purchase', 'monthly-purchase', 'purchase-report', 'sale-report', 'payment-report', 'product-qty-alert', 'customer-report', 'supplier-report', 'due-report']
-
     function handleAllPermissionsChange(isAllChecked,permissionsTargetClass){
         if(isAllChecked){
         $('.'+permissionsTargetClass).prop('checked',true);
