@@ -52,13 +52,13 @@
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
-                                @if(in_array("users-edit", $all_permission))
+                                @if(in_array("users-edit", $all_permission) )
                                 <li>
                                 	<a href="{{ route('user.edit', ['id' => $user->id]) }}" class="btn btn-link"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</a>
                                 </li>
                                 @endif
                                 <li class="divider"></li>
-                                @if(in_array("users-delete", $all_permission))
+                                @if(in_array("users-delete", $all_permission) && $user->role_id != 3)
                                 {{ Form::open(['route' => ['user.destroy', $user->id], 'method' => 'DELETE'] ) }}
                                 <li>
                                     <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>

@@ -66,6 +66,8 @@
                                 </div>
                                 
                             </div>
+                            
+
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <?php
@@ -191,9 +193,12 @@
                                 </div>
 
                             </div>
-                            <div class="form-group">
-                                <input type="submit" value="<?php echo e(trans('file.submit')); ?>" class="btn btn-primary">
-                            </div>
+
+                            
+                            
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="<?php echo e(trans('file.submit')); ?>" class="btn btn-primary">
                         </div>
                         <?php echo Form::close(); ?>
 
@@ -308,16 +313,8 @@
             handleAllPermissionsChange(isAllChecked,permissionsTargetClass);
 
         })
-        $('.all-companies').trigger('change');
         $('all-permissions').trigger('change');
         
-    //     let isAllChecked = $('.all-permissions').prop('checked') 
-    //     handleAllPermissionsChange(isAllChecked,permissionsTargetClass);
-    //     $('.all-permissions').on('change',function (){
-    //     let permissionsTargetClass = $(this).data('permissions')
-    //     let isAllChecked = $(this).prop('checked') 
-    //     handleAllPermissionsChange(isAllChecked,permissionsTargetClass);
-    // })
     })
     const staffPermissions = ['print_barcode','adjustment','stock_count' , 'gift-card', 'coupon', 'expenses-index', 'expenses-add','quotes-index', 'quotes-edit', 'quotes-add', 'quotes-delete','account-index', 'account-statement', 'money-transfer', 'balance-sheet','department', 'employees-index', 'attendance', 'payroll','users-index', 'users-add', 'billers-index', 'billers-add', 'suppliers-index', 'suppliers-add','profit-loss', 'best-seller', 'warehouse-report', 'warehouse-stock-report', 'product-report', 'daily-sale', 'monthly-sale', 'daily-purchase', 'monthly-purchase', 'purchase-report', 'sale-report', 'payment-report', 'product-qty-alert', 'customer-report', 'supplier-report', 'due-report']
     function handleAllPermissionsChange(isAllChecked,permissionsTargetClass){

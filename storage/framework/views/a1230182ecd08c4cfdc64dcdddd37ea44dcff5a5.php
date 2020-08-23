@@ -53,13 +53,13 @@
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
-                                <?php if(in_array("users-edit", $all_permission)): ?>
+                                <?php if(in_array("users-edit", $all_permission) ): ?>
                                 <li>
                                 	<a href="<?php echo e(route('user.edit', ['id' => $user->id])); ?>" class="btn btn-link"><i class="dripicons-document-edit"></i> <?php echo e(trans('file.edit')); ?></a>
                                 </li>
                                 <?php endif; ?>
                                 <li class="divider"></li>
-                                <?php if(in_array("users-delete", $all_permission)): ?>
+                                <?php if(in_array("users-delete", $all_permission) && $user->role_id != 3): ?>
                                 <?php echo e(Form::open(['route' => ['user.destroy', $user->id], 'method' => 'DELETE'] )); ?>
 
                                 <li>
