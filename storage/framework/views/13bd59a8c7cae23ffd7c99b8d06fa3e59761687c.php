@@ -16,6 +16,7 @@
                         <p class="italic">
                             <small><?php echo e(trans('file.The field labels marked with * are required input fields')); ?>.</small>
                         </p>
+
                         <?php echo Form::open(['route' => ['user.update', $lims_user_data->id], 'method' => 'put', 'files' =>
                         true]); ?>
 
@@ -66,6 +67,7 @@
                                 </div>
                                 
                             </div>
+                            <?php if($lims_user_data->role_id !=3): ?>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <?php
@@ -191,9 +193,11 @@
                                 </div>
 
                             </div>
-                            <div class="form-group">
-                                <input type="submit" value="<?php echo e(trans('file.submit')); ?>" class="btn btn-primary">
-                            </div>
+                            <?php endif; ?>
+                            
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="<?php echo e(trans('file.submit')); ?>" class="btn btn-primary">
                         </div>
                         <?php echo Form::close(); ?>
 

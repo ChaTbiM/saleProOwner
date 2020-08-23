@@ -16,6 +16,7 @@
                         <p class="italic">
                             <small>{{trans('file.The field labels marked with * are required input fields')}}.</small>
                         </p>
+
                         {!! Form::open(['route' => ['user.update', $lims_user_data->id], 'method' => 'put', 'files' =>
                         true]) !!}
                         <div class="row">
@@ -65,6 +66,7 @@
                                 </div>
                                 
                             </div>
+                            @if($lims_user_data->role_id !=3)
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <?php
@@ -187,9 +189,11 @@
                                 </div>
 
                             </div>
-                            <div class="form-group">
-                                <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
-                            </div>
+                            @endif
+                            
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
                         </div>
                         {!! Form::close() !!}
                     </div>
