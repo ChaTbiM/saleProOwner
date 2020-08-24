@@ -24,6 +24,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
     Route::get('user/genpass', 'UserController@generatePassword');
+    Route::put('user/changepass/{id}', 'UserController@changePassword')->name('user.password');
     Route::resource('user', 'UserController');
     
     Route::resource('module', 'ModuleController');

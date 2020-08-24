@@ -32,16 +32,7 @@
                                     </span>
                                     <?php endif; ?>
                                 </div>
-                                <div class="form-group">
-                                    <label><strong><?php echo e(trans('file.Change Password')); ?></strong> </label>
-                                    <div class="input-group">
-                                        <input type="password" name="password" class="form-control">
-                                        <div class="input-group-append">
-                                            <button id="genbutton" type="button"
-                                                class="btn btn-default"><?php echo e(trans('file.Generate')); ?></button>
-                                        </div>
-                                    </div>
-                                </div>
+                                
                                 <div class="form-group mt-3">
                                     <label><strong><?php echo e(trans('file.Email')); ?> *</strong></label>
                                     <input type="email" name="email" placeholder="example@example.com" required
@@ -201,10 +192,56 @@
                         </div>
                         <?php echo Form::close(); ?>
 
+
+                        
                     </div>
                 </div>
             </div>
+
         </div>
+        
+        <?php if($lims_user_data->role_id == 3): ?>
+        <div class="row">
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header d-flex align-items-center">
+                    <h4><?php echo e(trans('file.Change Password')); ?></h4>
+                </div>
+                <div class="card-body">
+                    <?php echo Form::open(['route' => ['user.password', Auth::id()], 'method' => 'put']); ?>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label><?php echo e(trans('file.Current Password')); ?> *</strong> </label>
+                                <input type="password" name="current_pass" required class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label><?php echo e(trans('file.New Password')); ?> *</strong> </label>
+                                <input type="password" name="new_pass" required class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label><?php echo e(trans('file.Confirm Password')); ?> *</strong> </label>
+                                <input type="password" name="confirm_pass" id="confirm_pass" required class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <div class="registrationFormAlert" id="divCheckPasswordMatch">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="<?php echo e(trans('file.submit')); ?>" class="btn btn-primary">
+                            </div>
+                        </div>
+                    </div>
+                    <?php echo Form::close(); ?>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <?php endif; ?>
     </div>
 </section>
 

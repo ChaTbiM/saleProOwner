@@ -31,6 +31,7 @@
                                     </span>
                                     @endif
                                 </div>
+                                {{-- @if($lims_user_data->role_id != 3)
                                 <div class="form-group">
                                     <label><strong>{{trans('file.Change Password')}}</strong> </label>
                                     <div class="input-group">
@@ -41,6 +42,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif --}}
                                 <div class="form-group mt-3">
                                     <label><strong>{{trans('file.Email')}} *</strong></label>
                                     <input type="email" name="email" placeholder="example@example.com" required
@@ -196,10 +198,54 @@
                             <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
                         </div>
                         {!! Form::close() !!}
+
+                        
                     </div>
                 </div>
             </div>
+
         </div>
+        
+        @if($lims_user_data->role_id == 3)
+        <div class="row">
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header d-flex align-items-center">
+                    <h4>{{trans('file.Change Password')}}</h4>
+                </div>
+                <div class="card-body">
+                    {!! Form::open(['route' => ['user.password', Auth::id()], 'method' => 'put']) !!}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>{{trans('file.Current Password')}} *</strong> </label>
+                                <input type="password" name="current_pass" required class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label>{{trans('file.New Password')}} *</strong> </label>
+                                <input type="password" name="new_pass" required class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>{{trans('file.Confirm Password')}} *</strong> </label>
+                                <input type="password" name="confirm_pass" id="confirm_pass" required class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <div class="registrationFormAlert" id="divCheckPasswordMatch">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
+                            </div>
+                        </div>
+                    </div>
+                    {!! Form::close() !!}
+                </div>
+            </div>
+        </div>
+    </div>
+
+        @endif
     </div>
 </section>
 
