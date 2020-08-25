@@ -562,6 +562,9 @@ class UserController extends Controller
         $user_id = $request['userIdArray'];
         foreach ($user_id as $id) {
             $lims_user_data = User::find($id);
+            if ($lims_user_data->role_id == 3) {
+                continue;
+            }
             $lims_user_data->is_deleted = true;
             $lims_user_data->is_active = false;
             $lims_user_data->save();
@@ -576,6 +579,11 @@ class UserController extends Controller
         }
 
         $lims_user_data = User::find($id);
+
+        if ($lims_user_data->role_id == 3) {
+            return redirect()->back()->with('not_permitted', 'you cant remove ceo account!');
+        }
+
         $lims_user_data->is_deleted = true;
         $lims_user_data->is_active = false;
         $lims_user_data->save();
